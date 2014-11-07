@@ -17,52 +17,47 @@ using namespace std;
 
 class Window
 {
-	public:
-		Window(string windowTitle, int width, int height,
-				bool useOpenGL = false);
-		~Window();
+public:
+	static void init(const char* title, Uint32 width, Uint32 height);
+	static void quit();
 
-		void EventHandler(const SDL_Event& event);
+	static void eventHandler(const SDL_Event& event);
 
-		void Clear();
-		void Present();
+	static void clear();
+	static void present();
 
-		/* Function to control this object */
-		void Resize(int width, int height);
-		void SetTitle(const string& title);
-		void MoveTo(int x, int y);
-		void Show();
-		void Hide();
+	/* Function to control this object */
+	static void resize(int width, int height);
+	static void setTitle(const string& title);
+	static void moveTo(int x, int y);
+	static void show();
+	static void hide();
 
-		void SetClearColor(SDL_Color value);
+	static void setClearColor(SDL_Color value);
 
-		/* Function to get object states or statuses */
-		int PosX() const;
-		int PosY() const;
-		int Width() const;
-		int Height() const;
-		SDL_Rect Rect() const;
+	/* Function to get object states or statuses */
+	static int posX();
+	static int posY();
+	static int width();
+	static int height();
+	static SDL_Rect rect();
 
-		bool IsWindowed() const;
-		bool IsFocused() const;
+	static bool isWindowed();
+	static bool isFocused();
 
-		SDL_Window* GetWindow() const;
-		SDL_Renderer* GetRenderer() const;
-		Uint32 ID() const;
-	private:
-		SDL_Window* window_ = nullptr;
-		string title_;
-		Uint32 windowID_;
+	static SDL_Window* window();
+	static SDL_Renderer* renderer();
+	static Uint32 ID();
+private:
+	Window() {};
+	static SDL_Window* window_;
+	static string title_;
 
-		SDL_Renderer* renderer_ = nullptr;
-		SDL_Color clearColor_ = {31, 31, 31, 255};
+	static SDL_Renderer* renderer_;
+	static SDL_Color clearColor_;
 
-		bool isFocused_ = false;
-		bool isWindowed_ = true;
-
-		bool useOpenGL_ = false;
-
-		void Release_();
+	static bool isFocused_;
+	static bool isWindowed_;
 };
 
 #endif	/* WINDOW_H */

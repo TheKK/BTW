@@ -6,9 +6,19 @@
 
 #include "window.h"
 
-Window::Window(string windowTitle, int width, int height, bool useOpenGL)
+SDL_Window* Window::window_ = nullptr;
+string Window::title_;
+
+SDL_Renderer* Window::renderer_ = nullptr;
+SDL_Color Window::clearColor_ = {31, 31, 31, 255};
+
+bool Window::isFocused_ = false;
+bool Window::isWindowed_ = true;
+
+void
+Window::init(const char* title, Uint32 width, Uint32 height)
 {
-	title_ = windowTitle;
+	title_ = title;
 
 	/* Create and setup new SDL window, and check error */
 	window_ = SDL_CreateWindow(
@@ -37,27 +47,30 @@ Window::Window(string windowTitle, int width, int height, bool useOpenGL)
 
 	/* Make fullscreen fit physical screen */
 	SDL_RenderSetLogicalSize(renderer_, width, height);
-
-	windowID_ = SDL_GetWindowID(window_);
-}
-
-Window::~Window()
-{
-	Release_();
 }
 
 void
-Window::EventHandler(const SDL_Event& event)
+Window::quit()
+{
+	SDL_DestroyWindow(window_);
+	window_ = nullptr;
+
+	SDL_DestroyRenderer(renderer_);
+	renderer_ = nullptr;
+}
+
+void
+Window::eventHandler(const SDL_Event& event)
 {
 	switch (event.type) {
 	case SDL_WINDOWEVENT:
-		if (event.window.windowID == windowID_) {
+		if (event.window.windowID == ID()) {
 			switch (event.window.event) {
-			//Get mouse focus
+				//Get mouse focus
 			case SDL_WINDOWEVENT_ENTER:
 				isFocused_ = true;
 				break;
-			//Lost mouse focus
+				//Lost mouse focus
 			case SDL_WINDOWEVENT_LEAVE:
 				isFocused_ = false;
 				break;
@@ -67,7 +80,7 @@ Window::EventHandler(const SDL_Event& event)
 }
 
 void
-Window::Clear()
+Window::clear()
 {
 	SDL_SetRenderDrawColor(renderer_,
 			       clearColor_.r,
@@ -78,49 +91,49 @@ Window::Clear()
 }
 
 void
-Window::Present()
+Window::present()
 {
 	SDL_RenderPresent(renderer_);
 }
 
 void
-Window::Resize(int width, int height)
+Window::resize(int width, int height)
 {
 	SDL_SetWindowSize(window_, width, height);
 }
 
 void
-Window::SetTitle(const string& title)
+Window::setTitle(const string& title)
 {
 	SDL_SetWindowTitle(window_, title.c_str());
 }
 
 void
-Window::MoveTo(int x, int y)
+Window::moveTo(int x, int y)
 {
 	SDL_SetWindowPosition(window_, x, y);
 }
 
 void
-Window::Show()
+Window::show()
 {
 	SDL_ShowWindow(window_);
 }
 
 void
-Window::Hide()
+Window::hide()
 {
 	SDL_HideWindow(window_);
 }
 
 void
-Window::SetClearColor(SDL_Color value)
+Window::setClearColor(SDL_Color value)
 {
 	clearColor_ = value;
 }
 
 int
-Window::PosX() const
+Window::posX()
 {
 	int xToReturn;
 	SDL_GetWindowPosition(window_, &xToReturn, nullptr);
@@ -129,7 +142,7 @@ Window::PosX() const
 
 
 int
-Window::PosY() const
+Window::posY()
 {
 	int yToReturn;
 	SDL_GetWindowPosition(window_, nullptr, &yToReturn);
@@ -137,7 +150,7 @@ Window::PosY() const
 }
 
 int
-Window::Width() const
+Window::width()
 {
 	int wToReturn;
 	SDL_GetWindowSize(window_, &wToReturn, nullptr);
@@ -145,7 +158,7 @@ Window::Width() const
 }
 
 int
-Window::Height() const
+Window::height()
 {
 	int hToReturn;
 	SDL_GetWindowSize(window_, nullptr, &hToReturn);
@@ -153,7 +166,7 @@ Window::Height() const
 }
 
 SDL_Rect
-Window::Rect() const
+Window::rect()
 {
 	SDL_Rect rectToReturn;
 	SDL_GetWindowSize(window_, &rectToReturn.w, &rectToReturn.h);
@@ -162,41 +175,31 @@ Window::Rect() const
 }
 
 bool
-Window::IsWindowed() const
+Window::isWindowed()
 {
 	return isWindowed_;
 }
 
 bool
-Window::IsFocused() const
+Window::isFocused()
 {
 	return isFocused_;
 }
 
 SDL_Window*
-Window::GetWindow() const
+Window::window()
 {
 	return window_;
 }
 
 SDL_Renderer*
-Window::GetRenderer() const
+Window::renderer()
 {
 	return renderer_;
 }
 
 Uint32
-Window::ID() const
+Window::ID()
 {
-	return windowID_;
-}
-
-void
-Window::Release_()
-{
-	SDL_DestroyWindow(window_);
-	window_ = nullptr;
-
-	SDL_DestroyRenderer(renderer_);
-	renderer_ = nullptr;
+	return SDL_GetWindowID(window_);
 }

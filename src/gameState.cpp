@@ -6,29 +6,24 @@
 
 #include "gameState.h"
 
-GameState::GameState():
-	next_(GAME_STATE_NULL)
-{
-}
-
 GameState::~GameState()
 {
 }
 
 bool
-GameState::HasNext() const
+GameState::hasNext() const
 {
 	return (next_ != GAME_STATE_NULL);
 }
 
 enum GameStateList
-GameState::Next() const
+GameState::next() const
 {
 	return next_;
 }
 
 void
-GameState::SetNext(enum GameStateList next)
+GameState::setNext(enum GameStateList next)
 {
 	next_ = next;
 }

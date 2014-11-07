@@ -16,23 +16,24 @@ enum GameStateList
 	GAME_STATE_INTRO,
 	GAME_STATE_MAIN,
 
+	GAME_STATE_TEST,
+
 	GAME_STATE_QUIT
 };
 
 class GameState
 {
 	public:
-		GameState();
 		virtual ~GameState();
 
-		virtual void EventHandler(const SDL_Event& event) = 0;
-		virtual void Update() = 0;
-		virtual void Render() = 0;
+		virtual void eventHandler(const SDL_Event& event) = 0;
+		virtual void update() = 0;
+		virtual void render() = 0;
 
-		bool HasNext() const;
-		enum GameStateList Next() const;
+		bool hasNext() const;
+		enum GameStateList next() const;
 	protected:
-		void SetNext(enum GameStateList next);
+		void setNext(enum GameStateList next);
 	private:
 		enum GameStateList next_ = GAME_STATE_NULL;
 };

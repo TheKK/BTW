@@ -17,8 +17,7 @@
 #include "timer.h"
 #include "userEvent.h"
 #include "window.h"
-
-#include "testGameActor.h"
+#include "testGameState.h"
 
 #ifndef SDL_ASSERT_LEVEL
 	#define SDL_ASSERT_LEVEL	3
@@ -84,6 +83,9 @@ InitSystem()
 		throw runtime_error(errMsg);
 	}
 
+	/* Window setup */
+	Window::init("BTW-test", 1280, 720);
+
 	/* Register user events */
 	UserEvent::Init();
 	SoundEngine::Init();
@@ -108,30 +110,38 @@ CleanUp()
 	delete (LogLocator::GetService());
 	LogLocator::Register(nullptr);
 
+	SoundEngine::Quit();
+	Window::quit();
+
 	SDL_Quit();
 	IMG_Quit();
 	TTF_Quit();
-
-	SoundEngine::Quit();
 }
 
-GameState*
-ChangeState(GameState* state, enum GameStateList which)
+void
+ChangeState(GameState** state)
 {
-	delete state;
-	state = nullptr;
+	GameState* newState = nullptr;
 
-	switch (which) {
+	switch ((*state)->next()) {
 	case GAME_STATE_MAIN:
-		break;
 	case GAME_STATE_QUIT:
+		newState = nullptr;
+		break;
+	case GAME_STATE_TEST:
+		newState = new TestGameState();
 		break;
 	default:
 		LogLocator::GetService()->LogError("GameState trasform error");
 		break;
 	}
 
-	return state;
+	delete *state;
+
+	if(newState)
+		*state = newState;
+	else
+		*state = nullptr;
 }
 
 int
@@ -139,42 +149,30 @@ main(int argc, char* argv[])
 {
 	Timer timer;
 	SDL_Event event;
-
-	bool appIsRunning = true;
+	GameState* gameState;
 
 	try {
 		/* The creation of world... */
 		InitSystem();
 
-		Window mainWindow("BTW-test", 1280, 720);
-		mainWindow.SetClearColor({0, 0, 0, 0});
+		gameState = new TestGameState();
 		
-		TestGameActor actor(mainWindow.GetRenderer());
-		actor.setGravity(1);
-
 		/* The cycle of life... */
-		while (appIsRunning) {
+		while (gameState) {
 			timer.Start();
 
 			/* EventHandler */
-			while (SDL_PollEvent(&event)) {
-				if (event.type == SDL_QUIT)
-					appIsRunning = false;
+			while (SDL_PollEvent(&event))
+				gameState->eventHandler(event);
 
-				actor.eventHandler(event);
-			}
+			gameState->update();
 
-			/* Update */
-			{
-				actor.update();
-			}
+			Window::clear();
+			gameState->render();
+			Window::present();
 
-			/* Render */
-			mainWindow.Clear();
-			{
-				actor.render();
-			}
-			mainWindow.Present();
+			if (gameState->hasNext())
+				ChangeState(&gameState);
 
 			if (timer.GetTicks() < (1000 / GAME_FPS))
 				SDL_Delay((1000 / GAME_FPS) -
