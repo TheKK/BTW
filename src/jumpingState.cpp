@@ -9,10 +9,12 @@
 void
 JumpingState::onEnter(GameActor& actor)
 {
-	frame = 0;
-
-	actor.setVelY(0);
-	actor.applyAcc(0, -10);
+	/* If you jump from ground */
+	if (actor.isOnGround()) {
+		frame = 0;
+		actor.setVelY(0);
+		actor.applyAcc(0, -10);
+	}
 }
 
 void
@@ -25,12 +27,12 @@ JumpingState::eventHandler(GameActor& actor, const SDL_Event& event)
 {
 	switch (event.type) {
 	case SDL_KEYDOWN:
-		if (event.key.repeat == 1)
-			break;
-
 		switch (event.key.keysym.sym) {
 		case SDLK_DOWN:
 			actor.dive();
+			break;
+		case SDLK_x:
+			actor.normalAirAttack();
 			break;
 		}
 		break;

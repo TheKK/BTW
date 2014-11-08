@@ -22,7 +22,7 @@ public:
 	TestGameActor(SDL_Renderer* renderer);
 	~TestGameActor();
 
-	void eventHandler(const SDL_Event& evnet);
+	void handleInput(const GameActorController& controller);
 	void update();
 	void render();
 
@@ -31,6 +31,8 @@ public:
 	void jump();
 	void land();
 	void dive();
+	void normalAttack();
+	void normalAirAttack();
 private:
 	TestStateMachine machine_;
 };

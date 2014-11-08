@@ -1,26 +1,25 @@
 /*
  * Author: KK <thumbd03803@gmail.com>
  *
- * File: diveState.h
+ * File: normalAttackState.h
  */
 
-#ifndef DIVE_STATE_H
-#define DIVE_STATE_H
+#ifndef NORMAL_ATTACK_STATE_H
+#define NORMAL_ATTACK_STATE_H
 
 #include <iostream>
 #include <SDL.h>
 
 #include "state.h"
 #include "gameActor.h"
-
-#define DIVE_DELAY	8
+#include "potionBullet.h"
 
 using namespace std;
 
-class DiveState: public State
+class NormalAttackState : public State
 {
 public:
-	~DiveState() {};
+	~NormalAttackState() {};
 
 	void onEnter(GameActor& actor);
 	void onExit(GameActor& actor);
@@ -28,7 +27,7 @@ public:
 	void eventHandler(GameActor& actor, const SDL_Event& event);
 	void update(GameActor& actor);
 private:
-	int delayFrame;
+	int frameCount;
 };
 
-#endif /* DIVE_STATE_H */
+#endif /* NORMAL_ATTACK_STATE_H */

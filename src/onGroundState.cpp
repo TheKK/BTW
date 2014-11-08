@@ -52,6 +52,9 @@ OnGroundState::eventHandler(GameActor& actor, const SDL_Event& event)
 		case SDLK_z:
 			actor.jump();
 			break;
+		case SDLK_x:
+			actor.normalAttack();
+			break;
 		}
 		break;
 	case SDL_KEYUP:

@@ -11,6 +11,8 @@ DiveState::onEnter(GameActor& actor)
 {
 	actor.setVelX(0);
 	actor.setVelY(10);
+
+	delayFrame = 0;
 }
 
 void
@@ -27,10 +29,7 @@ void
 DiveState::update(GameActor& actor)
 {
 	if (actor.isOnGround()) {
-		static int frame = 0;
-
-		if (++frame == 10) {
-			frame = 0;
+		if (++delayFrame == DIVE_DELAY) {
 			actor.land();
 		}
 	}

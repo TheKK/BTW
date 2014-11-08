@@ -10,8 +10,8 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
+#include <SDL.h>
+#include <SDL_image.h>
 
 #include "renderable.h"
 
@@ -27,19 +27,19 @@ class Sprite : public Renderable
 		       Uint8 r = 0, Uint8 g = 255, Uint8 = 255);
 		~Sprite();
 
-		int Load(string filePath, SDL_Renderer* renderer,
+		int load(string filePath, SDL_Renderer* renderer,
 			 int w, int h,
 			 Uint8 r = 0, Uint8 g = 255, Uint8 = 255);
 
-		void Render();
-		void RenderFullWindow();
+		void render();
+		void renderFullWindow();
 
-		void SetAlpha(Uint8 value);
+		void setAlpha(Uint8 value);
 
 		/* Frame control */
-		void NextFrame();
-		void PrevFrame();
-		void JumpTo(Uint16 where);
+		void nextFrame();
+		void prevFrame();
+		void jumpTo(Uint16 where);
 	private:
 		SDL_Texture* sheet_ = nullptr;
 		vector<SDL_Rect> clip_;
@@ -54,7 +54,7 @@ class Sprite : public Renderable
 		 */
 		int currentFrame_ = 0;
 
-		void Release_();
+		void release_();
 };
 
 #endif	/* SPRITE_H */

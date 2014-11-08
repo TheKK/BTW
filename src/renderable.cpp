@@ -23,7 +23,7 @@ Renderable::~Renderable()
 }
 
 SDL_Texture*
-Renderable::LoadTexture(string filePath, SDL_Renderer* renderer,
+Renderable::loadTexture(string filePath, SDL_Renderer* renderer,
 			Uint8 r, Uint8 g, Uint8 b)
 {
 	SDL_assert(renderer != nullptr);
@@ -58,107 +58,107 @@ Renderable::LoadTexture(string filePath, SDL_Renderer* renderer,
 }
 
 void
-Renderable::Enlarge(int dw, int dh)
+Renderable::enlarge(int dw, int dh)
 {
 	rect_.w += dw;
 	rect_.h += dh;
 }
 
 void
-Renderable::SetSize(unsigned int w, unsigned int h)
+Renderable::setSize(unsigned int w, unsigned int h)
 {
 	rect_.w = w;
 	rect_.h = h;
 }
 
 void
-Renderable::SetRenderer(SDL_Renderer* renderer)
+Renderable::setRenderer(SDL_Renderer* renderer)
 {
 	targetRenderer_ = renderer;
 }
 
 void
-Renderable::MoveBy(int x, int y)
+Renderable::moveBy(int x, int y)
 {
 	rect_.x += x;
 	rect_.y += y;
 }
 
 void
-Renderable::MoveXTo(int x)
+Renderable::moveXTo(int x)
 {
 	rect_.x = x;
 }
 
 void
-Renderable::MoveYTo(int y)
+Renderable::moveYTo(int y)
 {
 	rect_.y = y;
 }
 
 void
-Renderable::MoveTo(int x, int y)
+Renderable::moveTo(int x, int y)
 {
 	rect_.x = x;
 	rect_.y = y;
 }
 
 int
-Renderable::PosX() const
+Renderable::posX() const
 {
 	return rect_.x;
 }
 
 
 int
-Renderable::PosY() const
+Renderable::posY() const
 {
 	return rect_.y;
 }
 
 int
-Renderable::Width() const
+Renderable::width() const
 {
 	return rect_.w;
 }
 
 int
-Renderable::Height() const
+Renderable::height() const
 {
 	return rect_.h;
 }
 
 SDL_Rect
-Renderable::Rect() const
+Renderable::rect() const
 {
 	return rect_;
 }
 
 void
-Renderable::Hide()
+Renderable::hide()
 {
 	visable_ = false;
 }
 
 void
-Renderable::Show()
+Renderable::show()
 {
 	visable_ = true;
 }
 
 void
-Renderable::SetVisable(bool value)
+Renderable::setVisable(bool value)
 {
 	visable_ = value;
 }
 
 bool
-Renderable::GetVisable() const
+Renderable::getVisable() const
 {
 	return visable_;
 }
 bool
-Renderable::MouseHovered(int32_t mouseX, int32_t mouseY)
+Renderable::mouseHovered(int32_t mouseX, int32_t mouseY)
 {
 	if (
 		mouseX < (rect_.x + rect_.w) && mouseX > rect_.x &&

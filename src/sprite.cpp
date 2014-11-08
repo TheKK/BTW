@@ -14,16 +14,16 @@ Sprite::Sprite(string filePath, SDL_Renderer* renderer,
 	       int w, int h,
 	       Uint8 r, Uint8 g, Uint8 b)
 {
-	Load(filePath, renderer, w, h, r, g, b);
+	load(filePath, renderer, w, h, r, g, b);
 }
 
 Sprite::~Sprite()
 {
-	Release_();
+	release_();
 }
 
 int
-Sprite::Load(string filePath, SDL_Renderer* renderer,
+Sprite::load(string filePath, SDL_Renderer* renderer,
 	     int w, int h,
 	     Uint8 r, Uint8 g, Uint8 b)
 {
@@ -31,7 +31,7 @@ Sprite::Load(string filePath, SDL_Renderer* renderer,
 
 	targetRenderer_ = renderer;
 
-	sheet_ = LoadTexture(filePath, renderer, r, g, b);
+	sheet_ = loadTexture(filePath, renderer, r, g, b);
 
 	rect_.x = 0;
 	rect_.y = 0;
@@ -55,25 +55,25 @@ Sprite::Load(string filePath, SDL_Renderer* renderer,
 }
 
 void
-Sprite::Render()
+Sprite::render()
 {
 	SDL_RenderCopy(targetRenderer_, sheet_, &clip_[currentFrame_], &rect_);
 }
 
 void
-Sprite::RenderFullWindow()
+Sprite::renderFullWindow()
 {
 	SDL_RenderCopy(targetRenderer_, sheet_, &clip_[currentFrame_], nullptr);
 }
 
 void
-Sprite::SetAlpha(Uint8 value)
+Sprite::setAlpha(Uint8 value)
 {
 	SDL_SetTextureAlphaMod(sheet_, value);
 }
 
 void
-Sprite::NextFrame()
+Sprite::nextFrame()
 {
 	currentFrame_++;
 	if (currentFrame_ == totalFrame_)
@@ -81,7 +81,7 @@ Sprite::NextFrame()
 }
 
 void
-Sprite::PrevFrame()
+Sprite::prevFrame()
 {
 	currentFrame_--;
 	if (currentFrame_ < 0)
@@ -89,13 +89,13 @@ Sprite::PrevFrame()
 }
 
 void
-Sprite::JumpTo(Uint16 where)
+Sprite::jumpTo(Uint16 where)
 {
 	currentFrame_ = where;
 }
 
 void
-Sprite::Release_()
+Sprite::release_()
 {
 	SDL_assert(sheet_ != nullptr);
 

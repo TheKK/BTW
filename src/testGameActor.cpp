@@ -9,9 +9,12 @@
 TestGameActor::TestGameActor(SDL_Renderer* renderer)
 {
 	renderer_ = renderer;
+
 	posRect_ = {0, 0, 30, 65};
 	setGravity(1);
-	setHorizon(Window::height() - 50);
+	setHorizon(570);
+
+	machine_.currentState()->onEnter(*this);
 }
 
 TestGameActor::~TestGameActor()
@@ -19,7 +22,7 @@ TestGameActor::~TestGameActor()
 }
 
 void
-TestGameActor::eventHandler(const SDL_Event& event)
+TestGameActor::handleInput(const GameActorController& controller)
 {
 	machine_.currentState()->eventHandler(*this, event);
 }
@@ -40,12 +43,9 @@ TestGameActor::update()
 		}
 	}
 
+	updateBullet(*this);
+
 	machine_.currentState()->update(*this);
-	//if (machine_.next()) {
-		//machine_.currentState()->onExit(*this);
-		//machine_.changeStateTo(machine_.next());
-		//machine_.currentState()->onEnter(*this);
-	//}
 	if (machine_.hasNext()) {
 		machine_.currentState()->onExit(*this);
 		machine_.toNext();
@@ -58,18 +58,22 @@ TestGameActor::render()
 {
 	SDL_SetRenderDrawColor(renderer_, 0, 255, 30, 255);
 	SDL_RenderFillRect(renderer_, &posRect_);
+
+	renderBullet();
 }
 
 void
 TestGameActor::moveRight()
 {
 	applyAcc(1, 0);
+	direction_ = ACTOR_FACE_RIGHT;
 }
 
 void
 TestGameActor::moveLeft()
 {
 	applyAcc(-1, 0);
+	direction_ = ACTOR_FACE_LEFT;
 }
 
 void
@@ -88,4 +92,16 @@ void
 TestGameActor::dive()
 {
 	machine_.setNext(TEST_STATE_DIVE);
+}
+
+void
+TestGameActor::normalAttack()
+{
+	machine_.setNext(TEST_STATE_NORMAL_ATTACK);
+}
+
+void
+TestGameActor::normalAirAttack()
+{
+	machine_.setNext(TEST_STATE_NORMAL_AIR_ATTACK);
 }

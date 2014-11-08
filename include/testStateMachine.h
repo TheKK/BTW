@@ -15,6 +15,8 @@
 #include "onGroundState.h"
 #include "jumpingState.h"
 #include "diveState.h"
+#include "normalAttackState.h"
+#include "normalAirAttackState.h"
 
 using namespace std;
 
@@ -23,6 +25,8 @@ enum TestState
 	TEST_STATE_ON_GROUND = 0x00,
 	TEST_STATE_JUMPING,
 	TEST_STATE_DIVE,
+	TEST_STATE_NORMAL_ATTACK,
+	TEST_STATE_NORMAL_AIR_ATTACK,
 
 	TEST_STATE_COUNT,
 
@@ -45,6 +49,8 @@ private:
 	OnGroundState onGroundState_;
 	JumpingState jumpingState_;;
 	DiveState diveState_;
+	NormalAttackState normalAttack_;
+	NormalAirAttackState normalAirAttack_;
 
 	enum TestState currentState_;
 	enum TestState nextState_;

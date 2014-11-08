@@ -18,34 +18,34 @@ class Renderable
 	public:
 		Renderable();
 		virtual ~Renderable();
-		virtual void Render() = 0;
-		virtual void SetAlpha(uint8_t value) = 0;
+		virtual void render() = 0;
+		virtual void setAlpha(uint8_t value) = 0;
 
-		SDL_Texture* LoadTexture(string filePath,
+		SDL_Texture* loadTexture(string filePath,
 					 SDL_Renderer* renderer,
 					 Uint8 r, Uint8 g, Uint8 b);
 
-		void Enlarge(int dw, int dh);
-		void SetSize(unsigned int w, unsigned int h);
-		void SetRenderer(SDL_Renderer* renderer);
+		void enlarge(int dw, int dh);
+		void setSize(unsigned int w, unsigned int h);
+		void setRenderer(SDL_Renderer* renderer);
 
-		void MoveBy(int x, int y);
-		void MoveXTo(int x);
-		void MoveYTo(int y);
-		void MoveTo(int x, int y);
+		void moveBy(int x, int y);
+		void moveXTo(int x);
+		void moveYTo(int y);
+		void moveTo(int x, int y);
 
-		int PosX() const;
-		int PosY() const;
-		int Width() const;
-		int Height() const;
-		SDL_Rect Rect() const;
+		int posX() const;
+		int posY() const;
+		int width() const;
+		int height() const;
+		SDL_Rect rect() const;
 
-		void Hide();
-		void Show();
-		void SetVisable(bool value);
-		bool GetVisable() const;
+		void hide();
+		void show();
+		void setVisable(bool value);
+		bool getVisable() const;
 
-		bool MouseHovered(int32_t mouseX, int32_t mouseY);
+		bool mouseHovered(int32_t mouseX, int32_t mouseY);
 	protected:
 		SDL_Rect rect_ = {0, 0, 0, 0};
 

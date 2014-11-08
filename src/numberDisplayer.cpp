@@ -12,24 +12,24 @@ NumberDisplayer::NumberDisplayer(string picPath, uint8_t displayDigitalNum,
 	numSprite_(picPath, renderer, digitalWidth, digitalHeight),
 	digitalNum_(displayDigitalNum)
 {
-	SetRenderer(renderer);
+	setRenderer(renderer);
 
 	/* Set rendering size of this displayer */
-	SetSize(digitalWidth * displayDigitalNum, digitalHeight);
+	setSize(digitalWidth * displayDigitalNum, digitalHeight);
 
 	/* Set vector size and init value */
 	digitalVect_.resize(digitalNum_);
 
-	CounterSetZero();
+	counterSetZero();
 }
 
 NumberDisplayer::~NumberDisplayer()
 {
-	Release_();
+	release_();
 }
 
 void
-NumberDisplayer::AddNum(uint32_t value)
+NumberDisplayer::addNum(uint32_t value)
 {
 	Uint32 toNext = 0;
 
@@ -52,7 +52,7 @@ NumberDisplayer::AddNum(uint32_t value)
 }
 
 void
-NumberDisplayer::SetNum(int value)
+NumberDisplayer::setNum(int value)
 {
 	SDL_assert(value < pow(10, digitalNum_));
 	for (int i = 0; i < digitalNum_; i++) {
@@ -62,7 +62,7 @@ NumberDisplayer::SetNum(int value)
 }
 
 uint64_t
-NumberDisplayer::GetNum() const
+NumberDisplayer::getNum() const
 {
 	Uint64 toReturn = 0;
 
@@ -75,29 +75,29 @@ NumberDisplayer::GetNum() const
 }
 
 void
-NumberDisplayer::SetAlpha(Uint8 value)
+NumberDisplayer::setAlpha(Uint8 value)
 {
-	numSprite_.SetAlpha(value);
+	numSprite_.setAlpha(value);
 }
 
 void
-NumberDisplayer::CounterSetZero()
+NumberDisplayer::counterSetZero()
 {
 	for (auto& e: digitalVect_)
 		e = 0;
 }
 
 void
-NumberDisplayer::Render()
+NumberDisplayer::render()
 {
 	for (int i = 0; i < digitalNum_; i++) {
-		numSprite_.MoveTo((rect_.x + numSprite_.Width() * i), rect_.y);
-		numSprite_.JumpTo(digitalVect_[i]);
-		numSprite_.Render();
+		numSprite_.moveTo((rect_.x + numSprite_.width() * i), rect_.y);
+		numSprite_.jumpTo(digitalVect_[i]);
+		numSprite_.render();
 	}
 }
 
 void
-NumberDisplayer::Release_()
+NumberDisplayer::release_()
 {
 }

@@ -11,6 +11,8 @@ TestStateMachine::TestStateMachine()
 	stateList_.push_back((State*) &onGroundState_);
 	stateList_.push_back((State*) &jumpingState_);
 	stateList_.push_back((State*) &diveState_);
+	stateList_.push_back((State*) &normalAttack_);
+	stateList_.push_back((State*) &normalAirAttack_);
 
 	SDL_assert(stateList_.size() == TEST_STATE_COUNT);
 

@@ -12,6 +12,7 @@
 
 #include "gameState.h"
 #include "testGameActor.h"
+#include "texture.h"
 #include "window.h"
 
 using namespace std;
@@ -26,7 +27,9 @@ public:
 	void update();
 	void render();
 private:
-	TestGameActor actor;
+	TestGameActor actor_;
+	Texture backGroundBG_;
+	Texture backGroundFG_;
 };
 
 #endif /* TEST_GAME_STATE_H */

@@ -9,8 +9,8 @@
 
 #include <iostream>
 #include <vector>
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
+#include <SDL.h>
+#include <SDL_image.h>
 
 #include "sprite.h"
 #include "renderable.h"
@@ -25,22 +25,22 @@ class NumberDisplayer : public Renderable
 				SDL_Renderer* renderer);
 		~NumberDisplayer();
 
-		void Render();
+		void render();
 
-		void AddNum(Uint32 value);
-		void SetNum(int value);
-		Uint64 GetNum() const;
+		void addNum(Uint32 value);
+		void setNum(int value);
+		Uint64 getNum() const;
 
-		void SetAlpha(Uint8 value);
+		void setAlpha(Uint8 value);
 
-		void CounterSetZero();
+		void counterSetZero();
 	private:
 		Sprite numSprite_;
 
 		vector<Uint8> digitalVect_;
 		Uint16 digitalNum_;
 
-		void Release_();
+		void release_();
 };
 
 #endif	/* NUMBER_DISPLAYER_H */

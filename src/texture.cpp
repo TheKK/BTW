@@ -13,20 +13,20 @@ Texture::Texture()
 Texture::Texture(string filePath, SDL_Renderer* renderer,
 		 Uint8 r, Uint8 g, Uint8 b)
 {
-	Load(filePath, renderer, r, g, b);
+	load(filePath, renderer, r, g, b);
 }
 
 Texture::~Texture()
 {
-	Release_();
+	release_();
 }
 
 void
-Texture::Load(string filePath, SDL_Renderer* renderer,
-		 Uint8 r, Uint8 g, Uint8 b)
+Texture::load(string filePath, SDL_Renderer* renderer,
+	      Uint8 r, Uint8 g, Uint8 b)
 {
 	targetRenderer_ = renderer;
-	texture_ = LoadTexture(filePath, renderer, r, g, b);
+	texture_ = loadTexture(filePath, renderer, r, g, b);
 
 	rect_.x = 0;
 	rect_.y = 0;
@@ -34,7 +34,7 @@ Texture::Load(string filePath, SDL_Renderer* renderer,
 }
 
 void
-Texture::Rotate(double value)
+Texture::rotate(double value)
 {
 	degree_ += value;
 	if (degree_ > 360.0)
@@ -44,20 +44,20 @@ Texture::Rotate(double value)
 }
 
 void
-Texture::SetAlpha(Uint8 value)
+Texture::setAlpha(Uint8 value)
 {
 	SDL_SetTextureAlphaMod(texture_, value);
 	alpha_ = value;
 }
 
 SDL_Texture*
-Texture::Object() const
+Texture::object() const
 {
 	return texture_;
 }
 
 void
-Texture::SetBlendMode(SDL_BlendMode mode)
+Texture::setBlendMode(SDL_BlendMode mode)
 {
 	SDL_assert_paranoid(texture_ != nullptr);
 
@@ -65,7 +65,7 @@ Texture::SetBlendMode(SDL_BlendMode mode)
 }
 
 void
-Texture::Render()
+Texture::render()
 {
 	if (!visable_)
 		return;
@@ -75,7 +75,7 @@ Texture::Render()
 }
 
 void
-Texture::RenderFullWindow()
+Texture::renderFullWindow()
 {
 	if (!visable_)
 		return;
@@ -84,7 +84,7 @@ Texture::RenderFullWindow()
 }
 
 void
-Texture::Release_()
+Texture::release_()
 {
 	if (texture_ != nullptr)
 		SDL_DestroyTexture(texture_);
