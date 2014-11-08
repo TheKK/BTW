@@ -26,7 +26,7 @@
 	#define SDL_ASSERT_LEVEL	3
 #endif
 
-#define GAME_FPS	60
+#define GAME_FPS	60.0
 
 using namespace std;
 
@@ -174,9 +174,10 @@ main(int argc, char* argv[])
 			if (gameState->hasNext())
 				ChangeState(&gameState);
 
-			if (timer.GetTicks() < (1000 / GAME_FPS))
-				SDL_Delay((1000 / GAME_FPS) -
+			if (timer.GetTicks() < (1000.0 / (double) GAME_FPS)) {
+				SDL_Delay((1000.0 / (double) GAME_FPS) -
 					  timer.GetTicks());
+			}
 		}
 	} catch (runtime_error& e) {
 		cerr << e.what() << endl;

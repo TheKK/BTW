@@ -8,27 +8,37 @@
 
 TestStateMachine::TestStateMachine()
 {
-	onGroundState_.addDest("jumpingState", jumpingState_);
+	stateList_.push_back((State*) &onGroundState_);
+	stateList_.push_back((State*) &jumpingState_);
+	stateList_.push_back((State*) &diveState_);
 
-	jumpingState_.addDest("onGroundState", onGroundState_);
+	SDL_assert(stateList_.size() == TEST_STATE_COUNT);
 
-	currentState_ = &onGroundState_;
+	currentState_ = TEST_STATE_ON_GROUND;
+	nextState_ = TEST_STATE_NULL;
 }
 
 State*
 TestStateMachine::currentState()
 {
-	return currentState_;
-}
-
-State*
-TestStateMachine::next()
-{
-	return currentState_->next();
+	return stateList_[currentState_];
 }
 
 void
-TestStateMachine::changeStateTo(State* where)
+TestStateMachine::toNext()
 {
-	currentState_ = where;
+	currentState_ = nextState_;
+	nextState_ = TEST_STATE_NULL;
+}
+
+void
+TestStateMachine::setNext(enum TestState state)
+{
+	nextState_ = state;
+};
+
+bool
+TestStateMachine::hasNext()
+{
+	return (nextState_ != TEST_STATE_NULL);
 }

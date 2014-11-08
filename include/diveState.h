@@ -1,11 +1,11 @@
 /*
  * Author: KK <thumbd03803@gmail.com>
  *
- * File: onGroundState.h
+ * File: diveState.h
  */
 
-#ifndef ON_GROUND_STATE_H
-#define ON_GROUND_STATE_H
+#ifndef DIVE_STATE_H
+#define DIVE_STATE_H
 
 #include <iostream>
 #include <SDL.h>
@@ -13,27 +13,18 @@
 #include "state.h"
 #include "gameActor.h"
 
-#define WALK_SPEED	10
-
 using namespace std;
 
-class OnGroundState : public State
+class DiveState: public State
 {
 public:
-	~OnGroundState() {};
+	~DiveState() {};
 
 	void onEnter(GameActor& actor);
 	void onExit(GameActor& actor);
 
 	void eventHandler(GameActor& actor, const SDL_Event& event);
 	void update(GameActor& actor);
-private:
-	bool moveRight_;
-	bool moveLeft_;
-	bool dashRight_;
-
-	Uint32 buttonLeftTimestamp;
-	Uint32 buttonRightTimestamp;
 };
 
-#endif /* ON_GROUND_STATE_H */
+#endif /* DIVE_STATE_H */

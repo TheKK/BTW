@@ -9,22 +9,32 @@
 void
 JumpingState::onEnter(GameActor& actor)
 {
-	cout << "jumping enter" << endl;
-
-	setNext(nullptr);
-
 	frame = 0;
+
+	actor.setVelY(0);
+	actor.applyAcc(0, -10);
 }
 
 void
 JumpingState::onExit(GameActor& actor)
 {
-	cout << "jumping exit" << endl;
 }
 
 void
 JumpingState::eventHandler(GameActor& actor, const SDL_Event& event)
 {
+	switch (event.type) {
+	case SDL_KEYDOWN:
+		if (event.key.repeat == 1)
+			break;
+
+		switch (event.key.keysym.sym) {
+		case SDLK_DOWN:
+			actor.dive();
+			break;
+		}
+		break;
+	}
 }
 
 void
@@ -34,17 +44,17 @@ JumpingState::update(GameActor& actor)
 
 	/* Check keyboard state */
 	if (keyState[SDL_SCANCODE_LEFT])
-		actor.applyAcc(-WALK_SPEED, 0);
+		actor.moveLeft();
 
 	if (keyState[SDL_SCANCODE_RIGHT])
-		actor.applyAcc(WALK_SPEED, 0);
+		actor.moveRight();
 
 	if (!keyState[SDL_SCANCODE_Z])
-		frame = 7;
+		frame = 5;
 
-	if (frame++ < 7)
-		actor.applyAcc(0, (-1 * (7 - frame)));
+	if (frame++ < 5)
+		actor.applyAcc(0, (-1 * (5 - frame)));
 
 	if (actor.isOnGround())
-		setNext("onGroundState");
+		actor.land();
 }

@@ -8,14 +8,26 @@
 #define TEST_STATE_MACHINE_H
 
 #include <iostream>
-#include <set>
+#include <vector>
 #include <SDL.h>
 
 #include "stateMachine.h"
 #include "onGroundState.h"
 #include "jumpingState.h"
+#include "diveState.h"
 
 using namespace std;
+
+enum TestState
+{
+	TEST_STATE_ON_GROUND = 0x00,
+	TEST_STATE_JUMPING,
+	TEST_STATE_DIVE,
+
+	TEST_STATE_COUNT,
+
+	TEST_STATE_NULL
+};
 
 class TestStateMachine
 {
@@ -24,13 +36,18 @@ public:
 	~TestStateMachine() {};
 
 	State* currentState();
-	State* next();
 
-	void changeStateTo(State* where);
+	void setNext(enum TestState state);
+	bool hasNext();
+	void toNext();
 private:
-	State* currentState_;
+	vector<State*> stateList_;
 	OnGroundState onGroundState_;
 	JumpingState jumpingState_;;
+	DiveState diveState_;
+
+	enum TestState currentState_;
+	enum TestState nextState_;
 };
 
 #endif /* TEST_STATE_MACHINE_H */

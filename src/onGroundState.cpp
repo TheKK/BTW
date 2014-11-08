@@ -9,34 +9,75 @@
 void
 OnGroundState::onEnter(GameActor& actor)
 {
-	cout << "on gournd enter" << endl;
+	const uint8_t* keyState = SDL_GetKeyboardState(nullptr);
 
-	setNext(nullptr);
+	/* Check keyboard state */
+	if (keyState[SDL_SCANCODE_RIGHT])
+		moveRight_ = true;
+	else
+		moveRight_ = false;
+
+	if (keyState[SDL_SCANCODE_LEFT])
+		moveLeft_ = true;
+	else
+		moveLeft_ = false;
+
+	dashRight_ = false;
 }
 
 void
 OnGroundState::onExit(GameActor& actor)
 {
-	cout << "on ground exit" << endl;
 }
 
 void
 OnGroundState::eventHandler(GameActor& actor, const SDL_Event& event)
 {
+	switch (event.type) {
+	case SDL_KEYDOWN:
+		if (event.key.repeat == 1)
+			break;
+
+		switch (event.key.keysym.sym) {
+		case SDLK_RIGHT:
+			moveRight_ = true;
+
+			if (event.key.timestamp - buttonRightTimestamp <= 200)
+				dashRight_ = true;
+			buttonRightTimestamp = event.key.timestamp;
+			break;
+		case SDLK_LEFT:
+			moveLeft_ = true;
+			break;
+		case SDLK_z:
+			actor.jump();
+			break;
+		}
+		break;
+	case SDL_KEYUP:
+		switch (event.key.keysym.sym) {
+		case SDLK_RIGHT:
+			moveRight_ = false;
+			break;
+		case SDLK_LEFT:
+			moveLeft_ = false;
+			break;
+		}
+		break;
+	}
 }
 
 void
 OnGroundState::update(GameActor& actor)
 {
-	const uint8_t* keyState = SDL_GetKeyboardState(nullptr);
+	if (moveRight_)
+		actor.moveRight();
 
-	/* Check keyboard state */
-	if (keyState[SDL_SCANCODE_LEFT])
-		actor.applyAcc(-WALK_SPEED, 0);
+	if (moveLeft_)
+		actor.moveLeft();
 
-	if (keyState[SDL_SCANCODE_RIGHT])
-		actor.applyAcc(WALK_SPEED, 0);
-
-	if (keyState[SDL_SCANCODE_Z])
-		setNext("jumpingState");
+	if (dashRight_) {
+		actor.moveBy(70, 0);
+		dashRight_ = false;
+	}
 }

@@ -9,7 +9,6 @@
 TestGameState::TestGameState():
 	actor(Window::renderer())
 {
-	actor.setGravity(1);
 }
 
 TestGameState::~TestGameState()

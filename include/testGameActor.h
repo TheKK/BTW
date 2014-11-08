@@ -12,6 +12,7 @@
 
 #include "gameActor.h"
 #include "testStateMachine.h"
+#include "window.h"
 
 using namespace std;
 
@@ -25,13 +26,13 @@ public:
 	void update();
 	void render();
 
-	void applyAcc(int accX, int accY);
-	void setAccY(int n);
-	void setGravity(int g);
-
-	bool isOnGround();
+	void moveRight();
+	void moveLeft();
+	void jump();
+	void land();
+	void dive();
 private:
-	TestStateMachine machine;
+	TestStateMachine machine_;
 };
 
 #endif /* TEST_GAME_ACTOR_H */

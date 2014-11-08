@@ -26,13 +26,6 @@ public:
 	virtual void eventHandler(GameActor& actor,
 				  const SDL_Event& event) = 0;
 	virtual void update(GameActor& actor) = 0;
-
-	void addDest(const char* name, State& dest);
-	bool setNext(const char* name);
-	State* next();
-private:
-	map<string, State*> destList_;
-	State* nextState_ = nullptr;
 };
 
 #endif /* STATE_H */

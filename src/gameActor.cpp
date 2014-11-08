@@ -7,10 +7,57 @@
 #include "gameActor.h"
 
 void
-GameActor::move(int dx, int dy)
+GameActor::applyAcc(int accX, int accY)
+{
+	velX_ += accX;
+	velY_ += accY;
+}
+
+void
+GameActor::setVelX(int n)
+{
+	velX_ = n;
+}
+
+void
+GameActor::setVelY(int n)
+{
+	velY_ = n;
+}
+
+void
+GameActor::setGravity(int g)
+{
+	gravity_ = g;
+}
+
+void
+GameActor::setHorizon(int h)
+{
+	horizon_ = h;
+}
+
+bool
+GameActor::isOnGround()
+{
+	return (posRect_.y + posRect_.h >= horizon_);
+}
+
+void
+GameActor::moveBy(int dx, int dy)
 {
 	posRect_.x += dx;
 	posRect_.y += dy;
+
+	if (posRect_.y + posRect_.h > horizon_)
+		posRect_.y = horizon_ - posRect_.h;
+}
+
+void
+GameActor::moveTo(int x, int y)
+{
+	posRect_.x = x;
+	posRect_.y = y;
 }
 
 void
@@ -35,12 +82,6 @@ void
 GameActor::setH(int n)
 {
 	posRect_.h = n;
-}
-
-void
-GameActor::setRenderer(SDL_Renderer* renderer)
-{
-	renderer_ = renderer;
 }
 
 int

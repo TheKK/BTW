@@ -13,10 +13,8 @@
 #include "state.h"
 #include "gameActor.h"
 
-#include "onGroundState.h"
-
 #define JUMP_SPEED	-20
-#define WALK_SPEED	5
+#define WALK_SPEED	10
 
 using namespace std;
 
@@ -34,4 +32,4 @@ private:
 	int frame;
 };
 
-#endif /* STANDING_STATE_H */
+#endif /* JUMPING_STATE_H */

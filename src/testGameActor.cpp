@@ -9,7 +9,9 @@
 TestGameActor::TestGameActor(SDL_Renderer* renderer)
 {
 	renderer_ = renderer;
-	posRect_ = {0, 0, 20, 50};
+	posRect_ = {0, 0, 30, 65};
+	setGravity(1);
+	setHorizon(Window::height() - 50);
 }
 
 TestGameActor::~TestGameActor()
@@ -19,31 +21,36 @@ TestGameActor::~TestGameActor()
 void
 TestGameActor::eventHandler(const SDL_Event& event)
 {
-	machine.currentState()->eventHandler(*this, event);
+	machine_.currentState()->eventHandler(*this, event);
 }
 
 void
 TestGameActor::update()
 {
-	machine.currentState()->update(*this);
-	if (machine.next()) {
-		machine.currentState()->onExit(*this);
-		machine.changeStateTo(machine.next());
-		machine.currentState()->onEnter(*this);
+	moveBy(velX_, velY_);
+
+	if (!isOnGround())
+		velY_ += gravity_;
+
+	if (velX_ != 0) {
+		static int delay = 0;
+		if (delay++ == 5) {
+			velX_ -= velX_ * 0.5;
+			delay = 0;
+		}
 	}
 
-	move(velX, velY);
-	if (isOnGround()) {
-		moveYto(720 - posRect_.h);
-		velY = 0;
-	} else {
-		velY += gY;
+	machine_.currentState()->update(*this);
+	//if (machine_.next()) {
+		//machine_.currentState()->onExit(*this);
+		//machine_.changeStateTo(machine_.next());
+		//machine_.currentState()->onEnter(*this);
+	//}
+	if (machine_.hasNext()) {
+		machine_.currentState()->onExit(*this);
+		machine_.toNext();
+		machine_.currentState()->onEnter(*this);
 	}
-
-	if (velX > 0)
-		velX -= velX * 0.4;
-	else if (velX < 0)
-		velX -= velX * 0.4;
 }
 
 void
@@ -54,26 +61,31 @@ TestGameActor::render()
 }
 
 void
-TestGameActor::applyAcc(int accX, int accY)
+TestGameActor::moveRight()
 {
-	velX += accX;
-	velY += accY;
+	applyAcc(1, 0);
 }
 
 void
-TestGameActor::setAccY(int n)
+TestGameActor::moveLeft()
 {
-	velY = n;
+	applyAcc(-1, 0);
 }
 
 void
-TestGameActor::setGravity(int g)
+TestGameActor::jump()
 {
-	gY = g;
+	machine_.setNext(TEST_STATE_JUMPING);
 }
 
-bool
-TestGameActor::isOnGround()
+void
+TestGameActor::land()
 {
-	return (posRect_.y >= 720 - posRect_.h);
+	machine_.setNext(TEST_STATE_ON_GROUND);
+}
+
+void
+TestGameActor::dive()
+{
+	machine_.setNext(TEST_STATE_DIVE);
 }
