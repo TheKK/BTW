@@ -12,6 +12,7 @@
 
 #include "gameState.h"
 #include "testGameActor.h"
+#include "gameActorController.h"
 #include "texture.h"
 #include "window.h"
 
@@ -27,7 +28,9 @@ public:
 	void update();
 	void render();
 private:
+	GameActorController controller_;
 	TestGameActor actor_;
+
 	Texture backGroundBG_;
 	Texture backGroundFG_;
 };

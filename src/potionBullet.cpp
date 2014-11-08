@@ -8,14 +8,18 @@
 
 PotionBullet::PotionBullet(GameActor& caster)
 {
-	posRect_ = {(caster.x() + 20), (caster.y()) + 10, 20, 20};
+	if (caster.direction() == ACTOR_FACE_RIGHT) {
+		posRect_ = {(caster.x() + 20), (caster.y() + 10), 20, 20};
+		velX_ = 10;
+	} else {
+		posRect_ = {(caster.x() + caster.w() - 30), (caster.y() + 10),
+			20, 20};
+		velX_ = -10;
+	}
+
 	horizon_ = caster.getHorizon();
 	delay_ = 0;
 
-	if (caster.direction() == ACTOR_FACE_RIGHT)
-		velX_ = 10;
-	else
-		velX_ = -10;
 	velY_ = -10;
 	gravity_ = 1;
 }

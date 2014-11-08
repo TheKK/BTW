@@ -34,10 +34,13 @@ public:
 	~GameActorController();
 
 	void eventHandler(const SDL_Event& event);
+	void update();
 
-	bool getButtonState_(enum Buttons which) const;
+	bool getButtonState(enum Buttons which) const;
+	bool ifButtonPressed(enum Buttons which) const;
 private:
-	bool buttonState_[BUTTON_COUNT] = {false};
+	bool buttonPressed_[BUTTON_COUNT] = {false};
+	bool buttonReleased_[BUTTON_COUNT] = {false};
 	const Uint8* keyState_;
 };
 

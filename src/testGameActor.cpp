@@ -24,7 +24,7 @@ TestGameActor::~TestGameActor()
 void
 TestGameActor::handleInput(const GameActorController& controller)
 {
-	machine_.currentState()->eventHandler(*this, event);
+	machine_.currentState()->handleInput(*this, controller);
 }
 
 void

@@ -23,37 +23,28 @@ JumpingState::onExit(GameActor& actor)
 }
 
 void
-JumpingState::eventHandler(GameActor& actor, const SDL_Event& event)
+JumpingState::handleInput(GameActor& actor,
+			  const GameActorController& controller)
 {
-	switch (event.type) {
-	case SDL_KEYDOWN:
-		switch (event.key.keysym.sym) {
-		case SDLK_DOWN:
-			actor.dive();
-			break;
-		case SDLK_x:
-			actor.normalAirAttack();
-			break;
-		}
-		break;
-	}
+	if (controller.getButtonState(BUTTON_RIGHT))
+		actor.moveRight();
+
+	if (controller.getButtonState(BUTTON_LEFT))
+		actor.moveLeft();
+
+	if (controller.getButtonState(BUTTON_DOWN))
+		actor.dive();
+
+	if (controller.ifButtonPressed(BUTTON_NORMAL_ATTACK))
+		actor.normalAirAttack();
+
+	if (!controller.getButtonState(BUTTON_JUMP))
+		frame = 5;
 }
 
 void
 JumpingState::update(GameActor& actor)
 {
-	const uint8_t* keyState = SDL_GetKeyboardState(nullptr);
-
-	/* Check keyboard state */
-	if (keyState[SDL_SCANCODE_LEFT])
-		actor.moveLeft();
-
-	if (keyState[SDL_SCANCODE_RIGHT])
-		actor.moveRight();
-
-	if (!keyState[SDL_SCANCODE_Z])
-		frame = 5;
-
 	if (frame++ < 5)
 		actor.applyAcc(0, (-1 * (5 - frame)));
 

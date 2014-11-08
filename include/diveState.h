@@ -12,8 +12,9 @@
 
 #include "state.h"
 #include "gameActor.h"
+#include "gameActorController.h"
 
-#define DIVE_DELAY	8
+#define DIVE_DELAY	5
 
 using namespace std;
 
@@ -25,7 +26,8 @@ public:
 	void onEnter(GameActor& actor);
 	void onExit(GameActor& actor);
 
-	void eventHandler(GameActor& actor, const SDL_Event& event);
+	void handleInput(GameActor& actor,
+			 const GameActorController& controller);
 	void update(GameActor& actor);
 private:
 	int delayFrame;

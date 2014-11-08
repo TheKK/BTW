@@ -20,7 +20,8 @@ NormalAirAttackState::onExit(GameActor& actor)
 }
 
 void
-NormalAirAttackState::eventHandler(GameActor& actor, const SDL_Event& event)
+NormalAirAttackState::handleInput(GameActor& actor,
+				  const GameActorController& controller)
 {
 }
 

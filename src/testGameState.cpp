@@ -32,13 +32,16 @@ TestGameState::eventHandler(const SDL_Event& event)
 		break;
 	}
 
-	actor_.eventHandler(event);
+	controller_.eventHandler(event);
 }
 
 void
 TestGameState::update()
 {
+	actor_.handleInput(controller_);
 	actor_.update();
+
+	controller_.update();
 }
 
 void

@@ -7,16 +7,12 @@
 #ifndef JUMPING_STATE_H
 #define JUMPING_STATE_H
 
-#include <iostream>
-#include <SDL.h>
-
 #include "state.h"
 #include "gameActor.h"
+#include "gameActorController.h"
 
 #define JUMP_SPEED	-20
 #define WALK_SPEED	10
-
-using namespace std;
 
 class JumpingState : public State
 {
@@ -26,7 +22,8 @@ public:
 	void onEnter(GameActor& actor);
 	void onExit(GameActor& actor);
 
-	void eventHandler(GameActor& actor, const SDL_Event& event);
+	void handleInput(GameActor& actor,
+			 const GameActorController& contoller);
 	void update(GameActor& actor);
 private:
 	int frame;

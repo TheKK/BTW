@@ -21,7 +21,7 @@ DiveState::onExit(GameActor& actor)
 }
 
 void
-DiveState::eventHandler(GameActor& actor, const SDL_Event& event)
+DiveState::handleInput(GameActor& actor, const GameActorController& controller)
 {
 }
 
