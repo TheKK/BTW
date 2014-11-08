@@ -20,17 +20,17 @@
 
 using namespace std;
 
-enum TestState
+enum ActorStates
 {
-	TEST_STATE_ON_GROUND = 0x00,
-	TEST_STATE_JUMPING,
-	TEST_STATE_DIVE,
-	TEST_STATE_NORMAL_ATTACK,
-	TEST_STATE_NORMAL_AIR_ATTACK,
+	ACTOR_STATE_ON_GROUND = 0x00,
+	ACTOR_STATE_JUMPING,
+	ACTOR_STATE_DIVE,
+	ACTOR_STATE_NORMAL_ATTACK,
+	ACTOR_STATE_NORMAL_AIR_ATTACK,
 
-	TEST_STATE_COUNT,
+	ACTOR_STATE_COUNT,
 
-	TEST_STATE_NULL
+	ACTOR_STATE_NULL
 };
 
 class TestStateMachine
@@ -41,7 +41,7 @@ public:
 
 	State* currentState();
 
-	void setNext(enum TestState state);
+	void setNext(enum ActorStates state);
 	bool hasNext();
 	void toNext();
 private:
@@ -52,8 +52,8 @@ private:
 	NormalAttackState normalAttack_;
 	NormalAirAttackState normalAirAttack_;
 
-	enum TestState currentState_;
-	enum TestState nextState_;
+	enum ActorStates currentState_;
+	enum ActorStates nextState_;
 };
 
 #endif /* TEST_STATE_MACHINE_H */

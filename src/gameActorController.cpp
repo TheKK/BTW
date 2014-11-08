@@ -7,9 +7,17 @@
 #include "gameActorController.h"
 
 GameActorController::GameActorController():
-	keyState_(SDL_GetKeyboardState(nullptr)
-)
+	keyState_(SDL_GetKeyboardState(nullptr))
 {
+	buttonKeyMap_[BUTTON_JUMP] = 		SDLK_z;
+	buttonKeyMap_[BUTTON_NORMAL_ATTACK] = 	SDLK_x;
+	buttonKeyMap_[BUTTON_SPECIAL_ATTACK] = 	SDLK_s;
+	buttonKeyMap_[BUTTON_EVADE] = 		SDLK_a;
+
+	buttonKeyMap_[BUTTON_UP] = 		SDLK_UP;
+	buttonKeyMap_[BUTTON_DOWN] = 		SDLK_DOWN;
+	buttonKeyMap_[BUTTON_RIGHT] = 		SDLK_RIGHT;
+	buttonKeyMap_[BUTTON_LEFT] = 		SDLK_LEFT;
 }
 
 GameActorController::~GameActorController()
@@ -20,6 +28,7 @@ void
 GameActorController::eventHandler(const SDL_Event& event)
 {
 	enum Buttons whichButton;
+	SDL_Keycode keycode;
 
 	switch (event.type) {
 	case SDL_KEYUP:
@@ -28,34 +37,24 @@ GameActorController::eventHandler(const SDL_Event& event)
 		if (event.key.repeat)
 			return;
 
-		switch (event.key.keysym.sym) {
-		case SDLK_UP:
+		keycode = event.key.keysym.sym;
+
+		if (keycode == buttonKeyMap_[BUTTON_UP])
 			whichButton = BUTTON_UP;
-			break;
-		case SDLK_DOWN:
-			whichButton = BUTTON_DOWN;
-			break;
-		case SDLK_RIGHT:
-			whichButton = BUTTON_RIGHT;
-			break;
-		case SDLK_LEFT:
-			whichButton = BUTTON_LEFT;
-			break;
-		case SDLK_z:
-			whichButton = BUTTON_JUMP;
-			break;
-		case SDLK_x:
-			whichButton = BUTTON_NORMAL_ATTACK;
-			break;
-		case SDLK_a:
-			whichButton = BUTTON_EVADE;
-			break;
-		case SDLK_s:
-			whichButton = BUTTON_SPECIAL_ATTACK;
-			break;
-		default:
-			return;
-		}
+		else if (keycode == buttonKeyMap_[BUTTON_DOWN])
+			 whichButton = BUTTON_DOWN;
+		else if (keycode == buttonKeyMap_[BUTTON_RIGHT])
+			 whichButton = BUTTON_RIGHT;
+		else if (keycode == buttonKeyMap_[BUTTON_LEFT])
+			 whichButton = BUTTON_LEFT;
+		else if (keycode == buttonKeyMap_[BUTTON_JUMP])
+			 whichButton = BUTTON_JUMP;
+		else if (keycode == buttonKeyMap_[BUTTON_EVADE])
+			 whichButton = BUTTON_EVADE;
+		else if (keycode == buttonKeyMap_[BUTTON_NORMAL_ATTACK])
+			 whichButton = BUTTON_NORMAL_ATTACK;
+		else if (keycode == buttonKeyMap_[BUTTON_SPECIAL_ATTACK])
+			 whichButton = BUTTON_SPECIAL_ATTACK;
 
 		if (event.key.state == SDL_PRESSED) {
 			buttonPressed_[whichButton] = true;

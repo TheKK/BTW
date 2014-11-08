@@ -14,10 +14,10 @@ TestStateMachine::TestStateMachine()
 	stateList_.push_back((State*) &normalAttack_);
 	stateList_.push_back((State*) &normalAirAttack_);
 
-	SDL_assert(stateList_.size() == TEST_STATE_COUNT);
+	SDL_assert(stateList_.size() == ACTOR_STATE_COUNT);
 
-	currentState_ = TEST_STATE_ON_GROUND;
-	nextState_ = TEST_STATE_NULL;
+	currentState_ = ACTOR_STATE_ON_GROUND;
+	nextState_ = ACTOR_STATE_NULL;
 }
 
 State*
@@ -30,11 +30,11 @@ void
 TestStateMachine::toNext()
 {
 	currentState_ = nextState_;
-	nextState_ = TEST_STATE_NULL;
+	nextState_ = ACTOR_STATE_NULL;
 }
 
 void
-TestStateMachine::setNext(enum TestState state)
+TestStateMachine::setNext(enum ActorStates state)
 {
 	nextState_ = state;
 };
@@ -42,5 +42,5 @@ TestStateMachine::setNext(enum TestState state)
 bool
 TestStateMachine::hasNext()
 {
-	return (nextState_ != TEST_STATE_NULL);
+	return (nextState_ != ACTOR_STATE_NULL);
 }

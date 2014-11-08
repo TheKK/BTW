@@ -79,29 +79,29 @@ TestGameActor::moveLeft()
 void
 TestGameActor::jump()
 {
-	machine_.setNext(TEST_STATE_JUMPING);
+	machine_.setNext(ACTOR_STATE_JUMPING);
 }
 
 void
 TestGameActor::land()
 {
-	machine_.setNext(TEST_STATE_ON_GROUND);
+	machine_.setNext(ACTOR_STATE_ON_GROUND);
 }
 
 void
 TestGameActor::dive()
 {
-	machine_.setNext(TEST_STATE_DIVE);
+	machine_.setNext(ACTOR_STATE_DIVE);
 }
 
 void
 TestGameActor::normalAttack()
 {
-	machine_.setNext(TEST_STATE_NORMAL_ATTACK);
+	machine_.setNext(ACTOR_STATE_NORMAL_ATTACK);
 }
 
 void
 TestGameActor::normalAirAttack()
 {
-	machine_.setNext(TEST_STATE_NORMAL_AIR_ATTACK);
+	machine_.setNext(ACTOR_STATE_NORMAL_AIR_ATTACK);
 }
