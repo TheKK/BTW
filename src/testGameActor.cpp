@@ -6,7 +6,9 @@
 
 #include "testGameActor.h"
 
-TestGameActor::TestGameActor()
+TestGameActor::TestGameActor():
+	machine_(),
+	delay_(0)
 {
 	posRect_ = {0, 0, 30, 65};
 	setGravity(1);
@@ -34,10 +36,9 @@ TestGameActor::update()
 		velY_ += gravity_;
 
 	if (velX_ != 0) {
-		static int delay = 0;
-		if (delay++ == 5) {
+		if (delay_++ == 5) {
 			velX_ -= velX_ * 0.5;
-			delay = 0;
+			delay_ = 0;
 		}
 	}
 

@@ -1,0 +1,11 @@
+
+{
+	"BUTTON_DOWN" : "Down",
+	"BUTTON_EVADE" : "A",
+	"BUTTON_JUMP" : "Z",
+	"BUTTON_LEFT" : "J",
+	"BUTTON_NORMAL_ATTACK" : "X",
+	"BUTTON_RIGHT" : "K",
+	"BUTTON_SPECIAL_ATTACK" : "S",
+	"BUTTON_UP" : "Up"
+}

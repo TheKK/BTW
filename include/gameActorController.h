@@ -9,12 +9,13 @@
 
 #include <iostream>
 #include <fstream>
+#include <string>
 #include <SDL.h>
 #include <jsoncpp/json/json.h>
 
 #include "logLocator.h"
 
-#define SETTING_FILE	(char*) "./game/setting/controller.json"
+#define DEFAULT_SETTING_FILE	(char*) "./game/setting/controller.json"
 
 #define GET_SETTING_FROM_JSON(json, button, defaultValue); \
 	do { \
@@ -64,13 +65,14 @@ class GameActorController
 {
 public:
 	GameActorController();
+	GameActorController(const char* filePath);
 	~GameActorController();
 
 	void eventHandler(const SDL_Event& event);
 	void update();
 
-	bool readSettingFromFile(char* filePath);
-	bool saveSettingToFile(char* filePath);
+	bool readSettingFromFile(const char* filePath);
+	bool saveSettingToFile(const char* filePath);
 	void useDefaultSetting();
 	void setButtonKey(enum Buttons button, SDL_Scancode key);
 
@@ -81,6 +83,8 @@ private:
 	bool buttonPressed_[BUTTON_COUNT] = {false};
 	bool buttonReleased_[BUTTON_COUNT] = {false};
 	const Uint8* keyState_;
+
+	string settingFileName_;
 
 	SDL_Scancode buttonKeyMap_[BUTTON_COUNT] = {SDL_SCANCODE_UNKNOWN};
 };

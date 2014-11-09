@@ -35,6 +35,7 @@ public:
 	void normalAirAttack();
 private:
 	TestStateMachine machine_;
+	int delay_;
 };
 
 #endif /* TEST_GAME_ACTOR_H */

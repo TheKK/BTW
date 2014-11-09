@@ -9,15 +9,24 @@
 GameActorController::GameActorController():
 	keyState_(SDL_GetKeyboardState(nullptr))
 {
+	settingFileName_ = DEFAULT_SETTING_FILE;
+	if(!(readSettingFromFile(settingFileName_.c_str())))
+		useDefaultSetting();
+}
+
+GameActorController::GameActorController(const char* filePath):
+	keyState_(SDL_GetKeyboardState(nullptr))
+{
 	/* Use file to config button map */
-	if(!(readSettingFromFile(SETTING_FILE)))
+	settingFileName_ = filePath;
+	if(!(readSettingFromFile(settingFileName_.c_str())))
 		useDefaultSetting();
 }
 
 GameActorController::~GameActorController()
 {
 	/* TODO May be here is not the best potition to place this function */
-	saveSettingToFile(SETTING_FILE);
+	saveSettingToFile(settingFileName_.c_str());
 }
 
 void
@@ -74,15 +83,19 @@ GameActorController::update()
 }
 
 bool
-GameActorController::readSettingFromFile(char* filePath)
+GameActorController::readSettingFromFile(const char* filePath)
 {
 	Json::Value root;
 	Json::Reader reader;
 	ifstream config;
 	bool parseingSuccessful;
+	string fullPath;
 
 	/* Open file */
-	config.open(filePath, ifstream::in);
+	fullPath = SDL_GetBasePath();
+	fullPath += filePath;
+
+	config.open(fullPath, ifstream::in);
 	if (!config.is_open()) {
 		LogLocator::GetService()->LogWarn(
 			"Controller setting file not found");
@@ -116,7 +129,7 @@ GameActorController::readSettingFromFile(char* filePath)
 }
 
 bool
-GameActorController::saveSettingToFile(char* filePath)
+GameActorController::saveSettingToFile(const char* filePath)
 {
 	Json::Value root;
 	Json::StyledStreamWriter writer;
