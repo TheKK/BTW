@@ -7,7 +7,6 @@
 #include "testGameState.h"
 
 TestGameState::TestGameState():
-	actor_(Window::renderer()),
 	backGroundBG_("./game/images/battleField.png", Window::renderer()),
 	backGroundFG_("./game/images/battleFieldFG.png", Window::renderer())
 {

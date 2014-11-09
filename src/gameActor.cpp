@@ -183,9 +183,3 @@ GameActor::rect()
 {
 	return &posRect_;
 }
-
-SDL_Renderer*
-GameActor::renderer() const
-{
-	return renderer_;
-}

@@ -76,9 +76,7 @@ public:
 	int w() const;
 	int h() const;
 	SDL_Rect* rect();
-	SDL_Renderer* renderer() const;
 protected:
-	SDL_Renderer* renderer_ = nullptr;
 	SDL_Rect posRect_ = {0};
 	int velX_ = 0;
 	int velY_ = 0;

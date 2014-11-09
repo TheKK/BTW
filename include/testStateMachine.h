@@ -37,7 +37,9 @@ class TestStateMachine
 {
 public:
 	TestStateMachine();
-	~TestStateMachine() {};
+	~TestStateMachine();
+
+	void bindState(enum ActorStates which, State* state);
 
 	State* currentState();
 

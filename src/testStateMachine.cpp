@@ -20,9 +20,14 @@ TestStateMachine::TestStateMachine()
 	nextState_ = ACTOR_STATE_NULL;
 }
 
+TestStateMachine::~TestStateMachine()
+{
+}
+
 State*
 TestStateMachine::currentState()
 {
+	SDL_assert(stateList_[currentState_] != nullptr);
 	return stateList_[currentState_];
 }
 

@@ -6,10 +6,8 @@
 
 #include "testGameActor.h"
 
-TestGameActor::TestGameActor(SDL_Renderer* renderer)
+TestGameActor::TestGameActor()
 {
-	renderer_ = renderer;
-
 	posRect_ = {0, 0, 30, 65};
 	setGravity(1);
 	setHorizon(570);
@@ -56,8 +54,8 @@ TestGameActor::update()
 void
 TestGameActor::render()
 {
-	SDL_SetRenderDrawColor(renderer_, 0, 255, 30, 255);
-	SDL_RenderFillRect(renderer_, &posRect_);
+	SDL_SetRenderDrawColor(Window::renderer(), 0, 255, 30, 255);
+	SDL_RenderFillRect(Window::renderer(), &posRect_);
 
 	renderBullet();
 }

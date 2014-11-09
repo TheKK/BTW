@@ -26,6 +26,7 @@ LIB += $(shell pkg-config --libs SDL2_ttf)
 LIB += $(shell pkg-config --libs lua)
 LIB += $(shell pkg-config --libs openal)
 LIB += $(shell pkg-config --libs alure)
+LIB += -ljsoncpp
 
 # Object files
 OUT_DIR= $(PWD)/obj

@@ -8,9 +8,11 @@
 #define GAME_ACTOR_CONTROLLER_H
 
 #include <iostream>
+#include <fstream>
 #include <SDL.h>
+#include <jsoncpp/json/json.h>
 
-#include "gameActor.h"
+#include "logLocator.h"
 
 using namespace std;
 
@@ -52,19 +54,20 @@ public:
 	void eventHandler(const SDL_Event& event);
 	void update();
 
-	void execute(GameActor& actor);
+	bool readSettingFromFile(char* filePath);
+	void saveSettingToFile(char* filePath);
+	void useDefaultSetting();
+	void setButtonKey(enum Buttons button, SDL_Scancode key);
 
-	void setButtonFunction(enum Buttons button, enum Commands command);
-	void setButtonKey(enum Buttons button, SDL_Keycode key);
 	bool getButtonState(enum Buttons which) const;
 	bool ifButtonPressed(enum Buttons which) const;
+	bool ifButtonReleased(enum Buttons which) const;
 private:
 	bool buttonPressed_[BUTTON_COUNT] = {false};
 	bool buttonReleased_[BUTTON_COUNT] = {false};
 	const Uint8* keyState_;
 
-	enum Commands buttonCommandMap_[BUTTON_COUNT] = {COMMAND_NULL};
-	SDL_Keycode buttonKeyMap_[BUTTON_COUNT] = {0};
+	SDL_Scancode buttonKeyMap_[BUTTON_COUNT] = {SDL_SCANCODE_UNKNOWN};
 };
 
 #endif /* GAME_ACTOR_CONTROLLER_H */

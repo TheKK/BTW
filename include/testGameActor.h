@@ -19,7 +19,7 @@ using namespace std;
 class TestGameActor : public GameActor
 {
 public:
-	TestGameActor(SDL_Renderer* renderer);
+	TestGameActor();
 	~TestGameActor();
 
 	void handleInput(const GameActorController& controller);
