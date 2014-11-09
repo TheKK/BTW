@@ -14,6 +14,21 @@
 
 #include "logLocator.h"
 
+#define SETTING_FILE	(char*) "./game/setting/controller.json"
+
+#define GET_SETTING_FROM_JSON(json, button, defaultValue); \
+	do { \
+		buttonKeyMap_[button] = \
+		SDL_GetScancodeFromName(json.get(#button, defaultValue) \
+					.asCString()); \
+	} while (0); \
+
+#define SAVE_SETTING_TO_JSON(json, button); \
+	do { \
+		root[#button] = \
+		SDL_GetScancodeName(buttonKeyMap_[button]); \
+	} while (0); \
+
 using namespace std;
 
 enum Buttons
@@ -55,7 +70,7 @@ public:
 	void update();
 
 	bool readSettingFromFile(char* filePath);
-	void saveSettingToFile(char* filePath);
+	bool saveSettingToFile(char* filePath);
 	void useDefaultSetting();
 	void setButtonKey(enum Buttons button, SDL_Scancode key);
 

@@ -10,12 +10,14 @@ GameActorController::GameActorController():
 	keyState_(SDL_GetKeyboardState(nullptr))
 {
 	/* Use file to config button map */
-	if(!(readSettingFromFile((char*) "./game/setting/controller.json")))
+	if(!(readSettingFromFile(SETTING_FILE)))
 		useDefaultSetting();
 }
 
 GameActorController::~GameActorController()
 {
+	/* TODO May be here is not the best potition to place this function */
+	saveSettingToFile(SETTING_FILE);
 }
 
 void
@@ -98,23 +100,56 @@ GameActorController::readSettingFromFile(char* filePath)
 	}
 
 	/* Get value */
-	/* FIXME Tooooooooo long!! */
-	buttonKeyMap_[BUTTON_JUMP] = SDL_GetScancodeFromName(root.get("BUTTON_JUMP", "Z").asCString());
-	buttonKeyMap_[BUTTON_NORMAL_ATTACK] = SDL_GetScancodeFromName(root.get("BUTTON_NORMAL_ATTACK", "X").asCString());
-	buttonKeyMap_[BUTTON_SPECIAL_ATTACK] = SDL_GetScancodeFromName(root.get("BUTTON_SPECIAL_ATTACK", "S").asCString());
-	buttonKeyMap_[BUTTON_EVADE] = SDL_GetScancodeFromName(root.get("BUTTON_EVADE", "A").asCString());
+	GET_SETTING_FROM_JSON(root, BUTTON_JUMP,		"Z");
+	GET_SETTING_FROM_JSON(root, BUTTON_NORMAL_ATTACK,	"X");
+	GET_SETTING_FROM_JSON(root, BUTTON_SPECIAL_ATTACK,	"S");
+	GET_SETTING_FROM_JSON(root, BUTTON_EVADE,		"A");
+	GET_SETTING_FROM_JSON(root, BUTTON_UP,			"Up");
+	GET_SETTING_FROM_JSON(root, BUTTON_DOWN,		"Down");
+	GET_SETTING_FROM_JSON(root, BUTTON_RIGHT,		"Right");
+	GET_SETTING_FROM_JSON(root, BUTTON_LEFT,		"Left");
 
-	buttonKeyMap_[BUTTON_UP] = SDL_GetScancodeFromName(root.get("BUTTON_UP", "Up").asCString());
-	buttonKeyMap_[BUTTON_DOWN] = SDL_GetScancodeFromName(root.get("BUTTON_DOWN", "Down").asCString());
-	buttonKeyMap_[BUTTON_RIGHT] = SDL_GetScancodeFromName(root.get("BUTTON_RIGHT", "Right").asCString());
-	buttonKeyMap_[BUTTON_LEFT] = SDL_GetScancodeFromName(root.get("BUTTON_LEFT", "Left").asCString());
+	LogLocator::GetService()->LogInfo(
+		"Controller setting read from %s successfully", filePath);
 
 	return true;
 }
 
-void
+bool
 GameActorController::saveSettingToFile(char* filePath)
 {
+	Json::Value root;
+	Json::StyledStreamWriter writer;
+	string str;
+	ofstream output;
+
+	/* Create file */
+	output.open(filePath, ofstream::out);
+	if (!output.is_open()) {
+		LogLocator::GetService()->LogWarn(
+			"Can not write controller setting to file");
+
+		return false;
+	}
+
+	/* Store current setting */
+	SAVE_SETTING_TO_JSON(root, BUTTON_JUMP);
+	SAVE_SETTING_TO_JSON(root, BUTTON_NORMAL_ATTACK);
+	SAVE_SETTING_TO_JSON(root, BUTTON_SPECIAL_ATTACK);
+	SAVE_SETTING_TO_JSON(root, BUTTON_EVADE);
+	SAVE_SETTING_TO_JSON(root, BUTTON_UP);
+	SAVE_SETTING_TO_JSON(root, BUTTON_DOWN);
+	SAVE_SETTING_TO_JSON(root, BUTTON_RIGHT);
+	SAVE_SETTING_TO_JSON(root, BUTTON_LEFT);
+
+	writer.write(output, root);
+
+	output.close();
+
+	LogLocator::GetService()->LogInfo(
+		"Controller setting write to %s successfully", filePath);
+
+	return true;
 }
 
 void
