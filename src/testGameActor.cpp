@@ -30,8 +30,8 @@ TestGameActor::handleInput(const GameActorController& controller)
 void
 TestGameActor::update()
 {
+	/* Update position */
 	moveBy(velX_, velY_);
-
 	if (!isOnGround())
 		velY_ += gravity_;
 
@@ -42,14 +42,8 @@ TestGameActor::update()
 		}
 	}
 
-	updateBullet(*this);
-
 	machine_.update(*this);
-	if (machine_.hasNext()) {
-		machine_.onExit(*this);
-		machine_.toNext();
-		machine_.onEnter(*this);
-	}
+	updateBullet(*this);
 }
 
 void
@@ -73,34 +67,4 @@ TestGameActor::moveLeft()
 {
 	applyAcc(-1, 0);
 	direction_ = ACTOR_FACE_LEFT;
-}
-
-void
-TestGameActor::jump()
-{
-	machine_.setNext(ACTOR_STATE_JUMPING);
-}
-
-void
-TestGameActor::land()
-{
-	machine_.setNext(ACTOR_STATE_ON_GROUND);
-}
-
-void
-TestGameActor::dive()
-{
-	machine_.setNext(ACTOR_STATE_DIVE);
-}
-
-void
-TestGameActor::normalAttack()
-{
-	machine_.setNext(ACTOR_STATE_NORMAL_ATTACK);
-}
-
-void
-TestGameActor::normalAirAttack()
-{
-	machine_.setNext(ACTOR_STATE_NORMAL_AIR_ATTACK);
 }

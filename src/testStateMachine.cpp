@@ -8,10 +8,12 @@
 
 TestStateMachine::TestStateMachine():
 	states_(nullptr),
-	currentStateName_("")
+	currentState_(""),
+	nextState_("")
 {
 	string fullPath;
 
+	/* Lua routine */
 	states_ = luaL_newstate();
 	if (states_ == nullptr) {
 		LogLocator::GetService()->LogCritical(
@@ -22,6 +24,7 @@ TestStateMachine::TestStateMachine():
 
 	luaL_openlibs(states_);
 
+	/* Load character states */
 	fullPath = SDL_GetBasePath();
 	fullPath += "./game/scripts/character/Zup/states.lua";
 	if (luaL_dofile(states_, fullPath.c_str()) != LUA_OK) {
@@ -35,8 +38,14 @@ TestStateMachine::TestStateMachine():
 	GameActor::lua_registerEverything(states_);
 	GameActorController::lua_registerEverything(states_);
 
+	/* Set 'this' address as Lua global variable */
+	lua_pushlightuserdata(states_, this);
+	lua_setglobal(states_, "FSM");
+
+	lua_register(states_, "changeStateTo", lua_setNext);
+
 	/* Init machine state */
-	setNext(ACTOR_STATE_ON_GROUND);
+	setNext((char*) "onGround");
 	toNext();
 }
 
@@ -115,65 +124,47 @@ TestStateMachine::update(GameActor& actor)
 		lua_pop(states_, 1);
 		throw runtime_error("Lua error, program shutdown");
 	}
+
+	/* See if need to change to new state */
+	if (hasNext()) {
+		onExit(actor);
+		toNext();
+		onEnter(actor);
+	}
 }
 
 void
 TestStateMachine::toNext()
 {
+	SDL_assert(nextState_ != "");
+
 	currentState_ = nextState_;
-	nextState_ = ACTOR_STATE_NULL;
+	nextState_ = "";
 
-	/* Lua stuffs */
-	switch (currentState_) {
-	case ACTOR_STATE_ON_GROUND:
-		currentStateName_ = "onGround";
-		break;
-	case ACTOR_STATE_JUMPING:
-		currentStateName_ = "jumping";
-		break;
-	case ACTOR_STATE_DIVE:
-		currentStateName_ = "dive";
-		break;
-	case ACTOR_STATE_NORMAL_ATTACK:
-		currentStateName_ = "normalAttack";
-		break;
-	case ACTOR_STATE_NORMAL_AIR_ATTACK:
-		currentStateName_ = "normalAirAttack";
-		break;
-	default:
-		LogLocator::GetService()->LogError(
-			"[TestStateMachine] Program should not get here");
-		throw runtime_error("Boo");
-		break;
-	}
-
-	/* Make sure nothing go wrong */
+	/* Make sure nothing go wrong and pop them all */
 	if (lua_gettop(states_) > 1)
 		LogLocator::GetService()->LogWarn(
 			"[TestStateMachine] Lua stack height is not 1");
-	/* Pop old table */
 	lua_pop(states_, lua_gettop(states_));
 
-	/* Get new table */
-	lua_getglobal(states_, currentStateName_.c_str());
-	/* You are not exist */
+	/* Get new table and check error */
+	lua_getglobal(states_, currentState_.c_str());
 	if (lua_isnil(states_, -1)) {
 		LogLocator::GetService()->LogCritical(
-			"[TestStateMachine] Global varialbe \"%s\" not exist",
-			currentStateName_.c_str());
+			"[TestStateMachine] State \"%s\" does not exist",
+			currentState_.c_str());
 		throw runtime_error("Critical error, program shutdown");
 
-	/* You are not table */
 	} else if (!lua_istable(states_, -1)) {
 		LogLocator::GetService()->LogCritical(
-			"[TestStateMachine] Global varialbe \"%s\" not exist",
-			currentStateName_.c_str());
+			"[TestStateMachine] State \"%s\" is not a table",
+			currentState_.c_str());
 		throw runtime_error("Critical error, program shutdown");
 	}
 }
 
 void
-TestStateMachine::setNext(enum ActorStates state)
+TestStateMachine::setNext(char* state)
 {
 	nextState_ = state;
 };
@@ -181,5 +172,31 @@ TestStateMachine::setNext(enum ActorStates state)
 bool
 TestStateMachine::hasNext()
 {
-	return (nextState_ != ACTOR_STATE_NULL);
+	return (nextState_ != "");
+}
+
+int
+TestStateMachine::lua_setNext(lua_State* L)
+{
+	void* TestStateMachinePtr = nullptr;
+	char* nextState = nullptr;
+
+	/* Check number of argument(s) */
+	if (lua_gettop(L) < 2)
+		return luaL_error(L, "Too few argument");
+	else if (lua_gettop(L) > 2)
+		return luaL_error(L, "Too much argument");
+
+	/* Check argument type */
+	if (!lua_isuserdata(L, 1))
+		return luaL_error(L, "First argument is not userdata");
+	if (!lua_isstring(L, 2))
+		return luaL_error(L, "Second argument is not string");
+
+	TestStateMachinePtr = (void*) lua_topointer(L, 1);
+	nextState = (char*) lua_tostring(L, 2);
+
+	((TestStateMachine*) TestStateMachinePtr)->setNext(nextState);
+
+	return 0;
 }

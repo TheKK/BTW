@@ -5,5 +5,12 @@
 ]]
 
 -- Use this script to inclue all the state this character need!
-dofile './game/scripts/character/Zup/onGround.lua'
-dofile './game/scripts/character/Zup/jumping.lua'
+package.path = package.path .. ';./game/scripts/character/Zup/?.lua'
+
+require 'onGround'
+require 'jumping'
+require 'dive'
+
+-- Make a variable "ownerAddr" to store the finite state machine that own this
+-- Lua script
+ownerAddr = ''

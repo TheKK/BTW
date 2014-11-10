@@ -28,11 +28,6 @@ public:
 
 	void moveRight();
 	void moveLeft();
-	void jump();
-	void land();
-	void dive();
-	void normalAttack();
-	void normalAirAttack();
 private:
 	TestStateMachine machine_;
 	int delay_;

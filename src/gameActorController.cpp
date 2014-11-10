@@ -240,7 +240,6 @@ GameActorController::lua_getButtonState(lua_State* L)
 	if (!lua_isuserdata(L, 1))
 		return luaL_error(L, "First argument is not userdata");
 
-	/* FIXME Bug here but have no idea how to fix it... */
 	if (!check_enum_type(L, "Buttons", 2))
 		return luaL_error(L, "Second argument is not enum Button");
 
@@ -270,7 +269,8 @@ GameActorController::lua_ifButtonPressed(lua_State* L)
 	/* Check type of argument */
 	if (!lua_isuserdata(L, 1))
 		return luaL_error(L, "First argument is not userdata");
-	else if (!check_enum_type(L, "Button", 2))
+
+	if (!check_enum_type(L, "Buttons", 2))
 		return luaL_error(L, "Second argument is not enum Button");
 
 	controllerPtr = lua_touserdata(L, 1);
@@ -299,7 +299,8 @@ GameActorController::lua_ifButtonReleased(lua_State* L)
 	/* Check type of argument */
 	if (!lua_isuserdata(L, 1))
 		return luaL_error(L, "First argument is not userdata");
-	else if (!check_enum_type(L, "Button", 2))
+
+	if (!check_enum_type(L, "Buttons", 2))
 		return luaL_error(L, "Second argument is not enum Button");
 
 	controllerPtr = lua_touserdata(L, 1);

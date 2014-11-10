@@ -25,6 +25,7 @@ GameActor::lua_registerEverything(lua_State* L)
 	lua_register(L, "land", lua_land);
 	lua_register(L, "isOnGround", lua_isOnGround);
 	lua_register(L, "setVelY", lua_setVelY);
+	lua_register(L, "setVelX", lua_setVelX);
 	lua_register(L, "applyAcc", lua_applyAcc);
 }
 
@@ -139,6 +140,32 @@ GameActor::lua_isOnGround(lua_State* L)
 		lua_pushboolean(L, 0);
 
 	return 1;
+}
+
+int
+GameActor::lua_setVelX(lua_State* L)
+{
+	void* actorPtr = nullptr;
+	int value;
+
+	/* Check number of arguments */
+	if (lua_gettop(L) < 2)
+		return luaL_error(L, "Too few argument");
+	else if (lua_gettop(L) > 2)
+		return luaL_error(L, "Too much argument");
+
+	/* Check type of argument */
+	if (!lua_isuserdata(L, 1))
+		return luaL_error(L, "First argument is not userdata");
+	if (!lua_isnumber(L, 2))
+		return luaL_error(L, "Second argument is not number");
+
+	actorPtr = lua_touserdata(L, 1);
+	value = lua_tonumber(L, 2);
+
+	((GameActor*) actorPtr)->setVelX(value);
+
+	return 0;
 }
 
 int

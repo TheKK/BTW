@@ -4,6 +4,7 @@
 // LICENSE: Do whatever you want. No warranty is implied or given. The code is
 // released as-is... you're on your own.
 //
+//
 #include "lua_typed_enums.h"
 
 bool add_enum_to_lua(lua_State* L, const char* tname, ...)

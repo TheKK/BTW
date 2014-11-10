@@ -4,7 +4,7 @@
  # File: Makefile
  #
 
-CXX := clang++
+CXX := g++
 CXXFLAG = -Wall -std=c++11 -g
 
 SRC_DIR = $(PWD)/src

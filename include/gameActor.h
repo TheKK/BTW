@@ -88,6 +88,7 @@ public:
 	static int lua_normalAttack(lua_State* L);
 	static int lua_normalAirAttack(lua_State* L);
 	static int lua_isOnGround(lua_State* L);
+	static int lua_setVelX(lua_State* L);
 	static int lua_setVelY(lua_State* L);
 	static int lua_applyAcc(lua_State* L);
 

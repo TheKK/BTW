@@ -26,7 +26,7 @@ onGround.handleInput = function(actor, controller)
 	--end
 
 	if (getButtonState(controller, Buttons.BUTTON_JUMP)) then
-		jump(actor)
+		changeStateTo(FSM, 'jumping')
 	end
 end
 

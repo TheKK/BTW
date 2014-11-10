@@ -5,6 +5,8 @@
 ]]
 
 local frame
+local initJumpSpeed = -10
+local accPeriod = 5
 
 jumping = {}
 
@@ -12,7 +14,7 @@ jumping.onEnter = function(actor)
 	if (isOnGround(actor)) then
 		frame = 0
 		setVelY(actor, 0)
-		applyAcc(actor, 0, -10)
+		applyAcc(actor, 0, initJumpSpeed)
 	end
 end
 
@@ -28,18 +30,22 @@ jumping.handleInput = function(actor, controller)
 		moveLeft(actor)
 	end
 
+	if (ifButtonPressed(controller, Buttons.BUTTON_DOWN)) then
+		changeStateTo(FSM, 'dive')
+	end
+
 	if (not getButtonState(controller, Buttons.BUTTON_JUMP)) then
-		frame = 5
+		frame = accPeriod
 	end
 end
 
 jumping.update = function(actor)
 	frame = frame + 1
-	if (frame < 5) then
-		applyAcc(actor, 0, (-1 * (5 - frame)))
+	if (frame < accPeriod) then
+		applyAcc(actor, 0, (-1 * (accPeriod - frame)))
 	end
 
 	if (isOnGround(actor)) then
-		land(actor)
+		changeStateTo(FSM, 'onGround');
 	end
 end
