@@ -6,3 +6,4 @@
 
 -- Use this script to inclue all the state this character need!
 dofile './game/scripts/character/Zup/onGround.lua'
+dofile './game/scripts/character/Zup/jumping.lua'

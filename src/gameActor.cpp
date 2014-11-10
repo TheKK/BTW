@@ -21,6 +21,11 @@ GameActor::lua_registerEverything(lua_State* L)
 
 	lua_register(L, "moveRight", lua_moveRight);
 	lua_register(L, "moveLeft", lua_moveLeft);
+	lua_register(L, "jump", lua_jump);
+	lua_register(L, "land", lua_land);
+	lua_register(L, "isOnGround", lua_isOnGround);
+	lua_register(L, "setVelY", lua_setVelY);
+	lua_register(L, "applyAcc", lua_applyAcc);
 }
 
 int
@@ -70,12 +75,124 @@ GameActor::lua_moveLeft(lua_State* L)
 int
 GameActor::lua_jump(lua_State* L)
 {
+	void* actorPtr = nullptr;
+
+	/* Check number of arguments */
+	if (lua_gettop(L) < 1)
+		return luaL_error(L, "Too few argument");
+	else if (lua_gettop(L) > 1)
+		return luaL_error(L, "Too much argument");
+
+	/* Check type of argument */
+	if (!lua_isuserdata(L, 1))
+		return luaL_error(L, "First argument is not userdata");
+
+	actorPtr = lua_touserdata(L, 1);
+
+	((GameActor*) actorPtr)->jump();
+
 	return 0;
 }
 
 int
 GameActor::lua_land(lua_State* L)
 {
+	void* actorPtr = nullptr;
+
+	/* Check number of arguments */
+	if (lua_gettop(L) < 1)
+		return luaL_error(L, "Too few argument");
+	else if (lua_gettop(L) > 1)
+		return luaL_error(L, "Too much argument");
+
+	/* Check type of argument */
+	if (!lua_isuserdata(L, 1))
+		return luaL_error(L, "First argument is not userdata");
+
+	actorPtr = lua_touserdata(L, 1);
+
+	((GameActor*) actorPtr)->land();
+
+	return 0;
+}
+
+int
+GameActor::lua_isOnGround(lua_State* L)
+{
+	void* actorPtr = nullptr;
+
+	/* Check number of arguments */
+	if (lua_gettop(L) < 1)
+		return luaL_error(L, "Too few argument");
+	else if (lua_gettop(L) > 1)
+		return luaL_error(L, "Too much argument");
+
+	/* Check type of argument */
+	if (!lua_isuserdata(L, 1))
+		return luaL_error(L, "First argument is not userdata");
+
+	actorPtr = lua_touserdata(L, 1);
+
+	if (((GameActor*) actorPtr)->isOnGround())
+		lua_pushboolean(L, 1);
+	else
+		lua_pushboolean(L, 0);
+
+	return 1;
+}
+
+int
+GameActor::lua_setVelY(lua_State* L)
+{
+	void* actorPtr = nullptr;
+	int value;
+
+	/* Check number of arguments */
+	if (lua_gettop(L) < 2)
+		return luaL_error(L, "Too few argument");
+	else if (lua_gettop(L) > 2)
+		return luaL_error(L, "Too much argument");
+
+	/* Check type of argument */
+	if (!lua_isuserdata(L, 1))
+		return luaL_error(L, "First argument is not userdata");
+	if (!lua_isnumber(L, 2))
+		return luaL_error(L, "Second argument is not number");
+
+	actorPtr = lua_touserdata(L, 1);
+	value = lua_tonumber(L, 2);
+
+	((GameActor*) actorPtr)->setVelY(value);
+
+	return 0;
+}
+
+int
+GameActor::lua_applyAcc(lua_State* L)
+{
+	void* actorPtr = nullptr;
+	int dx, dy;
+
+	/* Check number of arguments */
+	if (lua_gettop(L) < 3)
+		return luaL_error(L, "Too few argument");
+	else if (lua_gettop(L) > 3)
+		return luaL_error(L, "Too much argument");
+
+	/* Check type of argument */
+	if (!lua_isuserdata(L, 1))
+		return luaL_error(L, "First argument is not userdata");
+	if (!lua_isnumber(L, 2))
+		return luaL_error(L, "Second argument is not number");
+	if (!lua_isnumber(L, 3))
+		return luaL_error(L, "Third argument is not number");
+
+	actorPtr = lua_touserdata(L, 1);
+	dx = lua_tonumber(L, 2);
+	dy = lua_tonumber(L, 3);
+
+	((GameActor*) actorPtr)->applyAcc(dx, dy);
+
 	return 0;
 }
 

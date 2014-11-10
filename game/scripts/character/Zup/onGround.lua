@@ -22,10 +22,12 @@ onGround.handleInput = function(actor, controller)
 	end
 
 	--if (ifButtonPressed(controller, Buttons.BUTTON_NORMAL_ATTACK)) then
-		--moveRight(actor)
+		--attack(actor)
+	--end
 
-	--if (getButtonState(controller, Buttons.BUTTON_RIGHT)) then
-		--moveRight(actor)
+	if (getButtonState(controller, Buttons.BUTTON_JUMP)) then
+		jump(actor)
+	end
 end
 
 onGround.update = function(actor)

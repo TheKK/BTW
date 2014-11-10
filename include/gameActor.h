@@ -87,6 +87,10 @@ public:
 	static int lua_dive(lua_State* L);
 	static int lua_normalAttack(lua_State* L);
 	static int lua_normalAirAttack(lua_State* L);
+	static int lua_isOnGround(lua_State* L);
+	static int lua_setVelY(lua_State* L);
+	static int lua_applyAcc(lua_State* L);
+
 protected:
 	SDL_Rect posRect_ = {0};
 	int velX_ = 0;

@@ -60,6 +60,7 @@ TestStateMachine::onEnter(GameActor& actor)
 			"[TestStateMachine] onEnter: Lua error %s",
 			lua_tostring(states_, -1));
 		lua_pop(states_, 1);
+		throw runtime_error("Lua error, program shutdown");
 	}
 }
 
@@ -76,6 +77,7 @@ TestStateMachine::onExit(GameActor& actor)
 			"[TestStateMachine] onExit: Lua error %s",
 			lua_tostring(states_, -1));
 		lua_pop(states_, 1);
+		throw runtime_error("Lua error, program shutdown");
 	}
 }
 
@@ -94,6 +96,7 @@ TestStateMachine::handleInput(GameActor& actor,
 			"[TestStateMachine] handleInput: Lua error %s",
 			lua_tostring(states_, -1));
 		lua_pop(states_, 1);
+		throw runtime_error("Lua error, program shutdown");
 	}
 }
 
@@ -110,6 +113,7 @@ TestStateMachine::update(GameActor& actor)
 			"[TestStateMachine] update: Lua error %s",
 			lua_tostring(states_, -1));
 		lua_pop(states_, 1);
+		throw runtime_error("Lua error, program shutdown");
 	}
 }
 
