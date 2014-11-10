@@ -30,8 +30,8 @@ public:
 private:
 	GameActorController controller_;
 	TestGameActor actor_;
-	GameActorController controller2_;
-	TestGameActor actor2_;
+	//GameActorController controller2_;
+	//TestGameActor actor2_;
 
 	Texture backGroundBG_;
 	Texture backGroundFG_;

@@ -7,11 +7,11 @@
 #ifndef ON_GROUND_STATE_H
 #define ON_GROUND_STATE_H
 
+#include <lua.hpp>
+
 #include "state.h"
 #include "gameActor.h"
 #include "gameActorController.h"
-
-#define WALK_SPEED	10
 
 class OnGroundState : public State
 {

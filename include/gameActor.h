@@ -9,6 +9,7 @@
 
 #include <iostream>
 #include <vector>
+#include <lua.hpp>
 #include <SDL.h>
 
 #include "bullet.h"
@@ -76,6 +77,16 @@ public:
 	int w() const;
 	int h() const;
 	SDL_Rect* rect();
+
+	/* For Lua use */
+	static void lua_registerEverything(lua_State* L);
+	static int lua_moveRight(lua_State* L);
+	static int lua_moveLeft(lua_State* L);
+	static int lua_jump(lua_State* L);
+	static int lua_land(lua_State* L);
+	static int lua_dive(lua_State* L);
+	static int lua_normalAttack(lua_State* L);
+	static int lua_normalAirAttack(lua_State* L);
 protected:
 	SDL_Rect posRect_ = {0};
 	int velX_ = 0;

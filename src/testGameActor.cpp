@@ -14,7 +14,7 @@ TestGameActor::TestGameActor():
 	setGravity(1);
 	setHorizon(570);
 
-	machine_.currentState()->onEnter(*this);
+	machine_.onEnter(*this);
 }
 
 TestGameActor::~TestGameActor()
@@ -24,7 +24,7 @@ TestGameActor::~TestGameActor()
 void
 TestGameActor::handleInput(const GameActorController& controller)
 {
-	machine_.currentState()->handleInput(*this, controller);
+	machine_.handleInput(*this, controller);
 }
 
 void
@@ -44,11 +44,11 @@ TestGameActor::update()
 
 	updateBullet(*this);
 
-	machine_.currentState()->update(*this);
+	machine_.update(*this);
 	if (machine_.hasNext()) {
-		machine_.currentState()->onExit(*this);
+		machine_.onExit(*this);
 		machine_.toNext();
-		machine_.currentState()->onEnter(*this);
+		machine_.onEnter(*this);
 	}
 }
 

@@ -15,6 +15,90 @@ GameActor::~GameActor()
 }
 
 void
+GameActor::lua_registerEverything(lua_State* L)
+{
+	SDL_assert(L != nullptr);
+
+	lua_register(L, "moveRight", lua_moveRight);
+	lua_register(L, "moveLeft", lua_moveLeft);
+}
+
+int
+GameActor::lua_moveRight(lua_State* L)
+{
+	void* actorPtr = nullptr;
+
+	/* Check number of arguments */
+	if (lua_gettop(L) < 1)
+		return luaL_error(L, "Too few argument");
+	else if (lua_gettop(L) > 1)
+		return luaL_error(L, "Too much argument");
+
+	/* Check type of argument */
+	if (!lua_isuserdata(L, 1))
+		return luaL_error(L, "First argument is not userdata");
+
+	actorPtr = lua_touserdata(L, 1);
+
+	((GameActor*) actorPtr)->moveRight();
+
+	return 0;
+}
+
+int
+GameActor::lua_moveLeft(lua_State* L)
+{
+	void* actorPtr = nullptr;
+
+	/* Check number of arguments */
+	if (lua_gettop(L) < 1)
+		return luaL_error(L, "Too few argument");
+	else if (lua_gettop(L) > 1)
+		return luaL_error(L, "Too much argument");
+
+	/* Check type of argument */
+	if (!lua_isuserdata(L, 1))
+		return luaL_error(L, "First argument is not userdata");
+
+	actorPtr = lua_touserdata(L, 1);
+
+	((GameActor*) actorPtr)->moveLeft();
+
+	return 0;
+}
+
+int
+GameActor::lua_jump(lua_State* L)
+{
+	return 0;
+}
+
+int
+GameActor::lua_land(lua_State* L)
+{
+	return 0;
+}
+
+int
+GameActor::lua_dive(lua_State* L)
+{
+	return 0;
+}
+
+int
+GameActor::lua_normalAttack(lua_State* L)
+{
+	return 0;
+}
+
+int
+GameActor::lua_normalAirAttack(lua_State* L)
+{
+	return 0;
+}
+
+
+void
 GameActor::addBullet(Bullet* bullet)
 {
 	bulletList_.push_back(bullet);

@@ -98,7 +98,7 @@ GameActorController::readSettingFromFile(const char* filePath)
 	config.open(fullPath, ifstream::in);
 	if (!config.is_open()) {
 		LogLocator::GetService()->LogWarn(
-			"Controller setting file not found");
+			"[GameActorController] Setting file not found");
 		return false;
 	}
 
@@ -107,7 +107,7 @@ GameActorController::readSettingFromFile(const char* filePath)
 	config.close();
 	if(!parseingSuccessful) {
 		LogLocator::GetService()->LogWarn(
-			"Failed to parse json file: %s",
+			"[GameActorController] Failed to parse json file: %s",
 			reader.getFormattedErrorMessages().c_str());
 		return false;
 	}
@@ -122,8 +122,9 @@ GameActorController::readSettingFromFile(const char* filePath)
 	GET_SETTING_FROM_JSON(root, BUTTON_RIGHT,		"Right");
 	GET_SETTING_FROM_JSON(root, BUTTON_LEFT,		"Left");
 
-	LogLocator::GetService()->LogInfo(
-		"Controller setting read from %s successfully", filePath);
+	LogLocator::GetService()->LogDebug(
+		"[GameActorController] Setting read from %s successfully",
+		filePath);
 
 	return true;
 }
@@ -140,7 +141,7 @@ GameActorController::saveSettingToFile(const char* filePath)
 	output.open(filePath, ofstream::out);
 	if (!output.is_open()) {
 		LogLocator::GetService()->LogWarn(
-			"Can not write controller setting to file");
+			"[GameActorController] Can not write setting to file");
 
 		return false;
 	}
@@ -159,8 +160,9 @@ GameActorController::saveSettingToFile(const char* filePath)
 
 	output.close();
 
-	LogLocator::GetService()->LogInfo(
-		"Controller setting write to %s successfully", filePath);
+	LogLocator::GetService()->LogDebug(
+		"[GameActorController] Setting write to %s successfully",
+		filePath);
 
 	return true;
 }
@@ -168,7 +170,9 @@ GameActorController::saveSettingToFile(const char* filePath)
 void
 GameActorController::useDefaultSetting()
 {
-	LogLocator::GetService()->LogInfo("Controller use default mapping");
+	LogLocator::GetService()->LogDebug(
+		"[GameActorController] Use default mapping");
+
 	buttonKeyMap_[BUTTON_JUMP] = 		SDL_SCANCODE_Z;
 	buttonKeyMap_[BUTTON_NORMAL_ATTACK] = 	SDL_SCANCODE_X;
 	buttonKeyMap_[BUTTON_SPECIAL_ATTACK] = 	SDL_SCANCODE_S;
@@ -196,4 +200,115 @@ bool
 GameActorController::ifButtonReleased(enum Buttons which) const
 {
 	return buttonReleased_[which];
+}
+
+/* For Lua use */
+void
+GameActorController::lua_registerEverything(lua_State* L)
+{
+	SDL_assert(L != nullptr);
+
+	lua_register(L, "getButtonState", lua_getButtonState);
+	lua_register(L, "ifButtonPressed", lua_ifButtonPressed);
+	lua_register(L, "ifButtonReleased", lua_ifButtonReleased);
+
+	add_enum_to_lua(L, "Buttons",
+			"BUTTON_JUMP", BUTTON_JUMP,
+			"BUTTON_NORMAL_ATTACK", BUTTON_NORMAL_ATTACK,
+			"BUTTON_SPECIAL_ATTACK" ,BUTTON_SPECIAL_ATTACK,
+			"BUTTON_EVADE", BUTTON_EVADE,
+			"BUTTON_UP", BUTTON_UP,
+			"BUTTON_DOWN", BUTTON_DOWN,
+			"BUTTON_RIGHT", BUTTON_RIGHT,
+			"BUTTON_LEFT", BUTTON_LEFT,
+			0);
+}
+
+int
+GameActorController::lua_getButtonState(lua_State* L)
+{
+	void* controllerPtr = nullptr;
+	enum Buttons button;
+
+	/* Check number of arguments */
+	if (lua_gettop(L) < 2)
+		return luaL_error(L, "Too few argument");
+	else if (lua_gettop(L) > 2)
+		return luaL_error(L, "Too much argument");
+
+	/* Check type of argument */
+	if (!lua_isuserdata(L, 1))
+		return luaL_error(L, "First argument is not userdata");
+
+	/* FIXME Bug here but have no idea how to fix it... */
+	if (!check_enum_type(L, "Buttons", 2))
+		return luaL_error(L, "Second argument is not enum Button");
+
+	controllerPtr = lua_touserdata(L, 1);
+	button = (enum Buttons) get_enum_value(L, 2);
+
+	if(((GameActorController*) controllerPtr)->getButtonState(button))
+		lua_pushboolean(L, 1);
+	else
+		lua_pushboolean(L, 0);
+
+	return 1;
+}
+
+int
+GameActorController::lua_ifButtonPressed(lua_State* L)
+{
+	void* controllerPtr = nullptr;
+	enum Buttons button;
+
+	/* Check number of arguments */
+	if (lua_gettop(L) < 2)
+		return luaL_error(L, "Too few argument");
+	else if (lua_gettop(L) > 2)
+		return luaL_error(L, "Too much argument");
+
+	/* Check type of argument */
+	if (!lua_isuserdata(L, 1))
+		return luaL_error(L, "First argument is not userdata");
+	else if (!check_enum_type(L, "Button", 2))
+		return luaL_error(L, "Second argument is not enum Button");
+
+	controllerPtr = lua_touserdata(L, 1);
+	button = (enum Buttons) get_enum_value(L, 2);
+
+	if(((GameActorController*) controllerPtr)->ifButtonPressed(button))
+		lua_pushboolean(L, 1);
+	else
+		lua_pushboolean(L, 0);
+
+	return 1;
+}
+
+int
+GameActorController::lua_ifButtonReleased(lua_State* L)
+{
+	void* controllerPtr = nullptr;
+	enum Buttons button;
+
+	/* Check number of arguments */
+	if (lua_gettop(L) < 2)
+		return luaL_error(L, "Too few argument");
+	else if (lua_gettop(L) > 2)
+		return luaL_error(L, "Too much argument");
+
+	/* Check type of argument */
+	if (!lua_isuserdata(L, 1))
+		return luaL_error(L, "First argument is not userdata");
+	else if (!check_enum_type(L, "Button", 2))
+		return luaL_error(L, "Second argument is not enum Button");
+
+	controllerPtr = lua_touserdata(L, 1);
+	button = (enum Buttons) get_enum_value(L, 2);
+
+	if(((GameActorController*) controllerPtr)->ifButtonReleased(button))
+		lua_pushboolean(L, 1);
+	else
+		lua_pushboolean(L, 0);
+
+	return 1;
 }

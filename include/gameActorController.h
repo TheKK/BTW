@@ -10,10 +10,13 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <stdexcept>
+#include <lua.hpp>
 #include <SDL.h>
 #include <jsoncpp/json/json.h>
 
 #include "logLocator.h"
+#include "lua_typed_enums.h"
 
 #define DEFAULT_SETTING_FILE	(char*) "./game/setting/controller.json"
 
@@ -47,18 +50,6 @@ enum Buttons
 	BUTTON_COUNT
 };
 
-enum Commands
-{
-	COMMAND_JUMP = 0x00,
-	COMMAND_DIVE,
-	COMMAND_NORMAL_ATTACK,
-	COMMAND_NORMAL_AIR_ATTACK,
-
-	COMMAND_COUNT,
-
-	COMMAND_NULL
-};
-
 class GameActor;
 
 class GameActorController
@@ -79,6 +70,12 @@ public:
 	bool getButtonState(enum Buttons which) const;
 	bool ifButtonPressed(enum Buttons which) const;
 	bool ifButtonReleased(enum Buttons which) const;
+
+	/* For Lua use */
+	static void lua_registerEverything(lua_State* L);
+	static int lua_getButtonState(lua_State* L);
+	static int lua_ifButtonPressed(lua_State* L);
+	static int lua_ifButtonReleased(lua_State* L);
 private:
 	bool buttonPressed_[BUTTON_COUNT] = {false};
 	bool buttonReleased_[BUTTON_COUNT] = {false};
