@@ -22,17 +22,16 @@ class Sprite : public Renderable
 {
 	public:
 		Sprite();
-		Sprite(string filePath, SDL_Renderer* renderer,
+		Sprite(const char* filePath, SDL_Renderer* renderer,
 		       int w, int h,
 		       Uint8 r = 0, Uint8 g = 255, Uint8 = 255);
 		~Sprite();
 
-		int load(string filePath, SDL_Renderer* renderer,
+		int load(const char* filePath, SDL_Renderer* renderer,
 			 int w, int h,
 			 Uint8 r = 0, Uint8 g = 255, Uint8 = 255);
 
-		void render();
-		void renderFullWindow();
+		void render(const SDL_Rect& rect);
 
 		void setAlpha(Uint8 value);
 

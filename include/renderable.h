@@ -15,45 +15,28 @@ using namespace std;
 
 class Renderable
 {
-	public:
-		Renderable();
-		virtual ~Renderable();
-		virtual void render() = 0;
-		virtual void setAlpha(uint8_t value) = 0;
+public:
+	Renderable();
+	virtual ~Renderable();
 
-		SDL_Texture* loadTexture(string filePath,
-					 SDL_Renderer* renderer,
-					 Uint8 r, Uint8 g, Uint8 b);
+	virtual void render(const SDL_Rect& rect) = 0;
 
-		void enlarge(int dw, int dh);
-		void setSize(unsigned int w, unsigned int h);
-		void setRenderer(SDL_Renderer* renderer);
+	virtual void setAlpha(uint8_t value) = 0;
 
-		void moveBy(int x, int y);
-		void moveXTo(int x);
-		void moveYTo(int y);
-		void moveTo(int x, int y);
+	SDL_Texture* loadTexture(const char* filePath, SDL_Renderer* renderer,
+				 Uint8 r, Uint8 g, Uint8 b);
 
-		int posX() const;
-		int posY() const;
-		int width() const;
-		int height() const;
-		SDL_Rect rect() const;
+	void setRenderer(SDL_Renderer* renderer);
 
-		void hide();
-		void show();
-		void setVisable(bool value);
-		bool getVisable() const;
-
-		bool mouseHovered(int32_t mouseX, int32_t mouseY);
-	protected:
-		SDL_Rect rect_ = {0, 0, 0, 0};
-
-		SDL_Renderer* targetRenderer_ = nullptr;
-
-		bool visable_ = true;
-
-		static uint32_t objectCount_;
+	void hide();
+	void show();
+	void setVisable(bool value);
+	bool isVisable() const;
+private:
+	static uint32_t objectCount_;
+protected:
+	SDL_Renderer* targetRenderer_ = nullptr;
+	bool visable_ = true;
 };
 
 #endif	/* RENDERABLE_H */

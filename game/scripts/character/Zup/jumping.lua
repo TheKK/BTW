@@ -11,6 +11,8 @@ local accPeriod = 5
 jumping = {}
 
 jumping.onEnter = function(actor)
+	setSprite(actor, Sprites.JUMPING)
+
 	if (isOnGround(actor)) then
 		frame = 0
 		setVelY(actor, 0)

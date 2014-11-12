@@ -10,7 +10,7 @@ Texture::Texture()
 {
 }
 
-Texture::Texture(string filePath, SDL_Renderer* renderer,
+Texture::Texture(const char* filePath, SDL_Renderer* renderer,
 		 Uint8 r, Uint8 g, Uint8 b)
 {
 	load(filePath, renderer, r, g, b);
@@ -22,15 +22,11 @@ Texture::~Texture()
 }
 
 void
-Texture::load(string filePath, SDL_Renderer* renderer,
+Texture::load(const char* filePath, SDL_Renderer* renderer,
 	      Uint8 r, Uint8 g, Uint8 b)
 {
-	targetRenderer_ = renderer;
+	setRenderer(renderer);
 	texture_ = loadTexture(filePath, renderer, r, g, b);
-
-	rect_.x = 0;
-	rect_.y = 0;
-	SDL_QueryTexture(texture_, nullptr, nullptr, &rect_.w, &rect_.h);
 }
 
 void
@@ -65,12 +61,12 @@ Texture::setBlendMode(SDL_BlendMode mode)
 }
 
 void
-Texture::render()
+Texture::render(const SDL_Rect& rect)
 {
 	if (!visable_)
 		return;
 
-	SDL_RenderCopyEx(targetRenderer_, texture_, nullptr, &rect_,
+	SDL_RenderCopyEx(targetRenderer_, texture_, nullptr, &rect,
 			 degree_, nullptr, SDL_FLIP_NONE);
 }
 
@@ -80,7 +76,8 @@ Texture::renderFullWindow()
 	if (!visable_)
 		return;
 
-	SDL_RenderCopy(targetRenderer_, texture_, nullptr, nullptr);
+	SDL_RenderCopyEx(targetRenderer_, texture_, nullptr, nullptr,
+			 degree_, nullptr, SDL_FLIP_NONE);
 }
 
 void

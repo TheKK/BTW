@@ -7,12 +7,20 @@
 #include "testGameActor.h"
 
 TestGameActor::TestGameActor():
+	sprite_onGround_("./game/images/zup_onGround.png", Window::renderer(),
+			 30, 65),
+	sprite_jumping_("./game/images/zup_jumping.png", Window::renderer(),
+			30, 65),
 	machine_(),
 	delay_(0)
 {
 	posRect_ = {0, 0, 30, 65};
 	setGravity(1);
 	setHorizon(570);
+
+	spriteList_[SPRITE_ON_GROUND] = &sprite_onGround_;
+	spriteList_[SPRITE_JUMPING] = &sprite_jumping_;
+	currentSprite_ = spriteList_[SPRITE_ON_GROUND];
 
 	machine_.onEnter(*this);
 }
@@ -49,8 +57,7 @@ TestGameActor::update()
 void
 TestGameActor::render()
 {
-	SDL_SetRenderDrawColor(Window::renderer(), 0, 255, 30, 255);
-	SDL_RenderFillRect(Window::renderer(), &posRect_);
+	currentSprite_->render(posRect_);
 
 	renderBullet();
 }

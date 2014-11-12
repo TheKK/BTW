@@ -6,16 +6,13 @@
 
 #include "numberDisplayer.h"
 
-NumberDisplayer::NumberDisplayer(string picPath, uint8_t displayDigitalNum,
-				uint16_t digitalWidth, uint16_t digitalHeight,
-				 SDL_Renderer* renderer):
-	numSprite_(picPath, renderer, digitalWidth, digitalHeight),
-	digitalNum_(displayDigitalNum)
+NumberDisplayer::NumberDisplayer(const char* filePath, SDL_Renderer* renderer,
+				 Uint8 howManyDigitals,
+				 Uint16 digitalWidth, Uint16 digitalHeight):
+	numSprite_(filePath, renderer, digitalWidth, digitalHeight),
+	digitalNum_(howManyDigitals)
 {
 	setRenderer(renderer);
-
-	/* Set rendering size of this displayer */
-	setSize(digitalWidth * displayDigitalNum, digitalHeight);
 
 	/* Set vector size and init value */
 	digitalVect_.resize(digitalNum_);
@@ -88,12 +85,16 @@ NumberDisplayer::counterSetZero()
 }
 
 void
-NumberDisplayer::render()
+NumberDisplayer::render(const SDL_Rect& rect)
 {
+	Uint16 digitalWidth = (rect.w / digitalNum_);
+
 	for (int i = 0; i < digitalNum_; i++) {
-		numSprite_.moveTo((rect_.x + numSprite_.width() * i), rect_.y);
 		numSprite_.jumpTo(digitalVect_[i]);
-		numSprite_.render();
+		numSprite_.render({
+				  (rect.x + digitalWidth * i), rect.y,
+				  digitalWidth, rect.h
+				  });
 	}
 }
 

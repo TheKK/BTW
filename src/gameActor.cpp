@@ -6,6 +6,11 @@
 
 #include "gameActor.h"
 
+GameActor::GameActor()
+{
+	spriteList_.resize(SPRITE_COUNT);
+}
+
 GameActor::~GameActor()
 {
 	for (auto e : bulletList_)
@@ -27,6 +32,12 @@ GameActor::lua_registerEverything(lua_State* L)
 	lua_register(L, "setVelY", lua_setVelY);
 	lua_register(L, "setVelX", lua_setVelX);
 	lua_register(L, "applyAcc", lua_applyAcc);
+	lua_register(L, "setSprite", lua_setSprite);
+
+	add_enum_to_lua(L, "Sprites",
+			"ON_GROUND", SPRITE_ON_GROUND,
+			"JUMPING", SPRITE_JUMPING,
+			0);
 }
 
 int
@@ -224,6 +235,33 @@ GameActor::lua_applyAcc(lua_State* L)
 }
 
 int
+GameActor::lua_setSprite(lua_State* L)
+{
+	void* actorPtr = nullptr;
+	enum ActorSprite sprite;
+
+	/* Check number of arguments */
+	if (lua_gettop(L) < 2)
+		return luaL_error(L, "Too few argument");
+	else if (lua_gettop(L) > 2)
+		return luaL_error(L, "Too much argument");
+
+	/* Check type of argument */
+	if (!lua_isuserdata(L, 1))
+		return luaL_error(L, "First argument is not userdata");
+
+	if (!check_enum_type(L, "Sprites", 2))
+		return luaL_error(L, "Second argument is not enum Sprites");
+
+	actorPtr = lua_touserdata(L, 1);
+	sprite = (enum ActorSprite) get_enum_value(L, 2);
+
+	((GameActor*) actorPtr)->setSprite(sprite);
+
+	return 0;
+}
+
+int
 GameActor::lua_dive(lua_State* L)
 {
 	return 0;
@@ -410,4 +448,10 @@ SDL_Rect*
 GameActor::rect()
 {
 	return &posRect_;
+}
+
+void
+GameActor::setSprite(enum ActorSprite which)
+{
+	currentSprite_ = spriteList_[which];
 }

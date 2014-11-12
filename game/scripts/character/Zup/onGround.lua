@@ -7,6 +7,7 @@
 onGround = {}
 
 onGround.onEnter = function(actor)
+	setSprite(actor, Sprites.ON_GROUND)
 end
 
 onGround.onExit = function(actor)

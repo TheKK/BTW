@@ -156,7 +156,7 @@ main(int argc, char* argv[])
 		InitSystem();
 
 		gameState = new TestGameState();
-		
+
 		/* The cycle of life... */
 		while (gameState) {
 			timer.Start();

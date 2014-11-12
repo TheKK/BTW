@@ -10,7 +10,7 @@ Sprite::Sprite()
 {
 }
 
-Sprite::Sprite(string filePath, SDL_Renderer* renderer,
+Sprite::Sprite(const char* filePath, SDL_Renderer* renderer,
 	       int w, int h,
 	       Uint8 r, Uint8 g, Uint8 b)
 {
@@ -23,26 +23,22 @@ Sprite::~Sprite()
 }
 
 int
-Sprite::load(string filePath, SDL_Renderer* renderer,
+Sprite::load(const char* filePath, SDL_Renderer* renderer,
 	     int w, int h,
 	     Uint8 r, Uint8 g, Uint8 b)
 {
 	int sheetWidth, sheetHeight;
+	SDL_Rect toBePushed;
 
-	targetRenderer_ = renderer;
+	setRenderer(renderer);
 
 	sheet_ = loadTexture(filePath, renderer, r, g, b);
-
-	rect_.x = 0;
-	rect_.y = 0;
-	rect_.w = w;
-	rect_.h = h;
 
 	SDL_QueryTexture(sheet_, nullptr, nullptr, &sheetWidth, &sheetHeight);
 
 	/* Setup clip for each frame and other stuffs*/
 	totalFrame_= sheetWidth / w;
-	SDL_Rect toBePushed;
+
 	toBePushed.y = 0;
 	toBePushed.w = w;
 	toBePushed.h = h;
@@ -55,20 +51,19 @@ Sprite::load(string filePath, SDL_Renderer* renderer,
 }
 
 void
-Sprite::render()
+Sprite::render(const SDL_Rect& rect)
 {
-	SDL_RenderCopy(targetRenderer_, sheet_, &clip_[currentFrame_], &rect_);
-}
+	SDL_assert(sheet_ != nullptr);
+	SDL_assert(clip_.size() > 0);
 
-void
-Sprite::renderFullWindow()
-{
-	SDL_RenderCopy(targetRenderer_, sheet_, &clip_[currentFrame_], nullptr);
+	SDL_RenderCopy(targetRenderer_, sheet_, &clip_[currentFrame_], &rect);
 }
 
 void
 Sprite::setAlpha(Uint8 value)
 {
+	SDL_assert(sheet_ != nullptr);
+
 	SDL_SetTextureAlphaMod(sheet_, value);
 }
 
@@ -91,14 +86,15 @@ Sprite::prevFrame()
 void
 Sprite::jumpTo(Uint16 where)
 {
+	SDL_assert((where >= 0) && (where < totalFrame_));
+
 	currentFrame_ = where;
 }
 
 void
 Sprite::release_()
 {
-	SDL_assert(sheet_ != nullptr);
-
-	SDL_DestroyTexture(sheet_);
+	if (sheet_ != nullptr)
+		SDL_DestroyTexture(sheet_);
 	sheet_ = nullptr;
 }

@@ -13,14 +13,23 @@
 #include <SDL.h>
 
 #include "bullet.h"
+#include "sprite.h"
 #include "gameActorController.h"
 
 using namespace std;
 
 enum ActorDirection
 {
-	ACTOR_FACE_RIGHT,
+	ACTOR_FACE_RIGHT = 0x00,
 	ACTOR_FACE_LEFT,
+};
+
+enum ActorSprite
+{
+	SPRITE_ON_GROUND = 0x00,
+	SPRITE_JUMPING,
+
+	SPRITE_COUNT
 };
 
 class Bullet;
@@ -29,6 +38,7 @@ class GameActorController;
 class GameActor
 {
 public:
+	GameActor();
 	virtual ~GameActor();
 
 	virtual void handleInput(const GameActorController& controller) = 0;
@@ -78,6 +88,8 @@ public:
 	int h() const;
 	SDL_Rect* rect();
 
+	void setSprite(enum ActorSprite which);
+
 	/* For Lua use */
 	static void lua_registerEverything(lua_State* L);
 	static int lua_moveRight(lua_State* L);
@@ -91,7 +103,7 @@ public:
 	static int lua_setVelX(lua_State* L);
 	static int lua_setVelY(lua_State* L);
 	static int lua_applyAcc(lua_State* L);
-
+	static int lua_setSprite(lua_State* L);
 protected:
 	SDL_Rect posRect_ = {0};
 	int velX_ = 0;
@@ -105,6 +117,9 @@ protected:
 	enum ActorDirection direction_ = ACTOR_FACE_RIGHT;
 
 	vector<Bullet*> bulletList_;
+
+	Sprite* currentSprite_ = nullptr;
+	vector<Sprite*> spriteList_;
 };
 
 #endif /* GAME_ACTOR_H */

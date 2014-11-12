@@ -12,6 +12,7 @@
 
 #include "gameActor.h"
 #include "testStateMachine.h"
+#include "sprite.h"
 #include "window.h"
 
 using namespace std;
@@ -29,6 +30,11 @@ public:
 	void moveRight();
 	void moveLeft();
 private:
+	Sprite sprite_onGround_;
+	//Sprite sprite_onGroundAttack_;
+	Sprite sprite_jumping_;
+	//Sprite sprite_jumpingAttack_;
+
 	TestStateMachine machine_;
 	int delay_;
 };

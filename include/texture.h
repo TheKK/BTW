@@ -18,31 +18,31 @@ using namespace std;
 
 class Texture : public Renderable
 {
-	public:
-		Texture();
-		Texture(string filePath, SDL_Renderer* renderer,
-			Uint8 r = 0, Uint8 g = 255, Uint8 b = 255);
-		~Texture();
+public:
+	Texture();
+	Texture(const char* filePath, SDL_Renderer* renderer,
+		Uint8 r = 0, Uint8 g = 255, Uint8 b = 255);
+	~Texture();
 
-		void load(string filePath, SDL_Renderer* renderer,
-			  Uint8 r = 0, Uint8 g = 255, Uint8 b = 255);
+	void load(const char* filePath, SDL_Renderer* renderer,
+		  Uint8 r = 0, Uint8 g = 255, Uint8 b = 255);
 
-		void rotate(double value);
+	void rotate(double value);
 
-		void setAlpha(Uint8 value);
-		SDL_Texture* object() const;
+	void setAlpha(Uint8 value);
+	SDL_Texture* object() const;
 
-		void setBlendMode(SDL_BlendMode mode);
+	void setBlendMode(SDL_BlendMode mode);
 
-		void render();
-		void renderFullWindow();
-	private:
-		SDL_Texture* texture_ = nullptr;
+	void render(const SDL_Rect& rect);
+	void renderFullWindow();
+private:
+	SDL_Texture* texture_ = nullptr;
 
-		double degree_ = 0;
-		Uint8 alpha_ = SDL_ALPHA_OPAQUE;
+	double degree_ = 0;
+	Uint8 alpha_ = SDL_ALPHA_OPAQUE;
 
-		void release_();
+	void release_();
 };
 
 #endif	/* TEXTURE_H */
