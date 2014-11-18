@@ -35,14 +35,19 @@ TestStateMachine::TestStateMachine():
 		throw runtime_error("Lua script error, program shutdown");
 	}
 
+	/* Register needed functions */
 	GameActor::lua_registerEverything(states_);
 	GameActorController::lua_registerEverything(states_);
+
+	lua_newtable(states_);
+	lua_pushcfunction(states_, lua_setNext);
+	lua_setfield(states_, 1, "setNext");
+	lua_setglobal(states_, "StateMachine");
+	/* lua_register(states_, "changeStateTo", lua_setNext); */
 
 	/* Set 'this' address as Lua global variable */
 	lua_pushlightuserdata(states_, this);
 	lua_setglobal(states_, "FSM");
-
-	lua_register(states_, "changeStateTo", lua_setNext);
 
 	/* Init machine state */
 	setNext((char*) "onGround");

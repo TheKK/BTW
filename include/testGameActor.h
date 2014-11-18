@@ -36,7 +36,9 @@ private:
 	//Sprite sprite_jumpingAttack_;
 
 	TestStateMachine machine_;
-	int delay_;
+
+	int frictionDelay_;
+	int spriteDelay_;
 };
 
 #endif /* TEST_GAME_ACTOR_H */

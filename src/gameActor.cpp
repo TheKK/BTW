@@ -454,4 +454,5 @@ void
 GameActor::setSprite(enum ActorSprite which)
 {
 	currentSprite_ = spriteList_[which];
+	currentSprite_->jumpTo(0);
 }

@@ -33,7 +33,7 @@ jumping.handleInput = function(actor, controller)
 	end
 
 	if (ifButtonPressed(controller, Buttons.BUTTON_DOWN)) then
-		changeStateTo(FSM, 'dive')
+		StateMachine.setNext(FSM, 'dive')
 	end
 
 	if (not getButtonState(controller, Buttons.BUTTON_JUMP)) then
@@ -48,6 +48,6 @@ jumping.update = function(actor)
 	end
 
 	if (isOnGround(actor)) then
-		changeStateTo(FSM, 'onGround');
+		StateMachine.setNext(FSM, 'onGround');
 	end
 end
