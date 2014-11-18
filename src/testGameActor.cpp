@@ -15,9 +15,9 @@ TestGameActor::TestGameActor():
 	frictionDelay_(0),
 	spriteDelay_(0)
 {
-	posRect_ = {0, 0, 45, 100};
+	posRect_ = {0, 0, 30, 65};
 	setGravity(1);
-	setHorizon(570);
+	setHorizon(Window::height() - 70);
 
 	spriteList_[SPRITE_ON_GROUND] = &sprite_onGround_;
 	spriteList_[SPRITE_JUMPING] = &sprite_jumping_;
@@ -46,7 +46,7 @@ TestGameActor::update()
 		velY_ += gravity_;
 
 	if (velX_ != 0) {
-		if (frictionDelay_++ == 5) {
+		if (++frictionDelay_ == 4) {
 			velX_ -= velX_ * 0.5;
 			frictionDelay_ = 0;
 		}

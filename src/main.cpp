@@ -84,7 +84,7 @@ InitSystem()
 	}
 
 	/* Window setup */
-	Window::init("BTW-test", 1280, 720);
+	Window::init("BTW-test", 640, 360);
 
 	/* Register user events */
 	UserEvent::Init();

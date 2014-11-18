@@ -5,7 +5,7 @@
 ]]
 
 local frame
-local initJumpSpeed = -10
+local initJumpSpeed = -8
 local accPeriod = 5
 
 jumping = {}
@@ -13,6 +13,7 @@ jumping = {}
 jumping.onEnter = function(actor)
 	setSprite(actor, Sprites.JUMPING)
 
+	-- Jump from ground
 	if (isOnGround(actor)) then
 		frame = 0
 		setVelY(actor, 0)
