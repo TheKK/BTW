@@ -10,7 +10,7 @@
 #include <iostream>
 
 #include "gameActor.h"
-#include "testStateMachine.h"
+#include "luaStateMachine.h"
 #include "sprite.h"
 #include "window.h"
 
@@ -35,7 +35,7 @@ private:
 	Sprite sprite_jumping_;
 	//Sprite sprite_jumpingAttack_;
 
-	TestStateMachine machine_;
+	LuaStateMachine machine_;
 
 	int frictionDelay_;
 	int spriteDelay_;

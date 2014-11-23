@@ -1,11 +1,11 @@
 /*
  * Author: KK <thumbd03803@gmail.com>
  *
- * File: testStateMachine.h
+ * File: luaStateMachine.h
  */
 
-#ifndef TEST_STATE_MACHINE_H
-#define TEST_STATE_MACHINE_H
+#ifndef LUA_STATE_MACHINE_H
+#define LUA_STATE_MACHINE_H
 
 #include <iostream>
 #include <vector>
@@ -18,11 +18,11 @@
 
 using namespace std;
 
-class TestStateMachine
+class LuaStateMachine
 {
 public:
-	TestStateMachine();
-	~TestStateMachine();
+	LuaStateMachine();
+	~LuaStateMachine();
 
 	//void bindState(enum ActorStates which, State* state);
 
@@ -45,4 +45,4 @@ private:
 	string nextState_;
 };
 
-#endif /* TEST_STATE_MACHINE_H */
+#endif /* LUA_STATE_MACHINE_H */

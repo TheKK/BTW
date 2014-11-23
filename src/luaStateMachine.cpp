@@ -1,12 +1,12 @@
 /*
  * Author: KK <thumbd03803@gmail.com>
  *
- * File: testStateMachine.cpp
+ * File: luaStateMachine.cpp
  */
 
-#include "testStateMachine.h"
+#include "luaStateMachine.h"
 
-TestStateMachine::TestStateMachine():
+LuaStateMachine::LuaStateMachine():
 	states_(nullptr),
 	currentState_(""),
 	nextState_("")
@@ -17,7 +17,7 @@ TestStateMachine::TestStateMachine():
 	states_ = luaL_newstate();
 	if (states_ == nullptr) {
 		LogLocator::GetService()->LogCritical(
-			"[TestStateMachine]"
+			"[LuaStateMachine]"
 			"No enough memory to create Lua state");
 		throw runtime_error("Critical error, program shutdown");
 	}
@@ -29,7 +29,7 @@ TestStateMachine::TestStateMachine():
 	fullPath += "./game/scripts/character/Zup/states.lua";
 	if (luaL_dofile(states_, fullPath.c_str()) != LUA_OK) {
 		LogLocator::GetService()->LogError(
-			"[TestStateMachine] Lua error %s",
+			"[LuaStateMachine] Lua error %s",
 			lua_tostring(states_, -1));
 		lua_pop(states_, 1);
 		throw runtime_error("Lua script error, program shutdown");
@@ -54,7 +54,7 @@ TestStateMachine::TestStateMachine():
 	toNext();
 }
 
-TestStateMachine::~TestStateMachine()
+LuaStateMachine::~LuaStateMachine()
 {
 	if (states_)
 		lua_close(states_);
@@ -62,7 +62,7 @@ TestStateMachine::~TestStateMachine()
 }
 
 void
-TestStateMachine::onEnter(GameActor& actor)
+LuaStateMachine::onEnter(GameActor& actor)
 {
 	lua_pushstring(states_, (char*) "onEnter");
 	lua_gettable(states_, -2);
@@ -71,7 +71,7 @@ TestStateMachine::onEnter(GameActor& actor)
 	lua_pushlightuserdata(states_, (void*) &actor);
 	if (lua_pcall(states_, 1, 0, 0) != LUA_OK) {
 		LogLocator::GetService()->LogError(
-			"[TestStateMachine] onEnter: Lua error %s",
+			"[LuaStateMachine] onEnter: Lua error %s",
 			lua_tostring(states_, -1));
 		lua_pop(states_, 1);
 		throw runtime_error("Lua error, program shutdown");
@@ -79,7 +79,7 @@ TestStateMachine::onEnter(GameActor& actor)
 }
 
 void
-TestStateMachine::onExit(GameActor& actor)
+LuaStateMachine::onExit(GameActor& actor)
 {
 	lua_pushstring(states_, (char*) "onExit");
 	lua_gettable(states_, -2);
@@ -88,7 +88,7 @@ TestStateMachine::onExit(GameActor& actor)
 	lua_pushlightuserdata(states_, (void*) &actor);
 	if (lua_pcall(states_, 1, 0, 0) != LUA_OK) {
 		LogLocator::GetService()->LogError(
-			"[TestStateMachine] onExit: Lua error %s",
+			"[LuaStateMachine] onExit: Lua error %s",
 			lua_tostring(states_, -1));
 		lua_pop(states_, 1);
 		throw runtime_error("Lua error, program shutdown");
@@ -96,7 +96,7 @@ TestStateMachine::onExit(GameActor& actor)
 }
 
 void
-TestStateMachine::handleInput(GameActor& actor,
+LuaStateMachine::handleInput(GameActor& actor,
 			      const GameActorController& controller)
 {
 	lua_pushstring(states_, (char*) "handleInput");
@@ -107,7 +107,7 @@ TestStateMachine::handleInput(GameActor& actor,
 	lua_pushlightuserdata(states_, (void*) &controller);
 	if (lua_pcall(states_, 2, 0, 0) != LUA_OK) {
 		LogLocator::GetService()->LogError(
-			"[TestStateMachine] handleInput: Lua error %s",
+			"[LuaStateMachine] handleInput: Lua error %s",
 			lua_tostring(states_, -1));
 		lua_pop(states_, 1);
 		throw runtime_error("Lua error, program shutdown");
@@ -115,7 +115,7 @@ TestStateMachine::handleInput(GameActor& actor,
 }
 
 void
-TestStateMachine::update(GameActor& actor)
+LuaStateMachine::update(GameActor& actor)
 {
 	lua_pushstring(states_, (char*) "update");
 	lua_gettable(states_, -2);
@@ -124,7 +124,7 @@ TestStateMachine::update(GameActor& actor)
 	lua_pushlightuserdata(states_, &actor);
 	if (lua_pcall(states_, 1, 0, 0) != LUA_OK) {
 		LogLocator::GetService()->LogError(
-			"[TestStateMachine] update: Lua error %s",
+			"[LuaStateMachine] update: Lua error %s",
 			lua_tostring(states_, -1));
 		lua_pop(states_, 1);
 		throw runtime_error("Lua error, program shutdown");
@@ -139,7 +139,7 @@ TestStateMachine::update(GameActor& actor)
 }
 
 void
-TestStateMachine::toNext()
+LuaStateMachine::toNext()
 {
 	SDL_assert(nextState_ != "");
 
@@ -149,41 +149,41 @@ TestStateMachine::toNext()
 	/* Make sure nothing go wrong and pop them all */
 	if (lua_gettop(states_) > 1)
 		LogLocator::GetService()->LogWarn(
-			"[TestStateMachine] Lua stack height is not 1");
+			"[LuaStateMachine] Lua stack height is not 1");
 	lua_pop(states_, lua_gettop(states_));
 
 	/* Get new table and check error */
 	lua_getglobal(states_, currentState_.c_str());
 	if (lua_isnil(states_, -1)) {
 		LogLocator::GetService()->LogCritical(
-			"[TestStateMachine] State \"%s\" does not exist",
+			"[LuaStateMachine] State \"%s\" does not exist",
 			currentState_.c_str());
 		throw runtime_error("Critical error, program shutdown");
 
 	} else if (!lua_istable(states_, -1)) {
 		LogLocator::GetService()->LogCritical(
-			"[TestStateMachine] State \"%s\" is not a table",
+			"[LuaStateMachine] State \"%s\" is not a table",
 			currentState_.c_str());
 		throw runtime_error("Critical error, program shutdown");
 	}
 }
 
 void
-TestStateMachine::setNext(char* state)
+LuaStateMachine::setNext(char* state)
 {
 	nextState_ = state;
 };
 
 bool
-TestStateMachine::hasNext()
+LuaStateMachine::hasNext()
 {
 	return (nextState_ != "");
 }
 
 int
-TestStateMachine::lua_setNext(lua_State* L)
+LuaStateMachine::lua_setNext(lua_State* L)
 {
-	void* TestStateMachinePtr = nullptr;
+	void* LuaStateMachinePtr = nullptr;
 	char* nextState = nullptr;
 
 	/* Check number of argument(s) */
@@ -198,10 +198,10 @@ TestStateMachine::lua_setNext(lua_State* L)
 	if (!lua_isstring(L, 2))
 		return luaL_error(L, "Second argument is not string");
 
-	TestStateMachinePtr = (void*) lua_topointer(L, 1);
+	LuaStateMachinePtr = (void*) lua_topointer(L, 1);
 	nextState = (char*) lua_tostring(L, 2);
 
-	((TestStateMachine*) TestStateMachinePtr)->setNext(nextState);
+	((LuaStateMachine*) LuaStateMachinePtr)->setNext(nextState);
 
 	return 0;
 }
