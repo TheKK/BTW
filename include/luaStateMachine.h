@@ -24,8 +24,6 @@ public:
 	LuaStateMachine(const char* filePath);
 	~LuaStateMachine();
 
-	//void bindState(enum ActorStates which, State* state);
-
 	void onEnter(GameActor& actor);
 	void onExit(GameActor& actor);
 	void handleInput(GameActor& actor,

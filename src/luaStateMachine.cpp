@@ -6,6 +6,8 @@
 
 #include "luaStateMachine.h"
 
+#include "luaGlues.h"
+
 LuaStateMachine::LuaStateMachine(const char* filePath):
 	states_(nullptr),
 	currentState_(""),
@@ -36,14 +38,13 @@ LuaStateMachine::LuaStateMachine(const char* filePath):
 	}
 
 	/* Register needed functions */
-	GameActor::lua_registerEverything(states_);
-	GameActorController::lua_registerEverything(states_);
+	LuaGlues::register_gameActor(states_);
+	LuaGlues::register_gameActorController(states_);
 
 	lua_newtable(states_);
 	lua_pushcfunction(states_, lua_setNext);
 	lua_setfield(states_, 1, "setNext");
 	lua_setglobal(states_, "StateMachine");
-	/* lua_register(states_, "changeStateTo", lua_setNext); */
 
 	/* Set 'this' address as Lua global variable */
 	lua_pushlightuserdata(states_, this);
