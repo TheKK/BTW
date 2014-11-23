@@ -49,6 +49,11 @@ GameActor_Zup::update()
 void
 GameActor_Zup::render()
 {
+	if (direction_ == ACTOR_FACE_RIGHT)
+		currentSprite_->setFlip(FLIP_NONE);
+	else
+		currentSprite_->setFlip(FLIP_HORIZONTAL);
+
 	currentSprite_->render(posRect_);
 
 	renderBullet();
@@ -82,7 +87,6 @@ GameActor_Zup::moveRight()
 {
 	applyAcc(1, 0);
 	direction_ = ACTOR_FACE_RIGHT;
-	currentSprite_->setFlip(FLIP_NONE);
 }
 
 void
@@ -90,5 +94,4 @@ GameActor_Zup::moveLeft()
 {
 	applyAcc(-1, 0);
 	direction_ = ACTOR_FACE_LEFT;
-	currentSprite_->setFlip(FLIP_HORIZONTAL);
 }
