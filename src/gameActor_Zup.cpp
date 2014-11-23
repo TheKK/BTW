@@ -11,7 +11,7 @@ GameActor_Zup::GameActor_Zup():
 			 30, 65),
 	sprite_jumping_("./game/images/zup_jumping.png", Window::renderer(),
 			30, 65),
-	machine_(),
+	stateMachine_("./game/scripts/character/Zup/states.lua"),
 	frictionDelay_(0),
 	spriteDelay_(0)
 {
@@ -23,7 +23,7 @@ GameActor_Zup::GameActor_Zup():
 	spriteList_[SPRITE_JUMPING] = &sprite_jumping_;
 	currentSprite_ = spriteList_[SPRITE_ON_GROUND];
 
-	machine_.onEnter(*this);
+	stateMachine_.onEnter(*this);
 }
 
 GameActor_Zup::~GameActor_Zup()
@@ -33,7 +33,7 @@ GameActor_Zup::~GameActor_Zup()
 void
 GameActor_Zup::handleInput(const GameActorController& controller)
 {
-	machine_.handleInput(*this, controller);
+	stateMachine_.handleInput(*this, controller);
 }
 
 void
@@ -41,7 +41,7 @@ GameActor_Zup::update()
 {
 	updatePosAndSprite();
 
-	machine_.update(*this);
+	stateMachine_.update(*this);
 
 	updateBullet(*this);
 }

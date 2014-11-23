@@ -35,7 +35,7 @@ private:
 	Sprite sprite_jumping_;
 	//Sprite sprite_jumpingAttack_;
 
-	LuaStateMachine machine_;
+	LuaStateMachine stateMachine_;
 
 	int frictionDelay_;
 	int spriteDelay_;

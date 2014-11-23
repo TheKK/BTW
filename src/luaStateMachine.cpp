@@ -6,7 +6,7 @@
 
 #include "luaStateMachine.h"
 
-LuaStateMachine::LuaStateMachine():
+LuaStateMachine::LuaStateMachine(const char* filePath):
 	states_(nullptr),
 	currentState_(""),
 	nextState_("")
@@ -26,7 +26,7 @@ LuaStateMachine::LuaStateMachine():
 
 	/* Load character states */
 	fullPath = SDL_GetBasePath();
-	fullPath += "./game/scripts/character/Zup/states.lua";
+	fullPath += filePath;
 	if (luaL_dofile(states_, fullPath.c_str()) != LUA_OK) {
 		LogLocator::GetService()->LogError(
 			"[LuaStateMachine] Lua error %s",

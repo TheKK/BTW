@@ -21,7 +21,7 @@ using namespace std;
 class LuaStateMachine
 {
 public:
-	LuaStateMachine();
+	LuaStateMachine(const char* filePath);
 	~LuaStateMachine();
 
 	//void bindState(enum ActorStates which, State* state);
