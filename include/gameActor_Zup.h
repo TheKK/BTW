@@ -29,15 +29,17 @@ public:
 	void updatePosAndSprite();
 	void moveRight();
 	void moveLeft();
+	void normalAttack();
 private:
 	Sprite sprite_onGround_;
-	//Sprite sprite_onGroundAttack_;
+	Sprite sprite_normalAttack_;
 	Sprite sprite_jumping_;
 	//Sprite sprite_jumpingAttack_;
 
 	LuaStateMachine stateMachine_;
 
 	int frictionDelay_;
+	int gravityDelay_;
 	int spriteDelay_;
 };
 

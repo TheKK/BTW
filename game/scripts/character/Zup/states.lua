@@ -10,6 +10,7 @@ package.path = package.path .. ';./game/scripts/character/Zup/?.lua'
 require 'onGround'
 require 'jumping'
 require 'dive'
+require 'normalAttack'
 
 -- Make a variable "ownerAddr" to store the finite state machine that own this
 -- Lua script

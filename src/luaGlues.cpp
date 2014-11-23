@@ -21,10 +21,18 @@ LuaGlues::register_gameActor(lua_State* L)
 	lua_register(L, "setVelX", gameActor_setVelX);
 	lua_register(L, "applyAcc", gameActor_applyAcc);
 	lua_register(L, "setSprite", gameActor_setSprite);
+	//lua_register(L, "normalAttack", gameActor_normalAttack);
+
+	lua_newtable(L);
+	lua_pushcfunction(L, gameActor_normalAttack);
+	lua_setfield(L, 1, "normalAttack");
+	lua_setglobal(L, "GameActor");
 
 	add_enum_to_lua(L, "Sprites",
 			"ON_GROUND", SPRITE_ON_GROUND,
 			"JUMPING", SPRITE_JUMPING,
+			"DIVE", SPRITE_DIVE,
+			"NORMAL_ATTACK", SPRITE_NORMAL_ATTACK,
 			0);
 }
 
@@ -39,14 +47,14 @@ LuaGlues::register_gameActorController(lua_State* L)
 		     gameActorController_ifButtonReleased);
 
 	add_enum_to_lua(L, "Buttons",
-			"BUTTON_JUMP", BUTTON_JUMP,
-			"BUTTON_NORMAL_ATTACK", BUTTON_NORMAL_ATTACK,
-			"BUTTON_SPECIAL_ATTACK" ,BUTTON_SPECIAL_ATTACK,
-			"BUTTON_EVADE", BUTTON_EVADE,
-			"BUTTON_UP", BUTTON_UP,
-			"BUTTON_DOWN", BUTTON_DOWN,
-			"BUTTON_RIGHT", BUTTON_RIGHT,
-			"BUTTON_LEFT", BUTTON_LEFT,
+			"JUMP", BUTTON_JUMP,
+			"NORMAL_ATTACK", BUTTON_NORMAL_ATTACK,
+			"SPECIAL_ATTACK" ,BUTTON_SPECIAL_ATTACK,
+			"EVADE", BUTTON_EVADE,
+			"UP", BUTTON_UP,
+			"DOWN", BUTTON_DOWN,
+			"RIGHT", BUTTON_RIGHT,
+			"LEFT", BUTTON_LEFT,
 			0);
 }
 
@@ -280,6 +288,22 @@ LuaGlues::gameActor_dive(lua_State* L)
 int
 LuaGlues::gameActor_normalAttack(lua_State* L)
 {
+	void* actorPtr = nullptr;
+
+	/* Check number of arguments */
+	if (lua_gettop(L) < 1)
+		return luaL_error(L, "Too few argument");
+	else if (lua_gettop(L) > 1)
+		return luaL_error(L, "Too much argument");
+
+	/* Check type of argument */
+	if (!lua_isuserdata(L, 1))
+		return luaL_error(L, "First argument is not userdata");
+
+	actorPtr = lua_touserdata(L, 1);
+
+	((GameActor*) actorPtr)->normalAttack();
+
 	return 0;
 }
 

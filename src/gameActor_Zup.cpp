@@ -6,13 +6,18 @@
 
 #include "gameActor_Zup.h"
 
+#include "potionBullet.h"
+
 GameActor_Zup::GameActor_Zup():
 	sprite_onGround_("./game/images/zup_onGround.png", Window::renderer(),
 			 30, 65),
+	sprite_normalAttack_("./game/images/zup_normalAttack.png",
+			     Window::renderer(), 30, 65),
 	sprite_jumping_("./game/images/zup_jumping.png", Window::renderer(),
 			30, 65),
 	stateMachine_("./game/scripts/character/Zup/states.lua"),
 	frictionDelay_(0),
+	gravityDelay_(0),
 	spriteDelay_(0)
 {
 	posRect_ = {0, 0, 30, 65};
@@ -20,6 +25,7 @@ GameActor_Zup::GameActor_Zup():
 	setHorizon(Window::height() - 70);
 
 	spriteList_[SPRITE_ON_GROUND] = &sprite_onGround_;
+	spriteList_[SPRITE_NORMAL_ATTACK] = &sprite_normalAttack_;
 	spriteList_[SPRITE_JUMPING] = &sprite_jumping_;
 	currentSprite_ = spriteList_[SPRITE_ON_GROUND];
 
@@ -63,8 +69,10 @@ void
 GameActor_Zup::updatePosAndSprite()
 {
 	moveBy(velX_, velY_);
-	if (!isOnGround())
+	if ((!isOnGround()) && (++gravityDelay_ == 2)) {
 		velY_ += gravity_;
+		gravityDelay_ = 0;
+	}
 
 	if (posRect_.y + posRect_.h > horizon_)
 		posRect_.y = horizon_ - posRect_.h;
@@ -94,4 +102,10 @@ GameActor_Zup::moveLeft()
 {
 	applyAcc(-1, 0);
 	direction_ = ACTOR_FACE_LEFT;
+}
+
+void
+GameActor_Zup::normalAttack()
+{
+	addBullet(new PotionBullet(*this));
 }

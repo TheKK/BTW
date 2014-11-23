@@ -19,8 +19,6 @@ GameActor::~GameActor()
 	bulletList_.clear();
 }
 
-
-
 void
 GameActor::addBullet(Bullet* bullet)
 {

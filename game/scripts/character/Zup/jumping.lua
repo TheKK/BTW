@@ -5,13 +5,13 @@
 ]]
 
 local frame
-local initJumpSpeed = -8
+local initJumpSpeed = -3
 local accPeriod = 5
 
 jumping = {}
 
 jumping.onEnter = function(actor)
-	setSprite(actor, Sprites.JUMPING)
+	--setSprite(actor, Sprites.JUMPING)
 
 	-- Jump from ground
 	if (isOnGround(actor)) then
@@ -25,19 +25,19 @@ jumping.onExit = function(actor)
 end
 
 jumping.handleInput = function(actor, controller)
-	if (getButtonState(controller, Buttons.BUTTON_RIGHT)) then
+	if (getButtonState(controller, Buttons.RIGHT)) then
 		moveRight(actor)
 	end
 
-	if (getButtonState(controller, Buttons.BUTTON_LEFT)) then
+	if (getButtonState(controller, Buttons.LEFT)) then
 		moveLeft(actor)
 	end
 
-	if (ifButtonPressed(controller, Buttons.BUTTON_DOWN)) then
+	if (ifButtonPressed(controller, Buttons.DOWN)) then
 		StateMachine.setNext(FSM, 'dive')
 	end
 
-	if (not getButtonState(controller, Buttons.BUTTON_JUMP)) then
+	if (not getButtonState(controller, Buttons.JUMP)) then
 		frame = accPeriod
 	end
 end

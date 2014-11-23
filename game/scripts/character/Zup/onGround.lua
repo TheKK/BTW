@@ -14,19 +14,19 @@ onGround.onExit = function(actor)
 end
 
 onGround.handleInput = function(actor, controller)
-	if (getButtonState(controller, Buttons.BUTTON_RIGHT)) then
+	if (getButtonState(controller, Buttons.RIGHT)) then
 		moveRight(actor)
 	end
 
-	if (getButtonState(controller, Buttons.BUTTON_LEFT)) then
+	if (getButtonState(controller, Buttons.LEFT)) then
 		moveLeft(actor)
 	end
 
-	--if (ifButtonPressed(controller, Buttons.BUTTON_NORMAL_ATTACK)) then
-		--attack(actor)
-	--end
+	if (ifButtonPressed(controller, Buttons.NORMAL_ATTACK)) then
+		StateMachine.setNext(FSM, 'normalAttack')
+	end
 
-	if (getButtonState(controller, Buttons.BUTTON_JUMP)) then
+	if (getButtonState(controller, Buttons.JUMP)) then
 		StateMachine.setNext(FSM, 'jumping')
 	end
 end
