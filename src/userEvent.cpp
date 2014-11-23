@@ -17,8 +17,8 @@ UserEvent::Init()
 
 	for (int i = 0; i < USEREVENT_COUNT; i++) {
 		id = SDL_RegisterEvents(1);
-		if (id == -1)
-			throw runtime_error("Can't get user event ID");
+		if (id == (Uint32) -1)
+			throw runtime_error("Can't get more user event ID");
 		else
 			ID.push_back(id);
 	}

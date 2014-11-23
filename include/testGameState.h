@@ -11,7 +11,7 @@
 #include <SDL.h>
 
 #include "gameState.h"
-#include "testGameActor.h"
+#include "gameActor_Zup.h"
 #include "gameActorController.h"
 #include "texture.h"
 #include "window.h"
@@ -29,9 +29,9 @@ public:
 	void render();
 private:
 	GameActorController controller_;
-	TestGameActor actor_;
+	GameActor_Zup actor_;
 	GameActorController controller2_;
-	TestGameActor actor2_;
+	GameActor_Zup actor2_;
 
 	Texture backGroundBG_;
 	Texture backGroundFG_;

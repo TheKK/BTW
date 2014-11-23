@@ -36,7 +36,7 @@ NumberDisplayer::addNum(uint32_t value)
 		toNext = 1;
 	}
 
-	for (int i = digitalNum_ - 2; i >= 0; i--) {
+	for (Uint16 i = digitalNum_ - 2; i >= 0; i--) {
 		digitalVect_[i] += toNext;
 
 		if (digitalVect_[i] > 9) {
@@ -63,7 +63,7 @@ NumberDisplayer::getNum() const
 {
 	Uint64 toReturn = 0;
 
-	for (int i = 0; i < digitalVect_.size(); i++)
+	for (Uint16 i = 0; i < digitalVect_.size(); i++)
 		toReturn +=
 			(digitalVect_[i] *
 			 pow(10, digitalVect_.size() - i - 1));
