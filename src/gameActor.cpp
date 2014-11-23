@@ -384,9 +384,6 @@ GameActor::moveBy(int dx, int dy)
 {
 	posRect_.x += dx;
 	posRect_.y += dy;
-
-	if (posRect_.y + posRect_.h > horizon_)
-		posRect_.y = horizon_ - posRect_.h;
 }
 
 void

@@ -56,7 +56,8 @@ Sprite::render(const SDL_Rect& rect)
 	SDL_assert(sheet_ != nullptr);
 	SDL_assert(clip_.size() > 0);
 
-	SDL_RenderCopy(targetRenderer_, sheet_, &clip_[currentFrame_], &rect);
+	SDL_RenderCopyEx(targetRenderer_, sheet_, &clip_[currentFrame_], &rect,
+			 0, nullptr, flip_);
 }
 
 void
@@ -65,6 +66,22 @@ Sprite::setAlpha(Uint8 value)
 	SDL_assert(sheet_ != nullptr);
 
 	SDL_SetTextureAlphaMod(sheet_, value);
+}
+
+void
+Sprite::setFlip(enum FlipDirection dir)
+{
+	switch (dir) {
+	case FLIP_HORIZONTAL:
+		flip_ = SDL_FLIP_HORIZONTAL;
+		break;
+	case FLIP_VERTICAL:
+		flip_ = SDL_FLIP_VERTICAL;
+		break;
+	case FLIP_NONE:
+		flip_ = SDL_FLIP_NONE;
+		break;
+	}
 }
 
 void

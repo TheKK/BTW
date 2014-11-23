@@ -8,7 +8,6 @@
 #define TEST_GAME_ACTOR_H
 
 #include <iostream>
-#include <SDL.h>
 
 #include "gameActor.h"
 #include "testStateMachine.h"
@@ -27,6 +26,7 @@ public:
 	void update();
 	void render();
 
+	void updatePosAndSprite();
 	void moveRight();
 	void moveLeft();
 private:

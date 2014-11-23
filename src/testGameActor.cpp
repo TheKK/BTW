@@ -39,25 +39,10 @@ TestGameActor::handleInput(const GameActorController& controller)
 void
 TestGameActor::update()
 {
-	/* TODO Make another class to handle position I need */
-	/* Update position */
-	moveBy(velX_, velY_);
-	if (!isOnGround())
-		velY_ += gravity_;
-
-	if (velX_ != 0) {
-		if (++frictionDelay_ == 4) {
-			velX_ -= velX_ * 0.5;
-			frictionDelay_ = 0;
-		}
-	}
-
-	if (++spriteDelay_ == 10) {
-		currentSprite_->nextFrame();
-		spriteDelay_ = 0;
-	}
+	updatePosAndSprite();
 
 	machine_.update(*this);
+
 	updateBullet(*this);
 }
 
@@ -70,10 +55,34 @@ TestGameActor::render()
 }
 
 void
+TestGameActor::updatePosAndSprite()
+{
+	moveBy(velX_, velY_);
+	if (!isOnGround())
+		velY_ += gravity_;
+
+	if (posRect_.y + posRect_.h > horizon_)
+		posRect_.y = horizon_ - posRect_.h;
+
+	if (velX_ != 0) {
+		if (++frictionDelay_ == 4) {
+			velX_ -= velX_ * 0.5;
+			frictionDelay_ = 0;
+		}
+	}
+
+	if (++spriteDelay_ == 10) {
+		currentSprite_->nextFrame();
+		spriteDelay_ = 0;
+	}
+}
+
+void
 TestGameActor::moveRight()
 {
 	applyAcc(1, 0);
 	direction_ = ACTOR_FACE_RIGHT;
+	currentSprite_->setFlip(FLIP_NONE);
 }
 
 void
@@ -81,4 +90,5 @@ TestGameActor::moveLeft()
 {
 	applyAcc(-1, 0);
 	direction_ = ACTOR_FACE_LEFT;
+	currentSprite_->setFlip(FLIP_HORIZONTAL);
 }
