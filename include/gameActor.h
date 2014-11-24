@@ -56,6 +56,8 @@ public:
 	virtual void normalAirAttack() {};
 
 	void addBullet(Bullet* bullet);
+	vector<Bullet*>* bulletList();
+	void testBulletCollision(GameActor& caster);
 	void updateBullet(GameActor& target);
 	void renderBullet();
 

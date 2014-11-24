@@ -30,7 +30,7 @@ GameActorController::~GameActorController()
 }
 
 void
-GameActorController::eventHandler(const SDL_Event& event)
+GameActorController::updateState(const SDL_Event& event)
 {
 	enum Buttons whichButton;
 	SDL_Scancode scancode;
@@ -38,7 +38,7 @@ GameActorController::eventHandler(const SDL_Event& event)
 	switch (event.type) {
 	case SDL_KEYUP:
 	case SDL_KEYDOWN:
-		/* No repeat fire */
+		/* No repeat */
 		if (event.key.repeat)
 			return;
 
@@ -73,7 +73,7 @@ GameActorController::eventHandler(const SDL_Event& event)
 }
 
 void
-GameActorController::update()
+GameActorController::resetState()
 {
 	for (bool& e : buttonPressed_)
 		e = false;

@@ -17,3 +17,9 @@ Bullet::isDead()
 {
 	return isDead_;
 }
+
+SDL_Rect*
+Bullet::rect()
+{
+	return &posRect_;
+}

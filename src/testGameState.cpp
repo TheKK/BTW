@@ -33,8 +33,8 @@ TestGameState::eventHandler(const SDL_Event& event)
 		break;
 	}
 
-	controller_.eventHandler(event);
-	controller2_.eventHandler(event);
+	controller_.updateState(event);
+	controller2_.updateState(event);
 }
 
 void
@@ -46,15 +46,21 @@ TestGameState::update()
 	actor2_.handleInput(controller2_);
 	actor2_.update();
 
-	controller_.update();
-	controller2_.update();
+	/* Collision test */
+	actor_.testBulletCollision(actor2_);
+	actor2_.testBulletCollision(actor_);
+
+	controller_.resetState();
+	controller2_.resetState();
 }
 
 void
 TestGameState::render()
 {
 	backGroundBG_.renderFullWindow();
+
 	actor_.render();
 	actor2_.render();
+
 	backGroundFG_.renderFullWindow();
 }

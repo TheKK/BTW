@@ -25,15 +25,37 @@ GameActor::addBullet(Bullet* bullet)
 	bulletList_.push_back(bullet);
 }
 
+vector<Bullet*>*
+GameActor::bulletList()
+{
+	return &bulletList_;
+}
+
+void
+GameActor::testBulletCollision(GameActor& caster)
+{
+	vector<Bullet*>* bulletList = caster.bulletList();
+
+	for (Bullet* bullet : (*bulletList)) {
+		if (SDL_HasIntersection(&this->posRect_, bullet->rect())) {
+			cout << "getHit" << endl;
+			bullet->suicide();
+		}
+	}
+}
+
 void
 GameActor::updateBullet(GameActor& target)
 {
-	for (auto it = bulletList_.rbegin(); it != bulletList_.rend(); it++) {
-		(*it)->update(target);
+	for (auto bullet = bulletList_.rbegin();
+	     bullet != bulletList_.rend();
+	     bullet++) {
 
-		if ((*it)->isDead()) {
-			delete (*it);
-			bulletList_.erase(next(it).base());
+		(*bullet)->update(target);
+
+		if ((*bullet)->isDead()) {
+			delete (*bullet);
+			bulletList_.erase(next(bullet).base());
 		}
 	}
 }

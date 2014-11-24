@@ -26,6 +26,8 @@ public:
 
 	void suicide();
 	bool isDead();
+
+	SDL_Rect* rect();
 protected:
 	bool isDead_ = false;
 	SDL_Rect posRect_;

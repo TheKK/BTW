@@ -57,8 +57,8 @@ public:
 	GameActorController(const char* filePath);
 	~GameActorController();
 
-	void eventHandler(const SDL_Event& event);
-	void update();
+	void updateState(const SDL_Event& event);
+	void resetState();
 
 	bool readSettingFromFile(const char* filePath);
 	bool saveSettingToFile(const char* filePath);
