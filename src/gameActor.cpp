@@ -38,8 +38,15 @@ GameActor::testBulletCollision(GameActor& caster)
 
 	for (Bullet* bullet : (*bulletList)) {
 		if (SDL_HasIntersection(&this->posRect_, bullet->rect())) {
-			cout << "getHit" << endl;
-			bullet->suicide();
+			hp -= 10;
+
+			if (hp <= 0) {
+				cout << "you die" << endl;
+				bullet->suicide();
+			} else {
+				cout << "hp: " << hp << endl;
+				bullet->suicide();
+			}
 		}
 	}
 }

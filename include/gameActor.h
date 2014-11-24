@@ -93,6 +93,8 @@ public:
 
 	void setSprite(enum ActorSprite which);
 protected:
+	int16_t hp = 100;
+
 	SDL_Rect posRect_ = {0};
 	int velX_ = 0;
 	int velY_ = 0;
