@@ -9,11 +9,11 @@
 PotionBullet::PotionBullet(GameActor& caster)
 {
 	if (caster.direction() == ACTOR_FACE_RIGHT) {
-		posRect_ = {(caster.x() + 20), (caster.y() + 10), 20, 20};
+		posRect_ = {(caster.x() + 20), (caster.y() + 10), 10, 10};
 		velX_ = 10;
 	} else {
 		posRect_ = {(caster.x() + caster.w() - 30), (caster.y() + 10),
-			20, 20};
+			10, 10};
 		velX_ = -10;
 	}
 
