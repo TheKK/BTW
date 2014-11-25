@@ -15,16 +15,16 @@
 
 class SDLLog : public Log
 {
-	public:
-		SDLLog();
-		~SDLLog();
+public:
+	SDLLog();
+	~SDLLog();
 
-		void LogVerbose(const char* fmt, ...);
-		void LogDebug(const char* fmt, ...);
-		void LogInfo(const char* fmt, ...);
-		void LogWarn(const char* fmt, ...);
-		void LogError(const char* fmt, ...);
-		void LogCritical(const char* fmt, ...);
+	void LogVerbose(const char* fmt, ...);
+	void LogDebug(const char* fmt, ...);
+	void LogInfo(const char* fmt, ...);
+	void LogWarn(const char* fmt, ...);
+	void LogError(const char* fmt, ...);
+	void LogCritical(const char* fmt, ...);
 };
 
 #endif 	/* SDL_LOG_H */
