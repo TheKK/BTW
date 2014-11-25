@@ -10,11 +10,11 @@ PotionBullet::PotionBullet(GameActor& caster)
 {
 	if (caster.direction() == ACTOR_FACE_RIGHT) {
 		posRect_ = {(caster.x() + 20), (caster.y() + 10), 10, 10};
-		velX_ = 10;
+		velX_ = 10 + caster.velX() * 1.5;
 	} else {
 		posRect_ = {(caster.x() + caster.w() - 30), (caster.y() + 10),
 			10, 10};
-		velX_ = -10;
+		velX_ = -10 + caster.velX() * 1.5;
 	}
 
 	horizon_ = caster.getHorizon();
@@ -22,6 +22,8 @@ PotionBullet::PotionBullet(GameActor& caster)
 
 	velY_ = -10;
 	gravity_ = 1;
+
+	damage_ = 9;
 }
 
 PotionBullet::~PotionBullet()

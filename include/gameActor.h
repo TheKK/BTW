@@ -56,7 +56,7 @@ public:
 	virtual void normalAirAttack() {};
 
 	void addBullet(Bullet* bullet);
-	vector<Bullet*>* bulletList();
+	vector<Bullet*>& bulletList();
 	void testBulletCollision(GameActor& caster);
 	void updateBullet(GameActor& target);
 	void renderBullet();
@@ -64,18 +64,20 @@ public:
 	void applyAcc(int x, int y);
 	void setVelX(int n);
 	void setVelY(int n);
+	int velX() const;
+	int velY() const;
 
 	void setAsInvisible();
 	void setAsVisible();
-	bool isInvisible();
+	bool isInvisible() const;
 
 	void setGravity(int g);
 	void setHorizon(int h);
-	int getGravity();
-	int getHorizon();
+	int getGravity() const;
+	int getHorizon() const;
 
-	bool isOnGround();
-	enum ActorDirection direction();
+	bool isOnGround() const;
+	enum ActorDirection direction() const;
 
 	void moveBy(int dx, int dy);
 	void moveTo(int x, int y);

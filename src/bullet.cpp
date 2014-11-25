@@ -6,6 +6,12 @@
 
 #include "bullet.h"
 
+int16_t
+Bullet::damage() const
+{
+	return damage_;
+}
+
 void
 Bullet::suicide()
 {

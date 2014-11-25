@@ -25,20 +25,20 @@ GameActor::addBullet(Bullet* bullet)
 	bulletList_.push_back(bullet);
 }
 
-vector<Bullet*>*
+vector<Bullet*>&
 GameActor::bulletList()
 {
-	return &bulletList_;
+	return bulletList_;
 }
 
 void
 GameActor::testBulletCollision(GameActor& caster)
 {
-	vector<Bullet*>* bulletList = caster.bulletList();
+	vector<Bullet*>& bulletList = caster.bulletList();
 
-	for (Bullet* bullet : (*bulletList)) {
+	for (Bullet* bullet : bulletList) {
 		if (SDL_HasIntersection(&this->posRect_, bullet->rect())) {
-			hp -= 10;
+			hp -= bullet->damage();
 
 			if (hp <= 0) {
 				cout << "you die" << endl;
@@ -93,6 +93,18 @@ GameActor::setVelY(int n)
 	velY_ = n;
 }
 
+int
+GameActor::velX() const
+{
+	return velX_;
+}
+
+int
+GameActor::velY() const
+{
+	return velY_;
+}
+
 void
 GameActor::setAsInvisible()
 {
@@ -106,7 +118,7 @@ GameActor::setAsVisible()
 }
 
 bool
-GameActor::isInvisible()
+GameActor::isInvisible() const
 {
 	return isInvisible_;
 }
@@ -124,25 +136,25 @@ GameActor::setHorizon(int h)
 }
 
 int
-GameActor::getGravity()
+GameActor::getGravity() const
 {
 	return gravity_;
 }
 
 int
-GameActor::getHorizon()
+GameActor::getHorizon() const
 {
 	return horizon_;
 }
 
 bool
-GameActor::isOnGround()
+GameActor::isOnGround() const
 {
 	return (posRect_.y + posRect_.h >= horizon_);
 }
 
 enum ActorDirection
-GameActor::direction()
+GameActor::direction() const
 {
 	return direction_;
 }

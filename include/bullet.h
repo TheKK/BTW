@@ -24,12 +24,15 @@ public:
 	virtual void update(GameActor& target) = 0;
 	virtual void render() = 0;
 
+	int16_t damage() const;
+
 	void suicide();
 	bool isDead();
 
 	SDL_Rect* rect();
 protected:
 	bool isDead_ = false;
+	int16_t damage_;
 	SDL_Rect posRect_;
 };
 
