@@ -7,14 +7,10 @@
 #ifndef GAME_ACTOR_ZUP_H
 #define GAME_ACTOR_ZUP_H
 
-#include <iostream>
-
 #include "gameActor.h"
 #include "luaStateMachine.h"
 #include "sprite.h"
 #include "window.h"
-
-using namespace std;
 
 class GameActor_Zup : public GameActor
 {
@@ -37,8 +33,6 @@ private:
 	Sprite sprite_normalAttack_;
 	Sprite sprite_jumping_;
 	//Sprite sprite_jumpingAttack_;
-
-	LuaStateMachine stateMachine_;
 
 	int frictionDelay_;
 	int gravityDelay_;

@@ -9,6 +9,7 @@
 
 #include <iostream>
 #include <vector>
+#include <lua.hpp>
 #include <SDL.h>
 
 #include "stateMachine.h"
@@ -18,7 +19,7 @@
 
 using namespace std;
 
-class LuaStateMachine
+class LuaStateMachine : public StateMachine
 {
 public:
 	LuaStateMachine();
@@ -47,6 +48,7 @@ private:
 	string currentState_ = "";
 	string nextState_ = "";
 
+	/* XXX Do I really need thiese? */
 	void createNewLuaState_();
 	void loadSettingScript_(const char* filePath);
 };

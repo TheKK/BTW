@@ -11,8 +11,10 @@ local delayFrame
 dive = {}
 
 dive.onEnter = function()
+	--GameActor.setSprite(Sprites.DIVE)
+
 	GameActor.setVelX(0)
-	GameActor.setVelY(10)
+	GameActor.setVelY(20)
 
 	delayFrame = 0;
 end

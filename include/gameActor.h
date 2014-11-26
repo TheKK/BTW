@@ -13,8 +13,9 @@
 
 #include "position.h"
 #include "bullet.h"
-#include "sprite.h"
+#include "stateMachine.h"
 #include "gameActorController.h"
+#include "sprite.h"
 
 using namespace std;
 
@@ -36,6 +37,7 @@ enum ActorSprite
 
 class Bullet;
 class GameActorController;
+class StateMachine;
 
 class GameActor
 {
@@ -84,25 +86,21 @@ public:
 	void setSprite(enum ActorSprite which);
 protected:
 	int16_t hp = 100;
-
 	bool isInvisible_ = false;
 
 	Position pos_;
-
 	int velX_ = 0;
 	int velY_ = 0;
-
 	int gravity_ = 0;
 	int horizon_ = 0;
-
 	enum FaceDirection direction_ = FACE_RIGHT;
+
+	StateMachine* stateMachine_ = nullptr;
 
 	vector<Bullet*> bulletList_;
 
 	Sprite* currentSprite_ = nullptr;
 	vector<Sprite*> spriteList_;
-
-	const GameActorController* controller_;
 };
 
 #endif /* GAME_ACTOR_H */

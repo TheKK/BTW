@@ -16,14 +16,16 @@ GameActor_Zup::GameActor_Zup(const GameActorController& controller):
 	sprite_jumping_("./game/images/zup_jumping.png", Window::renderer(),
 			30, 65),
 
-	stateMachine_("./game/scripts/character/Zup/states.lua"),
+	//stateMachine_("./game/scripts/character/Zup/states.lua"),
 
 	frictionDelay_(0),
 	gravityDelay_(0),
 	spriteDelay_(0)
 {
-	stateMachine_.bindActor(*this);
-	stateMachine_.bindController(controller);
+	stateMachine_ =
+		new LuaStateMachine("./game/scripts/character/Zup/states.lua");
+	stateMachine_->bindActor(*this);
+	stateMachine_->bindController(controller);
 
 	pos_.setRect(0, 0, 30, 65);
 
@@ -35,9 +37,7 @@ GameActor_Zup::GameActor_Zup(const GameActorController& controller):
 	spriteList_[SPRITE_JUMPING] = &sprite_jumping_;
 	currentSprite_ = spriteList_[SPRITE_ON_GROUND];
 
-	controller_ = &controller;
-
-	stateMachine_.onEnter();
+	stateMachine_->onEnter();
 }
 
 GameActor_Zup::~GameActor_Zup()
@@ -47,7 +47,7 @@ GameActor_Zup::~GameActor_Zup()
 void
 GameActor_Zup::handleInput()
 {
-	stateMachine_.handleInput();
+	stateMachine_->handleInput();
 }
 
 void
@@ -58,7 +58,7 @@ GameActor_Zup::update()
 	updatePosition();
 	updateBullet(*this);
 
-	stateMachine_.update();
+	stateMachine_->update();
 }
 
 void

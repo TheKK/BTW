@@ -25,7 +25,6 @@ GameActorController::GameActorController(const char* filePath):
 
 GameActorController::~GameActorController()
 {
-	/* TODO May be here is not the best potition to place this function */
 	saveSettingToFile(settingFileName_.c_str());
 }
 

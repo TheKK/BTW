@@ -17,6 +17,10 @@ GameActor::~GameActor()
 		delete e;
 
 	bulletList_.clear();
+
+	if (stateMachine_)
+		delete stateMachine_;
+	stateMachine_ = nullptr;
 }
 
 void
@@ -168,6 +172,8 @@ GameActor::pos() const
 void
 GameActor::setSprite(enum ActorSprite which)
 {
+	SDL_assert(spriteList_[which] != nullptr);
+
 	currentSprite_ = spriteList_[which];
 	currentSprite_->jumpTo(0);
 }

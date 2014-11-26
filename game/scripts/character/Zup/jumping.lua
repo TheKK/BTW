@@ -11,7 +11,7 @@ local accPeriod = 5
 jumping = {}
 
 jumping.onEnter = function()
-	--setSprite(actor, Sprites.JUMPING)
+	GameActor.setSprite(Sprites.JUMPING)
 
 	-- Jump from ground
 	if (GameActor.isOnGround()) then
