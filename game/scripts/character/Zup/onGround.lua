@@ -6,30 +6,30 @@
 
 onGround = {}
 
-onGround.onEnter = function(actor)
+onGround.onEnter = function()
 	GameActor.setSprite(Sprites.ON_GROUND)
 end
 
-onGround.onExit = function(actor)
+onGround.onExit = function()
 end
 
-onGround.handleInput = function(actor, controller)
-	if (getButtonState(controller, Buttons.RIGHT)) then
+onGround.handleInput = function()
+	if (Controller.getButtonState(Buttons.RIGHT)) then
 		GameActor.moveRight()
 	end
 
-	if (getButtonState(controller, Buttons.LEFT)) then
+	if (Controller.getButtonState(Buttons.LEFT)) then
 		GameActor.moveLeft()
 	end
 
-	if (ifButtonPressed(controller, Buttons.NORMAL_ATTACK)) then
+	if (Controller.ifButtonPressed(Buttons.NORMAL_ATTACK)) then
 		StateMachine.setNext('normalAttack')
 	end
 
-	if (getButtonState(controller, Buttons.JUMP)) then
+	if (Controller.getButtonState(Buttons.JUMP)) then
 		StateMachine.setNext('jumping')
 	end
 end
 
-onGround.update = function(actor)
+onGround.update = function()
 end

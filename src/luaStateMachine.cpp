@@ -8,8 +8,7 @@
 
 #include "luaGlues.h"
 
-LuaStateMachine::LuaStateMachine(const char* filePath, const GameActor& actor,
-				 const GameActorController& controller):
+LuaStateMachine::LuaStateMachine(const char* filePath):
 	states_(nullptr),
 	currentState_(""),
 	nextState_("")
@@ -51,15 +50,23 @@ LuaStateMachine::LuaStateMachine(const char* filePath, const GameActor& actor,
 	lua_pushlightuserdata(states_, (void*) this);
 	lua_setglobal(states_, "FSM");
 
-	lua_pushlightuserdata(states_, (void*) &actor);
-	lua_setglobal(states_, "gameActor");
-
-	lua_pushlightuserdata(states_, (void*) &controller);
-	lua_setglobal(states_, "controller");
-
 	/* Init machine state */
 	setNext((char*) "onGround");
 	toNext();
+}
+
+void
+LuaStateMachine::bindActor(const GameActor& actor)
+{
+	lua_pushlightuserdata(states_, (void*) &actor);
+	lua_setglobal(states_, "gameActor");
+}
+
+void
+LuaStateMachine::bindController(const GameActorController& controller)
+{
+	lua_pushlightuserdata(states_, (void*) &controller);
+	lua_setglobal(states_, "controller");
 }
 
 LuaStateMachine::~LuaStateMachine()
@@ -70,14 +77,13 @@ LuaStateMachine::~LuaStateMachine()
 }
 
 void
-LuaStateMachine::onEnter(GameActor& actor)
+LuaStateMachine::onEnter()
 {
 	lua_pushstring(states_, (char*) "onEnter");
 	lua_gettable(states_, -2);
 
 	/* Push argument */
-	lua_pushlightuserdata(states_, (void*) &actor);
-	if (lua_pcall(states_, 1, 0, 0) != LUA_OK) {
+	if (lua_pcall(states_, 0, 0, 0) != LUA_OK) {
 		LogLocator::GetService()->LogError(
 			"[LuaStateMachine] onEnter: Lua error %s",
 			lua_tostring(states_, -1));
@@ -87,14 +93,13 @@ LuaStateMachine::onEnter(GameActor& actor)
 }
 
 void
-LuaStateMachine::onExit(GameActor& actor)
+LuaStateMachine::onExit()
 {
 	lua_pushstring(states_, (char*) "onExit");
 	lua_gettable(states_, -2);
 
 	/* Push argument */
-	lua_pushlightuserdata(states_, (void*) &actor);
-	if (lua_pcall(states_, 1, 0, 0) != LUA_OK) {
+	if (lua_pcall(states_, 0, 0, 0) != LUA_OK) {
 		LogLocator::GetService()->LogError(
 			"[LuaStateMachine] onExit: Lua error %s",
 			lua_tostring(states_, -1));
@@ -104,16 +109,13 @@ LuaStateMachine::onExit(GameActor& actor)
 }
 
 void
-LuaStateMachine::handleInput(GameActor& actor,
-			      const GameActorController& controller)
+LuaStateMachine::handleInput()
 {
 	lua_pushstring(states_, (char*) "handleInput");
 	lua_gettable(states_, -2);
 
 	/* Push argument */
-	lua_pushlightuserdata(states_, (void*) &actor);
-	lua_pushlightuserdata(states_, (void*) &controller);
-	if (lua_pcall(states_, 2, 0, 0) != LUA_OK) {
+	if (lua_pcall(states_, 0, 0, 0) != LUA_OK) {
 		LogLocator::GetService()->LogError(
 			"[LuaStateMachine] handleInput: Lua error %s",
 			lua_tostring(states_, -1));
@@ -123,14 +125,13 @@ LuaStateMachine::handleInput(GameActor& actor,
 }
 
 void
-LuaStateMachine::update(GameActor& actor)
+LuaStateMachine::update()
 {
 	lua_pushstring(states_, (char*) "update");
 	lua_gettable(states_, -2);
 
 	/* Push argument */
-	lua_pushlightuserdata(states_, &actor);
-	if (lua_pcall(states_, 1, 0, 0) != LUA_OK) {
+	if (lua_pcall(states_, 0, 0, 0) != LUA_OK) {
 		LogLocator::GetService()->LogError(
 			"[LuaStateMachine] update: Lua error %s",
 			lua_tostring(states_, -1));
@@ -140,9 +141,9 @@ LuaStateMachine::update(GameActor& actor)
 
 	/* See if need to change to new state */
 	if (hasNext()) {
-		onExit(actor);
+		onExit();
 		toNext();
-		onEnter(actor);
+		onEnter();
 	}
 }
 

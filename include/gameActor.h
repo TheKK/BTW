@@ -43,7 +43,7 @@ public:
 	GameActor();
 	virtual ~GameActor();
 
-	virtual void handleInput(const GameActorController& controller) = 0;
+	virtual void handleInput() = 0;
 	virtual void update() = 0;
 	virtual void render() = 0;
 
@@ -54,8 +54,6 @@ public:
 	virtual void dive() {};
 	virtual void normalAttack() {};
 	virtual void normalAirAttack() {};
-
-	void bindController(const GameActorController& controller);
 
 	void applyAcc(int x, int y);
 	void setVelX(int n);

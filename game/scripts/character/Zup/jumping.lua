@@ -10,7 +10,7 @@ local accPeriod = 5
 
 jumping = {}
 
-jumping.onEnter = function(actor)
+jumping.onEnter = function()
 	--setSprite(actor, Sprites.JUMPING)
 
 	-- Jump from ground
@@ -21,28 +21,28 @@ jumping.onEnter = function(actor)
 	end
 end
 
-jumping.onExit = function(actor)
+jumping.onExit = function()
 end
 
-jumping.handleInput = function(actor, controller)
-	if (getButtonState(controller, Buttons.RIGHT)) then
+jumping.handleInput = function()
+	if (Controller.getButtonState(Buttons.RIGHT)) then
 		GameActor.moveRight()
 	end
 
-	if (getButtonState(controller, Buttons.LEFT)) then
+	if (Controller.getButtonState(Buttons.LEFT)) then
 		GameActor.moveLeft()
 	end
 
-	if (ifButtonPressed(controller, Buttons.DOWN)) then
+	if (Controller.ifButtonPressed(Buttons.DOWN)) then
 		StateMachine.setNext('dive')
 	end
 
-	if (not getButtonState(controller, Buttons.JUMP)) then
+	if (not Controller.getButtonState(Buttons.JUMP)) then
 		frame = accPeriod
 	end
 end
 
-jumping.update = function(actor)
+jumping.update = function()
 	frame = frame + 1
 	if (frame < accPeriod) then
 		GameActor.applyAcc(0, (-1 * (accPeriod - frame)))

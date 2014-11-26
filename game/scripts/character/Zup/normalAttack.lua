@@ -8,26 +8,26 @@ local frame;
 
 normalAttack = {}
 
-normalAttack.onEnter = function(actor)
+normalAttack.onEnter = function()
 	GameActor.setSprite(Sprites.NORMAL_ATTACK)
 
 	frame = 0
 end
 
-normalAttack.onExit = function(actor)
+normalAttack.onExit = function()
 end
 
-normalAttack.handleInput = function(actor, controller)
-	if (getButtonState(controller, Buttons.RIGHT)) then
+normalAttack.handleInput = function()
+	if (Controller.getButtonState(Buttons.RIGHT)) then
 		GameActor.moveRight()
 	end
 
-	if (getButtonState(controller, Buttons.LEFT)) then
+	if (Controller.getButtonState(Buttons.LEFT)) then
 		GameActor.moveLeft()
 	end
 end
 
-normalAttack.update = function(actor)
+normalAttack.update = function()
 	frame = frame + 1
 
 	if (frame == 5) then

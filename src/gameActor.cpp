@@ -20,12 +20,6 @@ GameActor::~GameActor()
 }
 
 void
-GameActor::bindController(const GameActorController& controller)
-{
-	controller_ = &controller;
-}
-
-void
 GameActor::applyAcc(int accX, int accY)
 {
 	velX_ += accX;

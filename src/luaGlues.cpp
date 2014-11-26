@@ -49,10 +49,14 @@ LuaGlues::register_gameActorController(lua_State* L)
 {
 	SDL_assert(L != nullptr);
 
-	lua_register(L, "getButtonState", gameActorController_getButtonState);
-	lua_register(L, "ifButtonPressed", gameActorController_ifButtonPressed);
-	lua_register(L, "ifButtonReleased",
-		     gameActorController_ifButtonReleased);
+	lua_table_begine(L);
+	lua_table_add_function(L, "getButtonState",
+			       gameActorController_getButtonState);
+	lua_table_add_function(L, "ifButtonPressed",
+			       gameActorController_ifButtonPressed);
+	lua_table_add_function(L, "ifButtonReleased",
+			       gameActorController_ifButtonReleased);
+	lua_table_end(L, "Controller");
 
 	add_enum_to_lua(L, "Buttons",
 			"JUMP", BUTTON_JUMP,
@@ -279,22 +283,21 @@ LuaGlues::gameActorController_getButtonState(lua_State* L)
 	enum Buttons button;
 
 	/* Check number of arguments */
-	if (lua_gettop(L) < 2)
+	if (lua_gettop(L) < 1)
 		return luaL_error(L, "Too few argument");
-	else if (lua_gettop(L) > 2)
+	else if (lua_gettop(L) > 1)
 		return luaL_error(L, "Too much argument");
 
 	/* Check type of argument */
-	if (!lua_isuserdata(L, 1))
-		return luaL_error(L, "First argument is not userdata");
+	if (!check_enum_type(L, "Buttons", 1))
+		return luaL_error(L, "First argument is not enum Button");
 
-	if (!check_enum_type(L, "Buttons", 2))
-		return luaL_error(L, "Second argument is not enum Button");
+	lua_getglobal(L, "controller");
+	controllerPtr = lua_touserdata(L, -1);
 
-	controllerPtr = lua_touserdata(L, 1);
-	button = (enum Buttons) get_enum_value(L, 2);
+	button = (enum Buttons) get_enum_value(L, 1);
 
-	if(((GameActorController*) controllerPtr)->getButtonState(button))
+	if (((GameActorController*) controllerPtr)->getButtonState(button))
 		lua_pushboolean(L, 1);
 	else
 		lua_pushboolean(L, 0);
@@ -309,20 +312,19 @@ LuaGlues::gameActorController_ifButtonPressed(lua_State* L)
 	enum Buttons button;
 
 	/* Check number of arguments */
-	if (lua_gettop(L) < 2)
+	if (lua_gettop(L) < 1)
 		return luaL_error(L, "Too few argument");
-	else if (lua_gettop(L) > 2)
+	else if (lua_gettop(L) > 1)
 		return luaL_error(L, "Too much argument");
 
 	/* Check type of argument */
-	if (!lua_isuserdata(L, 1))
-		return luaL_error(L, "First argument is not userdata");
+	if (!check_enum_type(L, "Buttons", 1))
+		return luaL_error(L, "First argument is not enum Button");
 
-	if (!check_enum_type(L, "Buttons", 2))
-		return luaL_error(L, "Second argument is not enum Button");
+	lua_getglobal(L, "controller");
+	controllerPtr = lua_touserdata(L, -1);
 
-	controllerPtr = lua_touserdata(L, 1);
-	button = (enum Buttons) get_enum_value(L, 2);
+	button = (enum Buttons) get_enum_value(L, 1);
 
 	if(((GameActorController*) controllerPtr)->ifButtonPressed(button))
 		lua_pushboolean(L, 1);
@@ -339,20 +341,19 @@ LuaGlues::gameActorController_ifButtonReleased(lua_State* L)
 	enum Buttons button;
 
 	/* Check number of arguments */
-	if (lua_gettop(L) < 2)
+	if (lua_gettop(L) < 1)
 		return luaL_error(L, "Too few argument");
-	else if (lua_gettop(L) > 2)
+	else if (lua_gettop(L) > 1)
 		return luaL_error(L, "Too much argument");
 
 	/* Check type of argument */
-	if (!lua_isuserdata(L, 1))
-		return luaL_error(L, "First argument is not userdata");
+	if (!check_enum_type(L, "Buttons", 1))
+		return luaL_error(L, "First argument is not enum Button");
 
-	if (!check_enum_type(L, "Buttons", 2))
-		return luaL_error(L, "Second argument is not enum Button");
+	lua_getglobal(L, "controller");
+	controllerPtr = lua_touserdata(L, -1);
 
-	controllerPtr = lua_touserdata(L, 1);
-	button = (enum Buttons) get_enum_value(L, 2);
+	button = (enum Buttons) get_enum_value(L, 1);
 
 	if(((GameActorController*) controllerPtr)->ifButtonReleased(button))
 		lua_pushboolean(L, 1);

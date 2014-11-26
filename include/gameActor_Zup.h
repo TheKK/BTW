@@ -22,7 +22,7 @@ public:
 	GameActor_Zup(const GameActorController& controller);
 	~GameActor_Zup();
 
-	void handleInput(const GameActorController& controller);
+	void handleInput();
 	void update();
 	void render();
 

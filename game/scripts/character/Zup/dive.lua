@@ -10,20 +10,20 @@ local delayFrame
 
 dive = {}
 
-dive.onEnter = function(actor)
+dive.onEnter = function()
 	GameActor.setVelX(0)
 	GameActor.setVelY(10)
 
 	delayFrame = 0;
 end
 
-dive.onExit = function(actor)
+dive.onExit = function()
 end
 
-dive.handleInput = function(actor, controller)
+dive.handleInput = function()
 end
 
-dive.update = function(actor)
+dive.update = function()
 	if (GameActor.isOnGround()) then
 		delayFrame = delayFrame + 1
 		if (delayFrame == DIVE_DELAY) then

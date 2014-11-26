@@ -44,10 +44,7 @@ TestGameState::eventHandler(const SDL_Event& event)
 void
 TestGameState::update()
 {
-	actor_.handleInput(controller_);
 	actor_.update();
-
-	actor2_.handleInput(controller2_);
 	actor2_.update();
 
 	/* Collision test */
