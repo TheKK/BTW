@@ -32,6 +32,6 @@ normalAttack.update = function(actor)
 
 	if (frame == 5) then
 		GameActor.normalAttack(actor)
-		StateMachine.setNext(FSM, 'onGround')
+		StateMachine.setNext('onGround')
 	end
 end

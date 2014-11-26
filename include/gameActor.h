@@ -51,7 +51,6 @@ public:
 	virtual void moveRight() {};
 	virtual void moveLeft() {};
 	virtual void jump() {};
-	virtual void land() {};
 	virtual void dive() {};
 	virtual void normalAttack() {};
 	virtual void normalAirAttack() {};

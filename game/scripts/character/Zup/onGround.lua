@@ -23,11 +23,11 @@ onGround.handleInput = function(actor, controller)
 	end
 
 	if (ifButtonPressed(controller, Buttons.NORMAL_ATTACK)) then
-		StateMachine.setNext(FSM, 'normalAttack')
+		StateMachine.setNext('normalAttack')
 	end
 
 	if (getButtonState(controller, Buttons.JUMP)) then
-		StateMachine.setNext(FSM, 'jumping')
+		StateMachine.setNext('jumping')
 	end
 end
 

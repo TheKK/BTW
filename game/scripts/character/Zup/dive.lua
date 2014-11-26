@@ -27,7 +27,7 @@ dive.update = function(actor)
 	if (isOnGround(actor)) then
 		delayFrame = delayFrame + 1
 		if (delayFrame == DIVE_DELAY) then
-			StateMachine.setNext(FSM, 'onGround')
+			StateMachine.setNext('onGround')
 		end
 	end
 end

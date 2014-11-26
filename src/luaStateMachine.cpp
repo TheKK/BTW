@@ -188,19 +188,18 @@ LuaStateMachine::lua_setNext(lua_State* L)
 	char* nextState = nullptr;
 
 	/* Check number of argument(s) */
-	if (lua_gettop(L) < 2)
+	if (lua_gettop(L) < 1)
 		return luaL_error(L, "Too few argument");
-	else if (lua_gettop(L) > 2)
+	else if (lua_gettop(L) > 1)
 		return luaL_error(L, "Too much argument");
 
 	/* Check argument type */
-	if (!lua_isuserdata(L, 1))
-		return luaL_error(L, "First argument is not userdata");
-	if (!lua_isstring(L, 2))
-		return luaL_error(L, "Second argument is not string");
+	if (!lua_isstring(L, 1))
+		return luaL_error(L, "First argument is not string");
 
-	LuaStateMachinePtr = (void*) lua_topointer(L, 1);
-	nextState = (char*) lua_tostring(L, 2);
+	lua_getglobal(L, "FSM");
+	LuaStateMachinePtr = (void*) lua_topointer(L, -1);
+	nextState = (char*) lua_tostring(L, 1);
 
 	((LuaStateMachine*) LuaStateMachinePtr)->setNext(nextState);
 
