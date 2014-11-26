@@ -14,10 +14,10 @@ jumping.onEnter = function(actor)
 	--setSprite(actor, Sprites.JUMPING)
 
 	-- Jump from ground
-	if (isOnGround(actor)) then
+	if (GameActor.isOnGround()) then
 		frame = 0
-		setVelY(actor, 0)
-		applyAcc(actor, 0, initJumpSpeed)
+		GameActor.setVelY(0)
+		GameActor.applyAcc(0, initJumpSpeed)
 	end
 end
 
@@ -26,11 +26,11 @@ end
 
 jumping.handleInput = function(actor, controller)
 	if (getButtonState(controller, Buttons.RIGHT)) then
-		moveRight(actor)
+		GameActor.moveRight()
 	end
 
 	if (getButtonState(controller, Buttons.LEFT)) then
-		moveLeft(actor)
+		GameActor.moveLeft()
 	end
 
 	if (ifButtonPressed(controller, Buttons.DOWN)) then
@@ -45,10 +45,10 @@ end
 jumping.update = function(actor)
 	frame = frame + 1
 	if (frame < accPeriod) then
-		applyAcc(actor, 0, (-1 * (accPeriod - frame)))
+		GameActor.applyAcc(0, (-1 * (accPeriod - frame)))
 	end
 
-	if (isOnGround(actor)) then
+	if (GameActor.isOnGround()) then
 		StateMachine.setNext('onGround');
 	end
 end

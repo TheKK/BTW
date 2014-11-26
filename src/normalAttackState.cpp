@@ -28,7 +28,5 @@ NormalAttackState::handleInput(GameActor& actor,
 void
 NormalAttackState::update(GameActor& actor)
 {
-	if (++frameCount == 5)
-		actor.land();
 }
 

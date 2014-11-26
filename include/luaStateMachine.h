@@ -21,7 +21,8 @@ using namespace std;
 class LuaStateMachine
 {
 public:
-	LuaStateMachine(const char* filePath);
+	LuaStateMachine(const char* filePath, const GameActor& actor,
+			const GameActorController& controller);
 	~LuaStateMachine();
 
 	void onEnter(GameActor& actor);

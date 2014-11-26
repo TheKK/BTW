@@ -11,8 +11,8 @@ local delayFrame
 dive = {}
 
 dive.onEnter = function(actor)
-	setVelX(actor, 0)
-	setVelY(actor, 10)
+	GameActor.setVelX(0)
+	GameActor.setVelY(10)
 
 	delayFrame = 0;
 end
@@ -24,7 +24,7 @@ dive.handleInput = function(actor, controller)
 end
 
 dive.update = function(actor)
-	if (isOnGround(actor)) then
+	if (GameActor.isOnGround()) then
 		delayFrame = delayFrame + 1
 		if (delayFrame == DIVE_DELAY) then
 			StateMachine.setNext('onGround')

@@ -7,7 +7,7 @@
 onGround = {}
 
 onGround.onEnter = function(actor)
-	setSprite(actor, Sprites.ON_GROUND)
+	GameActor.setSprite(Sprites.ON_GROUND)
 end
 
 onGround.onExit = function(actor)
@@ -15,11 +15,11 @@ end
 
 onGround.handleInput = function(actor, controller)
 	if (getButtonState(controller, Buttons.RIGHT)) then
-		moveRight(actor)
+		GameActor.moveRight()
 	end
 
 	if (getButtonState(controller, Buttons.LEFT)) then
-		moveLeft(actor)
+		GameActor.moveLeft()
 	end
 
 	if (ifButtonPressed(controller, Buttons.NORMAL_ATTACK)) then

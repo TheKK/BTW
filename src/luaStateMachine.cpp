@@ -8,7 +8,8 @@
 
 #include "luaGlues.h"
 
-LuaStateMachine::LuaStateMachine(const char* filePath):
+LuaStateMachine::LuaStateMachine(const char* filePath, const GameActor& actor,
+				 const GameActorController& controller):
 	states_(nullptr),
 	currentState_(""),
 	nextState_("")
@@ -43,12 +44,18 @@ LuaStateMachine::LuaStateMachine(const char* filePath):
 
 	lua_newtable(states_);
 	lua_pushcfunction(states_, lua_setNext);
-	lua_setfield(states_, 1, "setNext");
+	lua_setfield(states_, -2, "setNext");
 	lua_setglobal(states_, "StateMachine");
 
 	/* Set 'this' address as Lua global variable */
-	lua_pushlightuserdata(states_, this);
+	lua_pushlightuserdata(states_, (void*) this);
 	lua_setglobal(states_, "FSM");
+
+	lua_pushlightuserdata(states_, (void*) &actor);
+	lua_setglobal(states_, "gameActor");
+
+	lua_pushlightuserdata(states_, (void*) &controller);
+	lua_setglobal(states_, "controller");
 
 	/* Init machine state */
 	setNext((char*) "onGround");

@@ -55,6 +55,8 @@ public:
 	virtual void normalAttack() {};
 	virtual void normalAirAttack() {};
 
+	void bindController(const GameActorController& controller);
+
 	void applyAcc(int x, int y);
 	void setVelX(int n);
 	void setVelY(int n);
@@ -101,6 +103,8 @@ protected:
 
 	Sprite* currentSprite_ = nullptr;
 	vector<Sprite*> spriteList_;
+
+	const GameActorController* controller_;
 };
 
 #endif /* GAME_ACTOR_H */

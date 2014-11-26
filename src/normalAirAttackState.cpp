@@ -30,8 +30,5 @@ NormalAirAttackState::update(GameActor& actor)
 {
 	if (++frameCount == 5)
 		actor.jump();
-
-	if (actor.isOnGround())
-		actor.land();
 }
 

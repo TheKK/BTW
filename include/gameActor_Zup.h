@@ -19,7 +19,7 @@ using namespace std;
 class GameActor_Zup : public GameActor
 {
 public:
-	GameActor_Zup();
+	GameActor_Zup(const GameActorController& controller);
 	~GameActor_Zup();
 
 	void handleInput(const GameActorController& controller);

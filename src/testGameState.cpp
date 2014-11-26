@@ -9,6 +9,10 @@
 TestGameState::TestGameState():
 	controller_(),
 	controller2_("./game/setting/debugController.json"),
+
+	actor_(controller_),
+	actor2_(controller2_),
+
 	backGroundBG_("./game/images/battleField.png", Window::renderer()),
 	backGroundFG_("./game/images/battleFieldFG.png", Window::renderer())
 {

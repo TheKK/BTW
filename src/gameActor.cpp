@@ -20,6 +20,12 @@ GameActor::~GameActor()
 }
 
 void
+GameActor::bindController(const GameActorController& controller)
+{
+	controller_ = &controller;
+}
+
+void
 GameActor::applyAcc(int accX, int accY)
 {
 	velX_ += accX;
@@ -100,6 +106,9 @@ GameActor::bulletList()
 void
 GameActor::testBulletCollision(GameActor& caster)
 {
+	if (isInvisible_)
+		return;
+
 	for (Bullet* bullet : caster.bulletList()) {
 		if (SDL_HasIntersection(&pos_.rect(), bullet->rect())) {
 			hp -= bullet->damage();

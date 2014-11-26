@@ -29,8 +29,9 @@ public:
 	void render();
 private:
 	GameActorController controller_;
-	GameActor_Zup actor_;
 	GameActorController controller2_;
+
+	GameActor_Zup actor_;
 	GameActor_Zup actor2_;
 
 	Texture backGroundBG_;

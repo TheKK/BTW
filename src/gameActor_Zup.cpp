@@ -8,14 +8,15 @@
 
 #include "potionBullet.h"
 
-GameActor_Zup::GameActor_Zup():
+GameActor_Zup::GameActor_Zup(const GameActorController& controller):
 	sprite_onGround_("./game/images/zup_onGround.png", Window::renderer(),
 			 30, 65),
 	sprite_normalAttack_("./game/images/zup_normalAttack.png",
 			     Window::renderer(), 30, 65),
 	sprite_jumping_("./game/images/zup_jumping.png", Window::renderer(),
 			30, 65),
-	stateMachine_("./game/scripts/character/Zup/states.lua"),
+	stateMachine_("./game/scripts/character/Zup/states.lua", *this,
+		      controller),
 	frictionDelay_(0),
 	gravityDelay_(0),
 	spriteDelay_(0)
