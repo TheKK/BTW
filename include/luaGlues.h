@@ -7,10 +7,15 @@
 #ifndef LUA_GLUES_H
 #define LUA_GLUES_H
 
+#include <stdexcept>
 #include <lua.hpp>
+
 #include "lua_typed_enums.h"
 #include "gameActor.h"
 #include "gameActorController.h"
+#include "logLocator.h"
+
+using namespace std;
 
 class LuaGlues
 {

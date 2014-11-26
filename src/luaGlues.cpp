@@ -18,6 +18,16 @@
 		lua_setfield(lua_State, -2, fieldName); \
 	} while (0)
 
+#define lua_getglobal_safe(lua_State, name) \
+	do { \
+		lua_getglobal(L, name); \
+		if (lua_isnil(L, -1)) { \
+			LogLocator::GetService()->LogError( \
+			    "[LuaGlues] Global variable %s not exist", #name); \
+			throw runtime_error("Lua error, program shutdown"); \
+		} \
+	} while (0)
+
 void
 LuaGlues::register_gameActor(lua_State* L)
 {
@@ -79,7 +89,7 @@ LuaGlues::gameActor_moveRight(lua_State* L)
 	if (lua_gettop(L) > 0)
 		return luaL_error(L, "This function doesn't need arguments");
 
-	lua_getglobal(L, "gameActor");
+	lua_getglobal_safe(L, "gameActor");
 	actorPtr = lua_touserdata(L, -1);
 
 	((GameActor*) actorPtr)->moveRight();
@@ -96,7 +106,7 @@ LuaGlues::gameActor_moveLeft(lua_State* L)
 	if (lua_gettop(L) > 0)
 		return luaL_error(L, "This function doesn't need arguments");
 
-	lua_getglobal(L, "gameActor");
+	lua_getglobal_safe(L, "gameActor");
 	actorPtr = lua_touserdata(L, -1);
 
 	((GameActor*) actorPtr)->moveLeft();
@@ -113,7 +123,7 @@ LuaGlues::gameActor_jump(lua_State* L)
 	if (lua_gettop(L) > 0)
 		return luaL_error(L, "This function doesn't need arguments");
 
-	lua_getglobal(L, "gameActor");
+	lua_getglobal_safe(L, "gameActor");
 	actorPtr = lua_touserdata(L, -1);
 
 	((GameActor*) actorPtr)->jump();
@@ -130,7 +140,7 @@ LuaGlues::gameActor_isOnGround(lua_State* L)
 	if (lua_gettop(L) > 0)
 		return luaL_error(L, "This function doesn't need arguments");
 
-	lua_getglobal(L, "gameActor");
+	lua_getglobal_safe(L, "gameActor");
 	actorPtr = lua_touserdata(L, -1);
 
 	lua_pushboolean(L, ((GameActor*) actorPtr)->isOnGround());
@@ -154,7 +164,7 @@ LuaGlues::gameActor_setVelX(lua_State* L)
 	if (!lua_isnumber(L, 1))
 		return luaL_error(L, "First argument is not number");
 
-	lua_getglobal(L, "gameActor");
+	lua_getglobal_safe(L, "gameActor");
 	actorPtr = lua_touserdata(L, -1);
 
 	value = lua_tonumber(L, 1);
@@ -180,7 +190,7 @@ LuaGlues::gameActor_setVelY(lua_State* L)
 	if (!lua_isnumber(L, 1))
 		return luaL_error(L, "First argument is not number");
 
-	lua_getglobal(L, "gameActor");
+	lua_getglobal_safe(L, "gameActor");
 	actorPtr = lua_touserdata(L, -1);
 
 	value = lua_tonumber(L, 1);
@@ -208,7 +218,7 @@ LuaGlues::gameActor_applyAcc(lua_State* L)
 	if (!lua_isnumber(L, 2))
 		return luaL_error(L, "Second argument is not number");
 
-	lua_getglobal(L, "gameActor");
+	lua_getglobal_safe(L, "gameActor");
 	actorPtr = lua_touserdata(L, -1);
 
 	dx = lua_tonumber(L, 1);
@@ -235,7 +245,7 @@ LuaGlues::gameActor_setSprite(lua_State* L)
 	if (!check_enum_type(L, "Sprites", 1))
 		return luaL_error(L, "Second argument is not enum Sprites");
 
-	lua_getglobal(L, "gameActor");
+	lua_getglobal_safe(L, "gameActor");
 	actorPtr = lua_touserdata(L, -1);
 
 	sprite = (enum ActorSprite) get_enum_value(L, 1);
@@ -262,7 +272,7 @@ LuaGlues::gameActor_normalAttack(lua_State* L)
 	else if (lua_gettop(L) > 0)
 		return luaL_error(L, "Too much argument");
 
-	lua_getglobal(L, "gameActor");
+	lua_getglobal_safe(L, "gameActor");
 	actorPtr = lua_touserdata(L, -1);
 
 	((GameActor*) actorPtr)->normalAttack();
@@ -292,7 +302,7 @@ LuaGlues::gameActorController_getButtonState(lua_State* L)
 	if (!check_enum_type(L, "Buttons", 1))
 		return luaL_error(L, "First argument is not enum Button");
 
-	lua_getglobal(L, "controller");
+	lua_getglobal_safe(L, "controller");
 	controllerPtr = lua_touserdata(L, -1);
 
 	button = (enum Buttons) get_enum_value(L, 1);
@@ -321,7 +331,7 @@ LuaGlues::gameActorController_ifButtonPressed(lua_State* L)
 	if (!check_enum_type(L, "Buttons", 1))
 		return luaL_error(L, "First argument is not enum Button");
 
-	lua_getglobal(L, "controller");
+	lua_getglobal_safe(L, "controller");
 	controllerPtr = lua_touserdata(L, -1);
 
 	button = (enum Buttons) get_enum_value(L, 1);
@@ -350,7 +360,7 @@ LuaGlues::gameActorController_ifButtonReleased(lua_State* L)
 	if (!check_enum_type(L, "Buttons", 1))
 		return luaL_error(L, "First argument is not enum Button");
 
-	lua_getglobal(L, "controller");
+	lua_getglobal_safe(L, "controller");
 	controllerPtr = lua_touserdata(L, -1);
 
 	button = (enum Buttons) get_enum_value(L, 1);
