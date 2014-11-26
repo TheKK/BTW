@@ -14,6 +14,7 @@
 #include "gameActor_Zup.h"
 #include "gameActorController.h"
 #include "texture.h"
+#include "hpBar.h"
 #include "window.h"
 
 using namespace std;
@@ -33,6 +34,8 @@ private:
 
 	GameActor_Zup actor_;
 	GameActor_Zup actor2_;
+
+	HPBar boosHpBar_;
 
 	Texture backGroundBG_;
 	Texture backGroundFG_;

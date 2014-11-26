@@ -57,6 +57,8 @@ public:
 	virtual void normalAttack() {};
 	virtual void normalAirAttack() {};
 
+	int16_t hp() const;
+
 	void applyAcc(int x, int y);
 	void setVelX(int n);
 	void setVelY(int n);
@@ -85,7 +87,7 @@ public:
 
 	void setSprite(enum ActorSprite which);
 protected:
-	int16_t hp = 100;
+	int16_t hp_ = 100;
 	bool isInvisible_ = false;
 
 	Position pos_;

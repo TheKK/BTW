@@ -16,6 +16,7 @@ TestGameState::TestGameState():
 	backGroundBG_("./game/images/battleField.png", Window::renderer()),
 	backGroundFG_("./game/images/battleFieldFG.png", Window::renderer())
 {
+	boosHpBar_.bindGameActor(actor2_);
 }
 
 TestGameState::~TestGameState()
@@ -51,6 +52,8 @@ TestGameState::update()
 	actor_.testBulletCollision(actor2_);
 	actor2_.testBulletCollision(actor_);
 
+	boosHpBar_.update();
+
 	controller_.resetState();
 	controller2_.resetState();
 }
@@ -64,4 +67,6 @@ TestGameState::render()
 	actor2_.render();
 
 	backGroundFG_.renderFullWindow();
+
+	boosHpBar_.render();
 }

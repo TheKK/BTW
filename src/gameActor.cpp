@@ -23,6 +23,12 @@ GameActor::~GameActor()
 	stateMachine_ = nullptr;
 }
 
+int16_t
+GameActor::hp() const
+{
+	return hp_;
+}
+
 void
 GameActor::applyAcc(int accX, int accY)
 {
@@ -109,13 +115,13 @@ GameActor::testBulletCollision(GameActor& caster)
 
 	for (Bullet* bullet : caster.bulletList()) {
 		if (SDL_HasIntersection(&pos_.rect(), bullet->rect())) {
-			hp -= bullet->damage();
+			hp_ -= bullet->damage();
 
-			if (hp <= 0) {
+			if (hp_ <= 0) {
 				cout << "you die" << endl;
 				bullet->suicide();
 			} else {
-				cout << "hp: " << hp << endl;
+				cout << "hp: " << hp_ << endl;
 				bullet->suicide();
 			}
 		}
