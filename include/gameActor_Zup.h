@@ -26,7 +26,9 @@ public:
 	void update();
 	void render();
 
-	void updatePosAndSprite();
+	void updateSprite();
+	void updatePosition();
+
 	void moveRight();
 	void moveLeft();
 	void normalAttack();

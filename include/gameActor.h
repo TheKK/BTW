@@ -11,16 +11,17 @@
 #include <vector>
 #include <SDL.h>
 
+#include "position.h"
 #include "bullet.h"
 #include "sprite.h"
 #include "gameActorController.h"
 
 using namespace std;
 
-enum ActorDirection
+enum FaceDirection
 {
-	ACTOR_FACE_RIGHT = 0x00,
-	ACTOR_FACE_LEFT,
+	FACE_RIGHT = 0x00,
+	FACE_LEFT,
 };
 
 enum ActorSprite
@@ -55,58 +56,47 @@ public:
 	virtual void normalAttack() {};
 	virtual void normalAirAttack() {};
 
-	void addBullet(Bullet* bullet);
-	vector<Bullet*>& bulletList();
-	void testBulletCollision(GameActor& caster);
-	void updateBullet(GameActor& target);
-	void renderBullet();
-
 	void applyAcc(int x, int y);
 	void setVelX(int n);
 	void setVelY(int n);
 	int velX() const;
 	int velY() const;
 
+	void setGravity(int g);
+	void setHorizon(int h);
+	int gravity() const;
+	int horizon() const;
+
+	bool isOnGround() const;
+	enum FaceDirection direction() const;
+
+	void addBullet(Bullet* bullet);
+	const vector<Bullet*>& bulletList();
+	void testBulletCollision(GameActor& caster);
+	void updateBullet(GameActor& target);
+	void renderBullet();
+
 	void setAsInvisible();
 	void setAsVisible();
 	bool isInvisible() const;
 
-	void setGravity(int g);
-	void setHorizon(int h);
-	int getGravity() const;
-	int getHorizon() const;
-
-	bool isOnGround() const;
-	enum ActorDirection direction() const;
-
-	void moveBy(int dx, int dy);
-	void moveTo(int x, int y);
-	void moveXto(int n);
-	void moveYto(int n);
-
-	void setW(int n);
-	void setH(int n);
-
-	int x() const;
-	int y() const;
-	int w() const;
-	int h() const;
-	SDL_Rect* rect();
+	const Position& pos() const;
 
 	void setSprite(enum ActorSprite which);
 protected:
 	int16_t hp = 100;
 
-	SDL_Rect posRect_ = {0};
+	bool isInvisible_ = false;
+
+	Position pos_;
+
 	int velX_ = 0;
 	int velY_ = 0;
-
-	bool isInvisible_ = false;
 
 	int gravity_ = 0;
 	int horizon_ = 0;
 
-	enum ActorDirection direction_ = ACTOR_FACE_RIGHT;
+	enum FaceDirection direction_ = FACE_RIGHT;
 
 	vector<Bullet*> bulletList_;
 

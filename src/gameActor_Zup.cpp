@@ -20,9 +20,9 @@ GameActor_Zup::GameActor_Zup():
 	gravityDelay_(0),
 	spriteDelay_(0)
 {
-	posRect_ = {0, 0, 30, 65};
-	setGravity(1);
-	setHorizon(Window::height() - 70);
+	pos_.setRect(0, 0, 30, 65);
+	gravity_ = 1;
+	horizon_ = Window::height() - 70;
 
 	spriteList_[SPRITE_ON_GROUND] = &sprite_onGround_;
 	spriteList_[SPRITE_NORMAL_ATTACK] = &sprite_normalAttack_;
@@ -45,45 +45,29 @@ GameActor_Zup::handleInput(const GameActorController& controller)
 void
 GameActor_Zup::update()
 {
-	updatePosAndSprite();
+	updateSprite();
+	updatePosition();
+	updateBullet(*this);
 
 	stateMachine_.update(*this);
-
-	updateBullet(*this);
 }
 
 void
 GameActor_Zup::render()
 {
-	if (direction_ == ACTOR_FACE_RIGHT)
+	if (direction_ == FACE_RIGHT)
 		currentSprite_->setFlip(FLIP_NONE);
 	else
 		currentSprite_->setFlip(FLIP_HORIZONTAL);
 
-	currentSprite_->render(posRect_);
+	currentSprite_->render(pos_.rect());
 
 	renderBullet();
 }
 
 void
-GameActor_Zup::updatePosAndSprite()
+GameActor_Zup::updateSprite()
 {
-	moveBy(velX_, velY_);
-	if ((!isOnGround()) && (++gravityDelay_ == 2)) {
-		velY_ += gravity_;
-		gravityDelay_ = 0;
-	}
-
-	if (posRect_.y + posRect_.h > horizon_)
-		posRect_.y = horizon_ - posRect_.h;
-
-	if (velX_ != 0) {
-		if (++frictionDelay_ == 4) {
-			velX_ -= velX_ * 0.5;
-			frictionDelay_ = 0;
-		}
-	}
-
 	if (++spriteDelay_ == 10) {
 		currentSprite_->nextFrame();
 		spriteDelay_ = 0;
@@ -91,17 +75,38 @@ GameActor_Zup::updatePosAndSprite()
 }
 
 void
+GameActor_Zup::updatePosition()
+{
+	pos_.moveBy(velX_, velY_);
+
+	if ((!isOnGround()) && (++gravityDelay_ == 2)) {
+		velY_ += gravity_;
+		gravityDelay_ = 0;
+	}
+
+	if (pos_.y() + pos_.h() > horizon_)
+		pos_.setY(horizon_ - pos_.h());
+
+	if (velX_ != 0) {
+		if (++frictionDelay_ == 4) {
+			velX_ -= velX_ * 0.5;
+			frictionDelay_ = 0;
+		}
+	}
+}
+
+void
 GameActor_Zup::moveRight()
 {
 	applyAcc(1, 0);
-	direction_ = ACTOR_FACE_RIGHT;
+	direction_ = FACE_RIGHT;
 }
 
 void
 GameActor_Zup::moveLeft()
 {
 	applyAcc(-1, 0);
-	direction_ = ACTOR_FACE_LEFT;
+	direction_ = FACE_LEFT;
 }
 
 void
