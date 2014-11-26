@@ -137,8 +137,8 @@ GameActor::updateBullet(GameActor& target)
 void
 GameActor::renderBullet()
 {
-	for (const auto it : bulletList_)
-		it->render();
+	for (Bullet* bullet : bulletList_)
+		bullet->render();
 }
 
 void

@@ -15,7 +15,9 @@ GameActor_Zup::GameActor_Zup(const GameActorController& controller):
 			     Window::renderer(), 30, 65),
 	sprite_jumping_("./game/images/zup_jumping.png", Window::renderer(),
 			30, 65),
+
 	stateMachine_("./game/scripts/character/Zup/states.lua"),
+
 	frictionDelay_(0),
 	gravityDelay_(0),
 	spriteDelay_(0)

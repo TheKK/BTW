@@ -8,34 +8,28 @@
 
 #include "luaGlues.h"
 
-LuaStateMachine::LuaStateMachine(const char* filePath):
-	states_(nullptr),
-	currentState_(""),
-	nextState_("")
+LuaStateMachine::LuaStateMachine()
 {
-	string fullPath;
+}
 
-	/* Lua routine */
-	states_ = luaL_newstate();
-	if (states_ == nullptr) {
-		LogLocator::GetService()->LogCritical(
-			"[LuaStateMachine]"
-			"No enough memory to create Lua state");
-		throw runtime_error("Critical error, program shutdown");
-	}
+LuaStateMachine::LuaStateMachine(const char* filePath)
+{
+	init(filePath);
+}
 
-	luaL_openlibs(states_);
+LuaStateMachine::~LuaStateMachine()
+{
+	if (states_)
+		lua_close(states_);
+	states_ = nullptr;
+}
 
-	/* Load character states */
-	fullPath = SDL_GetBasePath();
-	fullPath += filePath;
-	if (luaL_dofile(states_, fullPath.c_str()) != LUA_OK) {
-		LogLocator::GetService()->LogError(
-			"[LuaStateMachine] Lua error %s",
-			lua_tostring(states_, -1));
-		lua_pop(states_, 1);
-		throw runtime_error("Lua script error, program shutdown");
-	}
+void
+LuaStateMachine::init(const char* filePath)
+{
+	createNewLuaState_();
+
+	loadSettingScript_(filePath);
 
 	/* Register needed functions */
 	LuaGlues::register_gameActor(states_);
@@ -67,13 +61,6 @@ LuaStateMachine::bindController(const GameActorController& controller)
 {
 	lua_pushlightuserdata(states_, (void*) &controller);
 	lua_setglobal(states_, "controller");
-}
-
-LuaStateMachine::~LuaStateMachine()
-{
-	if (states_)
-		lua_close(states_);
-	states_ = nullptr;
 }
 
 void
@@ -213,3 +200,35 @@ LuaStateMachine::lua_setNext(lua_State* L)
 
 	return 0;
 }
+
+void
+LuaStateMachine::createNewLuaState_()
+{
+	states_ = luaL_newstate();
+	if (states_ == nullptr) {
+		LogLocator::GetService()->LogCritical(
+			"[LuaStateMachine]"
+			"No enough memory to create Lua state");
+		throw runtime_error("Critical error, program shutdown");
+	}
+
+	luaL_openlibs(states_);
+}
+
+void
+LuaStateMachine::loadSettingScript_(const char* filePath)
+{
+	string fullPath;
+
+	fullPath = SDL_GetBasePath();
+	fullPath += filePath;
+
+	if (luaL_dofile(states_, fullPath.c_str()) != LUA_OK) {
+		LogLocator::GetService()->LogError(
+			"[LuaStateMachine] Lua error %s",
+			lua_tostring(states_, -1));
+		lua_pop(states_, 1);
+		throw runtime_error("Lua script error, program shutdown");
+	}
+}
+

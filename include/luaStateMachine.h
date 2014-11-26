@@ -8,7 +8,6 @@
 #define LUA_STATE_MACHINE_H
 
 #include <iostream>
-#include <stdexcept>
 #include <vector>
 #include <SDL.h>
 
@@ -22,8 +21,11 @@ using namespace std;
 class LuaStateMachine
 {
 public:
+	LuaStateMachine();
 	LuaStateMachine(const char* filePath);
 	~LuaStateMachine();
+
+	void init(const char* filePath);
 
 	void bindActor(const GameActor& actor);
 	void bindController(const GameActorController& controller);
@@ -40,10 +42,13 @@ public:
 	/* For Lua use */
 	static int lua_setNext(lua_State* L);
 private:
-	lua_State* states_;
+	lua_State* states_ = nullptr;
 
-	string currentState_;
-	string nextState_;
+	string currentState_ = "";
+	string nextState_ = "";
+
+	void createNewLuaState_();
+	void loadSettingScript_(const char* filePath);
 };
 
 #endif /* LUA_STATE_MACHINE_H */
