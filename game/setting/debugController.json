@@ -6,6 +6,8 @@
 	"BUTTON_LEFT" : "J",
 	"BUTTON_NORMAL_ATTACK" : "X",
 	"BUTTON_RIGHT" : "K",
+	"BUTTON_SELECT" : "Right Shift",
 	"BUTTON_SPECIAL_ATTACK" : "S",
+	"BUTTON_START" : "Return",
 	"BUTTON_UP" : "Up"
 }

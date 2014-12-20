@@ -7,15 +7,13 @@
 #ifndef MAIN_GAME_SCENE_H
 #define MAIN_GAME_SCENE_H
 
-#include <iostream>
 #include <SDL.h>
 
+#include "controller.h"
 #include "scene.h"
 #include "gameActor_Zup.h"
-#include "gameActorController.h"
 #include "texture.h"
 #include "hpBar.h"
-#include "window.h"
 
 #include "mainGameScene_onFight.h"
 #include "mainGameScene_onPause.h"
@@ -40,8 +38,8 @@ public:
 	void update();
 	void render();
 private:
-	GameActorController controller_;
-	GameActorController controller2_;
+	Controller controller_;
+	Controller controller2_;
 
 	GameActor_Zup actor_;
 	GameActor_Zup actor2_;

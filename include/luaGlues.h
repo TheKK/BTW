@@ -12,7 +12,7 @@
 
 #include "lua_typed_enums.h"
 #include "gameActor.h"
-#include "gameActorController.h"
+#include "controller.h"
 #include "logLocator.h"
 
 using namespace std;
@@ -21,7 +21,7 @@ class LuaGlues
 {
 public:
 	static void register_gameActor(lua_State* L);
-	static void register_gameActorController(lua_State* L);
+	static void register_controller(lua_State* L);
 private:
 	static int gameActor_moveRight(lua_State* L);
 	static int gameActor_moveLeft(lua_State* L);
@@ -36,9 +36,9 @@ private:
 	static int gameActor_applyAcc(lua_State* L);
 	static int gameActor_setSprite(lua_State* L);
 
-	static int gameActorController_getButtonState(lua_State* L);
-	static int gameActorController_ifButtonPressed(lua_State* L);
-	static int gameActorController_ifButtonReleased(lua_State* L);
+	static int controller_ifButtonHeld(lua_State* L);
+	static int controller_ifButtonPressed(lua_State* L);
+	static int controller_ifButtonReleased(lua_State* L);
 };
 
 #endif /* LUA_GLUES_H */

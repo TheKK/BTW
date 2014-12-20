@@ -6,8 +6,10 @@
 
 #include "mainGameScene.h"
 
+#include "window.h"
+
 MainGameScene::MainGameScene():
-	controller_(),
+	controller_("./game/setting/controller.json"),
 	controller2_("./game/setting/debugController.json"),
 
 	actor_(controller_),

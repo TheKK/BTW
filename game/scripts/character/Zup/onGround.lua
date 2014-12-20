@@ -14,11 +14,11 @@ onGround.onExit = function()
 end
 
 onGround.handleInput = function()
-	if (Controller.getButtonState(Buttons.RIGHT)) then
+	if (Controller.ifButtonHeld(Buttons.RIGHT)) then
 		GameActor.moveRight()
 	end
 
-	if (Controller.getButtonState(Buttons.LEFT)) then
+	if (Controller.ifButtonHeld(Buttons.LEFT)) then
 		GameActor.moveLeft()
 	end
 
@@ -26,7 +26,7 @@ onGround.handleInput = function()
 		StateMachine.setNext('normalAttack')
 	end
 
-	if (Controller.getButtonState(Buttons.JUMP)) then
+	if (Controller.ifButtonHeld(Buttons.JUMP)) then
 		StateMachine.setNext('jumping')
 	end
 end

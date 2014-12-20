@@ -7,15 +7,10 @@
 #ifndef GAME_ACTOR_H
 #define GAME_ACTOR_H
 
-#include <iostream>
 #include <vector>
 #include <SDL.h>
 
 #include "position.h"
-#include "bullet.h"
-#include "stateMachine.h"
-#include "gameActorController.h"
-#include "sprite.h"
 
 using namespace std;
 
@@ -35,8 +30,8 @@ enum ActorSprite
 	SPRITE_COUNT
 };
 
+class Sprite;
 class Bullet;
-class GameActorController;
 class StateMachine;
 
 class GameActor

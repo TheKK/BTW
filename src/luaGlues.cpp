@@ -55,17 +55,17 @@ LuaGlues::register_gameActor(lua_State* L)
 }
 
 void
-LuaGlues::register_gameActorController(lua_State* L)
+LuaGlues::register_controller(lua_State* L)
 {
 	SDL_assert(L != nullptr);
 
 	lua_table_begine(L);
-	lua_table_add_function(L, "getButtonState",
-			       gameActorController_getButtonState);
+	lua_table_add_function(L, "ifButtonHeld",
+			       controller_ifButtonHeld);
 	lua_table_add_function(L, "ifButtonPressed",
-			       gameActorController_ifButtonPressed);
+			       controller_ifButtonPressed);
 	lua_table_add_function(L, "ifButtonReleased",
-			       gameActorController_ifButtonReleased);
+			       controller_ifButtonReleased);
 	lua_table_end(L, "Controller");
 
 	add_enum_to_lua(L, "Buttons",
@@ -287,7 +287,7 @@ LuaGlues::gameActor_normalAirAttack(lua_State* L)
 }
 
 int
-LuaGlues::gameActorController_getButtonState(lua_State* L)
+LuaGlues::controller_ifButtonHeld(lua_State* L)
 {
 	void* controllerPtr = nullptr;
 	enum Buttons button;
@@ -307,7 +307,7 @@ LuaGlues::gameActorController_getButtonState(lua_State* L)
 
 	button = (enum Buttons) get_enum_value(L, 1);
 
-	if (((GameActorController*) controllerPtr)->getButtonState(button))
+	if (((Controller*) controllerPtr)->ifButtonHeld(button))
 		lua_pushboolean(L, 1);
 	else
 		lua_pushboolean(L, 0);
@@ -316,7 +316,7 @@ LuaGlues::gameActorController_getButtonState(lua_State* L)
 }
 
 int
-LuaGlues::gameActorController_ifButtonPressed(lua_State* L)
+LuaGlues::controller_ifButtonPressed(lua_State* L)
 {
 	void* controllerPtr = nullptr;
 	enum Buttons button;
@@ -336,7 +336,7 @@ LuaGlues::gameActorController_ifButtonPressed(lua_State* L)
 
 	button = (enum Buttons) get_enum_value(L, 1);
 
-	if(((GameActorController*) controllerPtr)->ifButtonPressed(button))
+	if(((Controller*) controllerPtr)->ifButtonPressed(button))
 		lua_pushboolean(L, 1);
 	else
 		lua_pushboolean(L, 0);
@@ -345,7 +345,7 @@ LuaGlues::gameActorController_ifButtonPressed(lua_State* L)
 }
 
 int
-LuaGlues::gameActorController_ifButtonReleased(lua_State* L)
+LuaGlues::controller_ifButtonReleased(lua_State* L)
 {
 	void* controllerPtr = nullptr;
 	enum Buttons button;
@@ -365,7 +365,7 @@ LuaGlues::gameActorController_ifButtonReleased(lua_State* L)
 
 	button = (enum Buttons) get_enum_value(L, 1);
 
-	if(((GameActorController*) controllerPtr)->ifButtonReleased(button))
+	if(((Controller*) controllerPtr)->ifButtonReleased(button))
 		lua_pushboolean(L, 1);
 	else
 		lua_pushboolean(L, 0);

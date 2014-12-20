@@ -18,11 +18,11 @@ normalAttack.onExit = function()
 end
 
 normalAttack.handleInput = function()
-	if (Controller.getButtonState(Buttons.RIGHT)) then
+	if (Controller.ifButtonHeld(Buttons.RIGHT)) then
 		GameActor.moveRight()
 	end
 
-	if (Controller.getButtonState(Buttons.LEFT)) then
+	if (Controller.ifButtonHeld(Buttons.LEFT)) then
 		GameActor.moveLeft()
 	end
 end

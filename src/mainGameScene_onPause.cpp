@@ -26,8 +26,8 @@ MainGameScene_onPause::eventHandler(const SDL_Event& event)
 		break;
 	}
 
-	scene_.controller_.updateState(event);
-	scene_.controller2_.updateState(event);
+	scene_.controller_.eventHandler(event);
+	scene_.controller2_.eventHandler(event);
 }
 
 void
@@ -35,6 +35,9 @@ MainGameScene_onPause::update()
 {
 	if (scene_.controller_.ifButtonPressed(BUTTON_JUMP))
 		scene_.changeScript_(SCRIPT_ON_FIGHT);
+
+	scene_.controller_.clearState();
+	scene_.controller2_.clearState();
 }
 
 void

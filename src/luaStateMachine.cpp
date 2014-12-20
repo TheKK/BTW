@@ -6,7 +6,13 @@
 
 #include "luaStateMachine.h"
 
+#include <SDL.h>
+#include <lua.hpp>
+
 #include "luaGlues.h"
+#include "gameActor.h"
+#include "controller.h"
+#include "logLocator.h"
 
 LuaStateMachine::LuaStateMachine()
 {
@@ -33,7 +39,7 @@ LuaStateMachine::init(const char* filePath)
 
 	/* Register needed functions */
 	LuaGlues::register_gameActor(states_);
-	LuaGlues::register_gameActorController(states_);
+	LuaGlues::register_controller(states_);
 
 	lua_newtable(states_);
 	lua_pushcfunction(states_, lua_setNext);
@@ -57,7 +63,7 @@ LuaStateMachine::bindActor(const GameActor& actor)
 }
 
 void
-LuaStateMachine::bindController(const GameActorController& controller)
+LuaStateMachine::bindController(const Controller& controller)
 {
 	lua_pushlightuserdata(states_, (void*) &controller);
 	lua_setglobal(states_, "controller");

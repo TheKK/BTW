@@ -3,9 +3,11 @@
 	"BUTTON_DOWN" : "Down",
 	"BUTTON_EVADE" : "A",
 	"BUTTON_JUMP" : "Z",
-	"BUTTON_LEFT" : "Left",
+	"BUTTON_LEFT" : "N",
 	"BUTTON_NORMAL_ATTACK" : "X",
-	"BUTTON_RIGHT" : "Right",
+	"BUTTON_RIGHT" : "M",
+	"BUTTON_SELECT" : "Right Shift",
 	"BUTTON_SPECIAL_ATTACK" : "S",
+	"BUTTON_START" : "Return",
 	"BUTTON_UP" : "Up"
 }

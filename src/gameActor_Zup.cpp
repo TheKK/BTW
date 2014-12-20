@@ -6,9 +6,11 @@
 
 #include "gameActor_Zup.h"
 
+#include "window.h"
 #include "potionBullet.h"
+#include "luaStateMachine.h"
 
-GameActor_Zup::GameActor_Zup(const GameActorController& controller):
+GameActor_Zup::GameActor_Zup(const Controller& controller):
 	sprite_onGround_("./game/images/zup_onGround.png", Window::renderer(),
 			 30, 65),
 	sprite_normalAttack_("./game/images/zup_normalAttack.png",

@@ -25,11 +25,11 @@ jumping.onExit = function()
 end
 
 jumping.handleInput = function()
-	if (Controller.getButtonState(Buttons.RIGHT)) then
+	if (Controller.ifButtonHeld(Buttons.RIGHT)) then
 		GameActor.moveRight()
 	end
 
-	if (Controller.getButtonState(Buttons.LEFT)) then
+	if (Controller.ifButtonHeld(Buttons.LEFT)) then
 		GameActor.moveLeft()
 	end
 
@@ -37,7 +37,7 @@ jumping.handleInput = function()
 		StateMachine.setNext('dive')
 	end
 
-	if (not Controller.getButtonState(Buttons.JUMP)) then
+	if (not Controller.ifButtonHeld(Buttons.JUMP)) then
 		frame = accPeriod
 	end
 end

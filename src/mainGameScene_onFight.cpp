@@ -26,8 +26,8 @@ MainGameScene_onFight::eventHandler(const SDL_Event& event)
 		break;
 	}
 
-	scene_.controller_.updateState(event);
-	scene_.controller2_.updateState(event);
+	scene_.controller_.eventHandler(event);
+	scene_.controller2_.eventHandler(event);
 }
 
 void
@@ -44,8 +44,8 @@ MainGameScene_onFight::update()
 
 	scene_.boosHpBar_.update();
 
-	scene_.controller_.resetState();
-	scene_.controller2_.resetState();
+	scene_.controller_.clearState();
+	scene_.controller2_.clearState();
 }
 
 void

@@ -1,35 +1,49 @@
 /*
  * Author: KK <thumbd03803@gmail.com>
  *
- * File: gameActorController.cpp
+ * File: controller.cpp
  */
 
-#include "gameActorController.h"
+#include "controller.h"
 
-GameActorController::GameActorController():
-	keyState_(SDL_GetKeyboardState(nullptr))
+#define DEFAULT_SETTING_FILE	(char*) "./game/setting/controller.json"
+
+#define GET_SETTING_FROM_JSON(json, button, defaultValue); \
+	do { \
+		buttonKeyMap_[button] = \
+		SDL_GetScancodeFromName(json.get(#button, defaultValue) \
+					.asCString()); \
+	} while (0); \
+
+#define SAVE_SETTING_TO_JSON(json, button); \
+	do { \
+		json[#button] = \
+		SDL_GetScancodeName(buttonKeyMap_[button]); \
+	} while (0); \
+
+Controller::Controller()
 {
-	settingFileName_ = DEFAULT_SETTING_FILE;
-	if(!(readSettingFromFile(settingFileName_.c_str())))
-		useDefaultSetting();
+	useDefaultSetting();
 }
 
-GameActorController::GameActorController(const char* filePath):
-	keyState_(SDL_GetKeyboardState(nullptr))
+Controller::Controller(const char* filePath)
 {
 	/* Use file to config button map */
 	settingFileName_ = filePath;
-	if(!(readSettingFromFile(settingFileName_.c_str())))
+	if(!(readSettingFromFile(settingFileName_.c_str()))) {
+		settingFileName_ = "";
 		useDefaultSetting();
+	}
 }
 
-GameActorController::~GameActorController()
+Controller::~Controller()
 {
-	saveSettingToFile(settingFileName_.c_str());
+	if (settingFileName_ != "")
+		saveSettingToFile(settingFileName_.c_str());
 }
 
 void
-GameActorController::updateState(const SDL_Event& event)
+Controller::eventHandler(const SDL_Event& event)
 {
 	enum Buttons whichButton;
 	SDL_Scancode scancode;
@@ -59,20 +73,25 @@ GameActorController::updateState(const SDL_Event& event)
 			 whichButton = BUTTON_NORMAL_ATTACK;
 		else if (scancode == buttonKeyMap_[BUTTON_SPECIAL_ATTACK])
 			 whichButton = BUTTON_SPECIAL_ATTACK;
+		else if (scancode == buttonKeyMap_[BUTTON_START])
+			 whichButton = BUTTON_START;
+		else if (scancode == buttonKeyMap_[BUTTON_SELECT])
+			 whichButton = BUTTON_SELECT;
 
 		if (event.key.state == SDL_PRESSED) {
 			buttonPressed_[whichButton] = true;
-			buttonReleased_[whichButton] = false;
+			buttonHeld_[whichButton] = true;
 		} else {
-			buttonPressed_[whichButton] = false;
 			buttonReleased_[whichButton] = true;
+			buttonHeld_[whichButton] = false;
 		}
+
 		break;
 	}
 }
 
 void
-GameActorController::resetState()
+Controller::clearState()
 {
 	for (bool& e : buttonPressed_)
 		e = false;
@@ -82,22 +101,22 @@ GameActorController::resetState()
 }
 
 bool
-GameActorController::readSettingFromFile(const char* filePath)
+Controller::readSettingFromFile(const char* filePath)
 {
 	Json::Value root;
 	Json::Reader reader;
-	ifstream config;
+	std::ifstream config;
 	bool parseingSuccessful;
-	string fullPath;
+	std::string fullPath;
 
 	/* Open file */
 	fullPath = SDL_GetBasePath();
 	fullPath += filePath;
 
-	config.open(fullPath, ifstream::in);
+	config.open(fullPath, std::ifstream::in);
 	if (!config.is_open()) {
 		LogLocator::GetService()->LogWarn(
-			"[GameActorController] Setting file not found");
+			"[Controller] Setting file not found");
 		return false;
 	}
 
@@ -106,41 +125,43 @@ GameActorController::readSettingFromFile(const char* filePath)
 	config.close();
 	if(!parseingSuccessful) {
 		LogLocator::GetService()->LogWarn(
-			"[GameActorController] Failed to parse json file: %s",
+			"[Controller] Failed to parse json file: %s",
 			reader.getFormattedErrorMessages().c_str());
 		return false;
 	}
 
 	/* Get value */
-	GET_SETTING_FROM_JSON(root, BUTTON_JUMP,		"Z");
-	GET_SETTING_FROM_JSON(root, BUTTON_NORMAL_ATTACK,	"X");
-	GET_SETTING_FROM_JSON(root, BUTTON_SPECIAL_ATTACK,	"S");
-	GET_SETTING_FROM_JSON(root, BUTTON_EVADE,		"A");
-	GET_SETTING_FROM_JSON(root, BUTTON_UP,			"Up");
-	GET_SETTING_FROM_JSON(root, BUTTON_DOWN,		"Down");
-	GET_SETTING_FROM_JSON(root, BUTTON_RIGHT,		"Right");
-	GET_SETTING_FROM_JSON(root, BUTTON_LEFT,		"Left");
+	GET_SETTING_FROM_JSON(root, BUTTON_JUMP, "Z");
+	GET_SETTING_FROM_JSON(root, BUTTON_NORMAL_ATTACK,"X");
+	GET_SETTING_FROM_JSON(root, BUTTON_SPECIAL_ATTACK,"S");
+	GET_SETTING_FROM_JSON(root, BUTTON_EVADE, "A");
+	GET_SETTING_FROM_JSON(root, BUTTON_UP, "Up");
+	GET_SETTING_FROM_JSON(root, BUTTON_DOWN, "Down");
+	GET_SETTING_FROM_JSON(root, BUTTON_RIGHT, "Right");
+	GET_SETTING_FROM_JSON(root, BUTTON_LEFT, "Left");
+	GET_SETTING_FROM_JSON(root, BUTTON_START, "Return");
+	GET_SETTING_FROM_JSON(root, BUTTON_SELECT, "Right Shift");
 
 	LogLocator::GetService()->LogDebug(
-		"[GameActorController] Setting read from %s successfully",
+		"[Controller] Setting read from %s successfully",
 		filePath);
 
 	return true;
 }
 
 bool
-GameActorController::saveSettingToFile(const char* filePath)
+Controller::saveSettingToFile(const char* filePath)
 {
 	Json::Value root;
 	Json::StyledStreamWriter writer;
-	string str;
-	ofstream output;
+	std::string str;
+	std::ofstream output;
 
 	/* Create file */
-	output.open(filePath, ofstream::out);
+	output.open(filePath, std::ofstream::out);
 	if (!output.is_open()) {
 		LogLocator::GetService()->LogWarn(
-			"[GameActorController] Can not write setting to file");
+			"[Controller] Can not write setting to file");
 
 		return false;
 	}
@@ -154,23 +175,25 @@ GameActorController::saveSettingToFile(const char* filePath)
 	SAVE_SETTING_TO_JSON(root, BUTTON_DOWN);
 	SAVE_SETTING_TO_JSON(root, BUTTON_RIGHT);
 	SAVE_SETTING_TO_JSON(root, BUTTON_LEFT);
+	SAVE_SETTING_TO_JSON(root, BUTTON_START);
+	SAVE_SETTING_TO_JSON(root, BUTTON_SELECT);
 
 	writer.write(output, root);
 
 	output.close();
 
 	LogLocator::GetService()->LogDebug(
-		"[GameActorController] Setting write to %s successfully",
+		"[Controller] Setting write to %s successfully",
 		filePath);
 
 	return true;
 }
 
 void
-GameActorController::useDefaultSetting()
+Controller::useDefaultSetting()
 {
 	LogLocator::GetService()->LogDebug(
-		"[GameActorController] Use default mapping");
+		"[Controller] Use default mapping");
 
 	buttonKeyMap_[BUTTON_JUMP] = 		SDL_SCANCODE_Z;
 	buttonKeyMap_[BUTTON_NORMAL_ATTACK] = 	SDL_SCANCODE_X;
@@ -181,22 +204,25 @@ GameActorController::useDefaultSetting()
 	buttonKeyMap_[BUTTON_DOWN] = 		SDL_SCANCODE_DOWN;
 	buttonKeyMap_[BUTTON_RIGHT] = 		SDL_SCANCODE_RIGHT;
 	buttonKeyMap_[BUTTON_LEFT] = 		SDL_SCANCODE_LEFT;
+
+	buttonKeyMap_[BUTTON_START] = 		SDL_SCANCODE_RETURN;
+	buttonKeyMap_[BUTTON_SELECT] = 		SDL_SCANCODE_RSHIFT;
 }
 
 bool
-GameActorController::getButtonState(enum Buttons which) const
+Controller::ifButtonHeld(enum Buttons which) const
 {
-	return keyState_[buttonKeyMap_[which]];
+	return buttonHeld_[which];
 }
 
 bool
-GameActorController::ifButtonPressed(enum Buttons which) const
+Controller::ifButtonPressed(enum Buttons which) const
 {
 	return buttonPressed_[which];
 }
 
 bool
-GameActorController::ifButtonReleased(enum Buttons which) const
+Controller::ifButtonReleased(enum Buttons which) const
 {
 	return buttonReleased_[which];
 }

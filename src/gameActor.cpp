@@ -6,6 +6,10 @@
 
 #include "gameActor.h"
 
+#include "bullet.h"
+#include "stateMachine.h"
+#include "sprite.h"
+
 GameActor::GameActor()
 {
 	spriteList_.resize(SPRITE_COUNT);

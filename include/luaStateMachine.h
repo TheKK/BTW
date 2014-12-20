@@ -7,17 +7,13 @@
 #ifndef LUA_STATE_MACHINE_H
 #define LUA_STATE_MACHINE_H
 
-#include <iostream>
-#include <vector>
-#include <lua.hpp>
-#include <SDL.h>
+#include <string>
 
 #include "stateMachine.h"
-#include "gameActor.h"
-#include "gameActorController.h"
-#include "logLocator.h"
 
-using namespace std;
+struct lua_State;
+class GameActor;
+class Controller;
 
 class LuaStateMachine : public StateMachine
 {
@@ -29,7 +25,7 @@ public:
 	void init(const char* filePath);
 
 	void bindActor(const GameActor& actor);
-	void bindController(const GameActorController& controller);
+	void bindController(const Controller& controller);
 
 	void onEnter();
 	void onExit();
@@ -45,10 +41,10 @@ public:
 private:
 	lua_State* states_ = nullptr;
 
-	string currentState_ = "";
-	string nextState_ = "";
+	std::string currentState_ = "";
+	std::string nextState_ = "";
 
-	/* XXX Do I really need thiese? */
+	/* XXX Do I really need these? */
 	void createNewLuaState_();
 	void loadSettingScript_(const char* filePath);
 };

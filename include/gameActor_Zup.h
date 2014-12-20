@@ -8,14 +8,14 @@
 #define GAME_ACTOR_ZUP_H
 
 #include "gameActor.h"
-#include "luaStateMachine.h"
 #include "sprite.h"
-#include "window.h"
+
+class Controller;
 
 class GameActor_Zup : public GameActor
 {
 public:
-	GameActor_Zup(const GameActorController& controller);
+	GameActor_Zup(const Controller& controller);
 	~GameActor_Zup();
 
 	void handleInput();
