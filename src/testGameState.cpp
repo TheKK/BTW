@@ -14,9 +14,20 @@ TestGameState::TestGameState():
 	actor2_(controller2_),
 
 	backGroundBG_("./game/images/battleField.png", Window::renderer()),
-	backGroundFG_("./game/images/battleFieldFG.png", Window::renderer())
+	backGroundFG_("./game/images/battleFieldFG.png", Window::renderer()),
+
+	onFight_(*this),
+	onPause_(*this)
 {
 	boosHpBar_.bindGameActor(actor2_);
+
+	scripts_.resize(0);
+	scripts_.push_back(&onFight_);
+	scripts_.push_back(&onPause_);
+
+	SDL_assert(scripts_.size() == SCRIPT_COUNT);
+
+	currentScript_ = scripts_[SCRIPT_ON_FIGHT];
 }
 
 TestGameState::~TestGameState()
@@ -26,47 +37,23 @@ TestGameState::~TestGameState()
 void
 TestGameState::eventHandler(const SDL_Event& event)
 {
-	switch (event.type) {
-	case SDL_QUIT:
-		setNext(GAME_STATE_QUIT);
-		break;
-	case SDL_MOUSEBUTTONDOWN:
-		if (event.button.button == SDL_BUTTON_MIDDLE) {
-			cout << "x, y: " << event.button.x << ":"
-				<< event.button.y << endl;
-		}
-		break;
-	}
-
-	controller_.updateState(event);
-	controller2_.updateState(event);
+	currentScript_->eventHandler(event);
 }
 
 void
 TestGameState::update()
 {
-	actor_.update();
-	actor2_.update();
-
-	/* Collision test */
-	actor_.testBulletCollision(actor2_);
-	actor2_.testBulletCollision(actor_);
-
-	boosHpBar_.update();
-
-	controller_.resetState();
-	controller2_.resetState();
+	currentScript_->update();
 }
 
 void
 TestGameState::render()
 {
-	backGroundBG_.renderFullWindow();
+	currentScript_->render();
+}
 
-	actor_.render();
-	actor2_.render();
-
-	backGroundFG_.renderFullWindow();
-
-	boosHpBar_.render();
+void
+TestGameState::changeScript_(enum TestGameStateScript which)
+{
+	currentScript_ = scripts_[which];
 }

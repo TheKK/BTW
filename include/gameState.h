@@ -7,8 +7,9 @@
 #ifndef GAME_STATE_H
 #define GAME_STATE_H
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
+/* XXX Not this way */
 enum GameStateList
 {
 	GAME_STATE_NULL = 0x00,

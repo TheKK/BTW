@@ -17,10 +17,21 @@
 #include "hpBar.h"
 #include "window.h"
 
-using namespace std;
+#include "testGameState_onFight.h"
+#include "testGameState_onPause.h"
+
+enum TestGameStateScript {
+	SCRIPT_ON_FIGHT = 0x0000,
+	SCRIPT_ON_PAUSE,
+
+	SCRIPT_COUNT
+};
 
 class TestGameState : public GameState
 {
+friend class TestGameState_onFight;
+friend class TestGameState_onPause;
+
 public:
 	TestGameState();
 	~TestGameState();
@@ -39,6 +50,13 @@ private:
 
 	Texture backGroundBG_;
 	Texture backGroundFG_;
+
+	vector<Script*> scripts_;
+	Script* currentScript_ = NULL;
+	TestGameState_onFight onFight_;
+	TestGameState_onPause onPause_;
+
+	void changeScript_(enum TestGameStateScript which);
 };
 
 #endif /* TEST_GAME_STATE_H */
