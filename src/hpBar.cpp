@@ -6,12 +6,13 @@
 
 #include "hpBar.h"
 
-HPBar::HPBar()
+HPBar::HPBar():
+	hpBar_("./game/images/boss_hp_bar.png", Window::renderer())
 {
 	posRect_.x = 600;
-	posRect_.y = 220;
-	posRect_.w = 10;
-	posRect_.h = -200;
+	posRect_.y = 30;
+	posRect_.w = 20;
+	posRect_.h = 150;
 }
 
 HPBar::~HPBar()
@@ -21,22 +22,13 @@ HPBar::~HPBar()
 void
 HPBar::update()
 {
-	SDL_assert(actor_ != nullptr);
-
-	posRect_.h = -actor_->hp() * 2;
-	if (posRect_.h >= 0)
-		posRect_.h = 0;
+	//SDL_assert(actor_ != nullptr);
 }
 
 void
 HPBar::render()
 {
-	SDL_SetRenderDrawColor(Window::renderer(),
-			       200 * ((float) (200 + posRect_.h) / 200.0),
-			       200 * ((float) (-posRect_.h) / 200.0),
-			       10,
-			       255);
-	SDL_RenderFillRect(Window::renderer(), &posRect_);
+	hpBar_.render(posRect_);
 }
 
 void
