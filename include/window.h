@@ -7,57 +7,43 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
-#include <iostream>
 #include <string>
-#include <stdexcept>
 
-#include <SDL2/SDL.h>
-
-using namespace std;
+#include <SDL.h>
 
 class Window
 {
 public:
-	static void init(const char* title, Uint32 width, Uint32 height);
-	static void quit();
+	Window(const char* title, uint32_t width, uint32_t height);
+	~Window();
 
-	static void eventHandler(const SDL_Event& event);
+	void eventHandler(const SDL_Event& event);
 
-	static void clear();
-	static void present();
+	void clear();
+	void present();
 
-	/* Function to control this object */
-	static void resize(int width, int height);
-	static void setTitle(const string& title);
-	static void moveTo(int x, int y);
-	static void show();
-	static void hide();
+	void resize(int width, int height);
+	void setTitle(const std::string& title);
+	void moveTo(int x, int y);
+	void show();
+	void hide();
 
-	static void setClearColor(SDL_Color value);
+	int posX() const;
+	int posY() const;
+	int width() const;
+	int height() const;
 
-	/* Function to get object states or statuses */
-	static int posX();
-	static int posY();
-	static int width();
-	static int height();
-	static SDL_Rect rect();
+	bool isWindowed() const;
+	bool isFocused() const;
 
-	static bool isWindowed();
-	static bool isFocused();
-
-	static SDL_Window* window();
-	static SDL_Renderer* renderer();
-	static Uint32 ID();
+	SDL_Window* window() const;
+	uint32_t ID() const;
 private:
-	Window() {};
-	static SDL_Window* window_;
-	static string title_;
+	SDL_Window* window_;
+	std::string title_;
 
-	static SDL_Renderer* renderer_;
-	static SDL_Color clearColor_;
-
-	static bool isFocused_;
-	static bool isWindowed_;
+	bool isFocused_;
+	bool isWindowed_;
 };
 
 #endif	/* WINDOW_H */

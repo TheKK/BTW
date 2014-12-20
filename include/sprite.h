@@ -7,13 +7,13 @@
 #ifndef SPRITE_H
 #define SPRITE_H
 
-#include <iostream>
 #include <string>
 #include <vector>
 #include <SDL.h>
-#include <SDL_image.h>
 
 #include "renderable.h"
+
+class Graphics;
 
 enum FlipDirection
 {
@@ -22,22 +22,20 @@ enum FlipDirection
 	FLIP_NONE
 };
 
-using namespace std;
-
 class Sprite : public Renderable
 {
 public:
 	Sprite();
-	Sprite(const char* filePath, SDL_Renderer* renderer,
+	Sprite(const std::string& filePath, Graphics& graphics,
 	       int w, int h,
 	       Uint8 r = 0, Uint8 g = 255, Uint8 = 255);
 	~Sprite();
 
-	int load(const char* filePath, SDL_Renderer* renderer,
+	int load(const std::string& filePath, Graphics& graphics,
 		 int w, int h,
 		 Uint8 r = 0, Uint8 g = 255, Uint8 = 255);
 
-	void render(const SDL_Rect& rect);
+	void render(Graphics& graphics, const SDL_Rect* rect);
 
 	void setAlpha(Uint8 value);
 	void setFlip(enum FlipDirection dir);
@@ -48,7 +46,7 @@ public:
 	void jumpTo(Uint16 where);
 private:
 	SDL_Texture* sheet_ = nullptr;
-	vector<SDL_Rect> clip_;
+	std::vector<SDL_Rect> clip_;
 
 	int totalFrame_ = 0;
 	int currentFrame_ = 0;

@@ -14,33 +14,32 @@
 
 #include "renderable.h"
 
-using namespace std;
+class Graphics;
 
 class Texture : public Renderable
 {
 public:
 	Texture();
-	Texture(const char* filePath, SDL_Renderer* renderer,
-		Uint8 r = 0, Uint8 g = 255, Uint8 b = 255);
+	Texture(const std::string&  filePath, Graphics& graphics,
+		uint8_t r = 0, uint8_t g = 255, uint8_t b = 255);
 	~Texture();
 
-	void load(const char* filePath, SDL_Renderer* renderer,
-		  Uint8 r = 0, Uint8 g = 255, Uint8 b = 255);
+	void load(const std::string& filePath, Graphics& graphics,
+		  uint8_t r = 0, uint8_t g = 255, uint8_t b = 255);
 
 	void rotate(double value);
 
-	void setAlpha(Uint8 value);
-	SDL_Texture* object() const;
+	void setAlpha(uint8_t value);
 
 	void setBlendMode(SDL_BlendMode mode);
 
-	void render(const SDL_Rect& rect);
-	void renderFullWindow();
+	void render(Graphics& graphics, const SDL_Rect* rect);
 private:
 	SDL_Texture* texture_ = nullptr;
 
 	double degree_ = 0;
-	Uint8 alpha_ = SDL_ALPHA_OPAQUE;
+	uint8_t alpha_ = SDL_ALPHA_OPAQUE;
+	SDL_RendererFlip flip_ = SDL_FLIP_NONE;
 
 	void release_();
 };

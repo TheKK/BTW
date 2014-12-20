@@ -16,17 +16,18 @@ namespace {
 	const float slowdownFator = 0.85f;
 }
 
+class Graphics;
 class Controller;
 
 class GameActor_Zup : public GameActor
 {
 public:
-	GameActor_Zup(const Controller& controller);
+	GameActor_Zup(Graphics& graphics, const Controller& controller);
 	~GameActor_Zup();
 
 	void handleInput();
 	void update();
-	void render();
+	void render(Graphics& graphics);
 
 	void updateSprite();
 	void updatePosition();

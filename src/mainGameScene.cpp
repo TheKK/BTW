@@ -8,15 +8,17 @@
 
 #include "window.h"
 
-MainGameScene::MainGameScene():
+MainGameScene::MainGameScene(Graphics& graphics):
 	controller_("./game/setting/controller.json"),
 	controller2_("./game/setting/debugController.json"),
 
-	actor_(controller_),
-	actor2_(controller2_),
+	actor_(graphics, controller_),
+	actor2_(graphics, controller2_),
 
-	backGroundBG_("./game/images/battleField.png", Window::renderer()),
-	backGroundFG_("./game/images/battleFieldFG.png", Window::renderer()),
+	boosHpBar_(graphics),
+
+	backGroundBG_("./game/images/battleField.png", graphics),
+	backGroundFG_("./game/images/battleFieldFG.png", graphics),
 
 	onFight_(*this),
 	onPause_(*this)
@@ -49,9 +51,9 @@ MainGameScene::update()
 }
 
 void
-MainGameScene::render()
+MainGameScene::render(Graphics& graphics)
 {
-	currentScript_->render();
+	currentScript_->render(graphics);
 }
 
 void

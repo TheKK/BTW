@@ -10,21 +10,22 @@
 #include <SDL.h>
 
 #include "texture.h"
-#include "window.h"
-#include "gameActor.h"
+
+class Graphics;
+class GameActor;
 
 class HPBar
 {
 public:
-	HPBar();
+	HPBar(Graphics& graphics);
 	~HPBar();
 
 	void update();
-	void render();
+	void render(Graphics& graphics);
 
 	void bindGameActor(const GameActor& actor);
 private:
-	Texture hpBar_;
+	Texture hpBarTex_;
 	SDL_Rect posRect_ = {0};
 
 	const GameActor* actor_;

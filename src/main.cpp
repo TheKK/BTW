@@ -17,6 +17,7 @@
 #include "timer.h"
 #include "userEvent.h"
 #include "window.h"
+#include "graphics.h"
 #include "mainGameScene.h"
 
 #ifndef SDL_ASSERT_LEVEL
@@ -83,9 +84,6 @@ InitSystem()
 		throw runtime_error(errMsg);
 	}
 
-	/* Window setup */
-	Window::init("BTW-test", 640, 360);
-
 	/* Register user events */
 	UserEvent::Init();
 	SoundEngine::Init();
@@ -111,7 +109,6 @@ CleanUp()
 	LogLocator::Register(nullptr);
 
 	SoundEngine::Quit();
-	Window::quit();
 
 	SDL_Quit();
 	IMG_Quit();
@@ -129,7 +126,7 @@ ChangeScene(Scene** scene)
 		newScene = nullptr;
 		break;
 	case SCENE_TEST:
-		newScene = new MainGameScene();
+		newScene = nullptr;
 		break;
 	default:
 		LogLocator::GetService()->LogError("Game scene trasform error");
@@ -155,7 +152,10 @@ main(int argc, char* argv[])
 		/* The creation of world... */
 		InitSystem();
 
-		currentScene = new MainGameScene();
+		Window window("BTW-test", 640, 360);
+		Graphics graphics(window, 640, 360);
+
+		currentScene = new MainGameScene(graphics);
 
 		/* The cycle of life... */
 		while (currentScene) {
@@ -167,9 +167,9 @@ main(int argc, char* argv[])
 
 			currentScene->update();
 
-			Window::clear();
-			currentScene->render();
-			Window::present();
+			graphics.clear();
+			currentScene->render(graphics);
+			graphics.present();
 
 			if (currentScene->hasNext())
 				ChangeScene(&currentScene);

@@ -11,13 +11,14 @@
 #include "window.h"
 #include "potionBullet.h"
 #include "luaStateMachine.h"
+#include "graphics.h"
 
-GameActor_Zup::GameActor_Zup(const Controller& controller):
-	sprite_onGround_("./game/images/zup_onGround.png", Window::renderer(),
+GameActor_Zup::GameActor_Zup(Graphics& graphics, const Controller& controller):
+	sprite_onGround_("./game/images/zup_onGround.png", graphics,
 			 30, 65),
 	sprite_normalAttack_("./game/images/zup_normalAttack.png",
-			     Window::renderer(), 30, 65),
-	sprite_jumping_("./game/images/zup_jumping.png", Window::renderer(),
+			     graphics, 30, 65),
+	sprite_jumping_("./game/images/zup_jumping.png", graphics,
 			30, 65),
 
 	frictionDelay_(0),
@@ -32,7 +33,7 @@ GameActor_Zup::GameActor_Zup(const Controller& controller):
 	pos_.setRect(0, 0, 30, 65);
 
 	gravity_ = 1;
-	horizon_ = Window::height() - 70;
+	horizon_ = graphics.h() - 70;
 
 	spriteList_[SPRITE_ON_GROUND] = &sprite_onGround_;
 	spriteList_[SPRITE_NORMAL_ATTACK] = &sprite_normalAttack_;
@@ -64,14 +65,14 @@ GameActor_Zup::update()
 }
 
 void
-GameActor_Zup::render()
+GameActor_Zup::render(Graphics& graphics)
 {
 	if (direction_ == FACE_RIGHT)
 		currentSprite_->setFlip(FLIP_NONE);
 	else
 		currentSprite_->setFlip(FLIP_HORIZONTAL);
 
-	currentSprite_->render(pos_.rect());
+	currentSprite_->render(graphics, &pos_.rect());
 
 	renderBullet();
 }

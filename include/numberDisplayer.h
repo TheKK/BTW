@@ -7,29 +7,25 @@
 #ifndef NUMBER_DISPLAYER_H
 #define NUMBER_DISPLAYER_H
 
-#include <iostream>
 #include <vector>
 #include <SDL.h>
-#include <SDL_image.h>
 
 #include "sprite.h"
 #include "renderable.h"
 
-using namespace std;
-
 class NumberDisplayer : public Renderable
 {
 public:
-	NumberDisplayer(const char* filePath, SDL_Renderer* renderer,
-			Uint8 howManyDigitals,
-			Uint16 digitalWidth, Uint16 digitalHeight);
+	NumberDisplayer(const char* filePath, Graphics& graphics,
+			uint8_t howManyDigitals,
+			uint16_t digitalWidth, uint16_t digitalHeight);
 	~NumberDisplayer();
 
-	void render(const SDL_Rect& rect);
+	void render(Graphics& graphics, const SDL_Rect* rect);
 
-	void addNum(Uint32 value);
+	void addNum(uint32_t value);
 	void setNum(int value);
-	Uint64 getNum() const;
+	uint64_t getNum() const;
 
 	void setAlpha(Uint8 value);
 
@@ -37,8 +33,8 @@ public:
 private:
 	Sprite numSprite_;
 
-	vector<Uint8> digitalVect_;
-	Uint16 digitalNum_;
+	std::vector<uint8_t> digitalVect_;
+	uint16_t digitalNum_;
 
 	void release_();
 };

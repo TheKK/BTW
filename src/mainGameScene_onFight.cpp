@@ -7,6 +7,7 @@
 #include "mainGameScene_onFight.h"
 
 #include "mainGameScene.h"
+#include "graphics.h"
 
 MainGameScene_onFight::MainGameScene_onFight(MainGameScene& scene):
 	scene_(scene)
@@ -49,15 +50,15 @@ MainGameScene_onFight::update()
 }
 
 void
-MainGameScene_onFight::render()
+MainGameScene_onFight::render(Graphics& graphics)
 {
-	scene_.backGroundBG_.renderFullWindow();
+	scene_.backGroundBG_.render(graphics, nullptr);
 
-	scene_.actor_.render();
-	scene_.actor2_.render();
+	scene_.actor_.render(graphics);
+	scene_.actor2_.render(graphics);
 
-	scene_.backGroundFG_.renderFullWindow();
+	scene_.backGroundFG_.render(graphics, nullptr);
 
-	scene_.boosHpBar_.render();
+	scene_.boosHpBar_.render(graphics);
 }
 

@@ -6,15 +6,19 @@
 
 #include "sprite.h"
 
+#include <SDL_image.h>
+
+#include "graphics.h"
+
 Sprite::Sprite()
 {
 }
 
-Sprite::Sprite(const char* filePath, SDL_Renderer* renderer,
+Sprite::Sprite(const std::string& filePath, Graphics& graphics,
 	       int w, int h,
 	       Uint8 r, Uint8 g, Uint8 b)
 {
-	load(filePath, renderer, w, h, r, g, b);
+	load(filePath, graphics, w, h, r, g, b);
 }
 
 Sprite::~Sprite()
@@ -23,16 +27,14 @@ Sprite::~Sprite()
 }
 
 int
-Sprite::load(const char* filePath, SDL_Renderer* renderer,
+Sprite::load(const std::string& filePath, Graphics& graphics,
 	     int w, int h,
 	     Uint8 r, Uint8 g, Uint8 b)
 {
 	int sheetWidth, sheetHeight;
 	SDL_Rect toBePushed;
 
-	setRenderer(renderer);
-
-	sheet_ = loadTexture(filePath, renderer, r, g, b);
+	sheet_ = graphics.loadTexture(filePath, r, g, b);
 
 	SDL_QueryTexture(sheet_, nullptr, nullptr, &sheetWidth, &sheetHeight);
 
@@ -51,13 +53,13 @@ Sprite::load(const char* filePath, SDL_Renderer* renderer,
 }
 
 void
-Sprite::render(const SDL_Rect& rect)
+Sprite::render(Graphics& graphics, const SDL_Rect* rect)
 {
 	SDL_assert(sheet_ != nullptr);
 	SDL_assert(clip_.size() > 0);
 
-	SDL_RenderCopyEx(targetRenderer_, sheet_, &clip_[currentFrame_], &rect,
-			 0, nullptr, flip_);
+	graphics.renderCopy(sheet_, &clip_[currentFrame_], rect, 0, nullptr,
+			    flip_);
 }
 
 void

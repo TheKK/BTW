@@ -21,6 +21,8 @@ enum SceneList {
 	SCENE_QUIT
 };
 
+class Graphics;
+
 class Scene
 {
 public:
@@ -28,7 +30,7 @@ public:
 
 	virtual void eventHandler(const SDL_Event& event) = 0;
 	virtual void update() = 0;
-	virtual void render() = 0;
+	virtual void render(Graphics& graphics) = 0;
 
 	bool hasNext() const;
 	enum SceneList next() const;

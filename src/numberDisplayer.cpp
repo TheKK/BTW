@@ -6,14 +6,14 @@
 
 #include "numberDisplayer.h"
 
-NumberDisplayer::NumberDisplayer(const char* filePath, SDL_Renderer* renderer,
+#include "graphics.h"
+
+NumberDisplayer::NumberDisplayer(const char* filePath, Graphics& graphics,
 				 Uint8 howManyDigitals,
-				 Uint16 digitalWidth, Uint16 digitalHeight):
-	numSprite_(filePath, renderer, digitalWidth, digitalHeight),
+				 uint16_t digitalWidth, uint16_t digitalHeight):
+	numSprite_(filePath, graphics, digitalWidth, digitalHeight),
 	digitalNum_(howManyDigitals)
 {
-	setRenderer(renderer);
-
 	/* Set vector size and init value */
 	digitalVect_.resize(digitalNum_);
 
@@ -36,7 +36,7 @@ NumberDisplayer::addNum(uint32_t value)
 		toNext = 1;
 	}
 
-	for (Uint16 i = digitalNum_ - 2; i >= 0; i--) {
+	for (uint16_t i = digitalNum_ - 2; i >= 0; i--) {
 		digitalVect_[i] += toNext;
 
 		if (digitalVect_[i] > 9) {
@@ -63,7 +63,7 @@ NumberDisplayer::getNum() const
 {
 	Uint64 toReturn = 0;
 
-	for (Uint16 i = 0; i < digitalVect_.size(); i++)
+	for (uint16_t i = 0; i < digitalVect_.size(); i++)
 		toReturn +=
 			(digitalVect_[i] *
 			 pow(10, digitalVect_.size() - i - 1));
@@ -85,16 +85,19 @@ NumberDisplayer::counterSetZero()
 }
 
 void
-NumberDisplayer::render(const SDL_Rect& rect)
+NumberDisplayer::render(Graphics& graphics, const SDL_Rect* rect)
 {
-	Uint16 digitalWidth = (rect.w / digitalNum_);
+	uint16_t digitalWidth = (rect->w / digitalNum_);
+	SDL_Rect renderPos;
+
+	renderPos.y = rect->y;
+	renderPos.w = digitalWidth;
+	renderPos.h = rect->h;
 
 	for (int i = 0; i < digitalNum_; i++) {
+		renderPos.x = rect->x + digitalWidth * i;
 		numSprite_.jumpTo(digitalVect_[i]);
-		numSprite_.render({
-				  (rect.x + digitalWidth * i), rect.y,
-				  digitalWidth, rect.h
-				  });
+		numSprite_.render(graphics, &renderPos);
 	}
 }
 

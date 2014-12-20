@@ -6,8 +6,11 @@
 
 #include "hpBar.h"
 
-HPBar::HPBar():
-	hpBar_("./game/images/boss_hp_bar.png", Window::renderer())
+#include "gameActor.h"
+#include "graphics.h"
+
+HPBar::HPBar(Graphics& graphics):
+	hpBarTex_("./game/images/boss_hp_bar.png", graphics)
 {
 	posRect_.x = 600;
 	posRect_.y = 30;
@@ -26,9 +29,9 @@ HPBar::update()
 }
 
 void
-HPBar::render()
+HPBar::render(Graphics& graphics)
 {
-	hpBar_.render(posRect_);
+	hpBarTex_.render(graphics, &posRect_);
 }
 
 void

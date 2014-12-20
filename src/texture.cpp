@@ -6,27 +6,27 @@
 
 #include "texture.h"
 
+#include "graphics.h"
+
 Texture::Texture()
 {
 }
 
-Texture::Texture(const char* filePath, SDL_Renderer* renderer,
-		 Uint8 r, Uint8 g, Uint8 b)
+Texture::Texture(const std::string& filePath, Graphics& graphics,
+		 uint8_t r, uint8_t g, uint8_t b)
 {
-	load(filePath, renderer, r, g, b);
+	load(filePath, graphics, r, g, b);
 }
 
 Texture::~Texture()
 {
-	release_();
 }
 
 void
-Texture::load(const char* filePath, SDL_Renderer* renderer,
-	      Uint8 r, Uint8 g, Uint8 b)
+Texture::load(const std::string& filePath, Graphics& graphics,
+	      uint8_t r, uint8_t g, uint8_t b)
 {
-	setRenderer(renderer);
-	texture_ = loadTexture(filePath, renderer, r, g, b);
+	texture_ = graphics.loadTexture(filePath, r, g, b);
 }
 
 void
@@ -40,50 +40,22 @@ Texture::rotate(double value)
 }
 
 void
-Texture::setAlpha(Uint8 value)
+Texture::setAlpha(uint8_t value)
 {
 	SDL_SetTextureAlphaMod(texture_, value);
 	alpha_ = value;
 }
 
-SDL_Texture*
-Texture::object() const
-{
-	return texture_;
-}
-
 void
 Texture::setBlendMode(SDL_BlendMode mode)
 {
-	SDL_assert_paranoid(texture_ != nullptr);
+	SDL_assert(texture_ != nullptr);
 
 	SDL_SetTextureBlendMode(texture_, mode);
 }
 
 void
-Texture::render(const SDL_Rect& rect)
+Texture::render(Graphics& graphics, const SDL_Rect* rect)
 {
-	if (!visable_)
-		return;
-
-	SDL_RenderCopyEx(targetRenderer_, texture_, nullptr, &rect,
-			 degree_, nullptr, SDL_FLIP_NONE);
-}
-
-void
-Texture::renderFullWindow()
-{
-	if (!visable_)
-		return;
-
-	SDL_RenderCopyEx(targetRenderer_, texture_, nullptr, nullptr,
-			 degree_, nullptr, SDL_FLIP_NONE);
-}
-
-void
-Texture::release_()
-{
-	if (texture_ != nullptr)
-		SDL_DestroyTexture(texture_);
-	texture_ = nullptr;
+	graphics.renderCopy(texture_, nullptr, rect, degree_, nullptr, flip_);
 }

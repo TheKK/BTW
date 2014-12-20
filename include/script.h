@@ -9,6 +9,8 @@
 
 #include <SDL.h>
 
+class Graphics;
+
 class Script
 {
 public:
@@ -21,7 +23,7 @@ public:
 
 	virtual void eventHandler(const SDL_Event& event) = 0;
 	virtual void update() = 0;
-	virtual void render() = 0;
+	virtual void render(Graphics& graphics) = 0;
 };
 
 #endif /* SCRIPT_H */

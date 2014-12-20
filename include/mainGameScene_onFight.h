@@ -11,6 +11,7 @@
 
 #include "script.h"
 
+class Graphics;
 class MainGameScene;
 
 class MainGameScene_onFight : public Script
@@ -21,7 +22,7 @@ public:
 
 	void eventHandler(const SDL_Event& event);
 	void update();
-	void render();
+	void render(Graphics& graphics);
 private:
 	MainGameScene& scene_;
 };

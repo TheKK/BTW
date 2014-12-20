@@ -7,13 +7,11 @@
 #ifndef POTION_BULLET_H
 #define POTION_BULLET_H
 
-#include <iostream>
 #include <SDL.h>
 
 #include "bullet.h"
-#include "window.h"
 
-using namespace std;
+class GameActor;
 
 class PotionBullet : public Bullet
 {

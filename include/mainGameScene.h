@@ -25,18 +25,20 @@ enum MainGameSceneScript {
 	SCRIPT_COUNT
 };
 
+class Graphics;
+
 class MainGameScene : public Scene
 {
 friend class MainGameScene_onFight;
 friend class MainGameScene_onPause;
 
 public:
-	MainGameScene();
+	MainGameScene(Graphics& graphics);
 	~MainGameScene();
 
 	void eventHandler(const SDL_Event& event);
 	void update();
-	void render();
+	void render(Graphics& graphics);
 private:
 	Controller controller_;
 	Controller controller2_;
@@ -49,7 +51,7 @@ private:
 	Texture backGroundBG_;
 	Texture backGroundFG_;
 
-	vector<Script*> scripts_;
+	std::vector<Script*> scripts_;
 	Script* currentScript_ = NULL;
 	MainGameScene_onFight onFight_;
 	MainGameScene_onPause onPause_;

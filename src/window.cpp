@@ -6,17 +6,9 @@
 
 #include "window.h"
 
-SDL_Window* Window::window_ = nullptr;
-string Window::title_;
+#include <stdexcept>
 
-SDL_Renderer* Window::renderer_ = nullptr;
-SDL_Color Window::clearColor_ = {31, 31, 31, 255};
-
-bool Window::isFocused_ = false;
-bool Window::isWindowed_ = true;
-
-void
-Window::init(const char* title, Uint32 width, Uint32 height)
+Window::Window(const char* title, uint32_t width, uint32_t height)
 {
 	title_ = title;
 
@@ -28,35 +20,16 @@ Window::init(const char* title, Uint32 width, Uint32 height)
 		SDL_WINDOW_SHOWN
 		);
 	if (window_ == nullptr) {
-		string errMsg("SDL window error: ");
+		std::string errMsg("SDL window error: ");
 		errMsg += SDL_GetError();
-		throw runtime_error(errMsg);
+		throw std::runtime_error(errMsg);
 	}
-
-	/* Create and setup new SDL renderer, and check error */
-	renderer_ = SDL_CreateRenderer(
-		window_,
-		-1,
-		SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC
-		);
-	if (renderer_ == nullptr) {
-		string errMsg("SDL renderer error: ");
-		errMsg += SDL_GetError();
-		throw runtime_error(errMsg);
-	}
-
-	/* Make fullscreen fit physical screen */
-	SDL_RenderSetLogicalSize(renderer_, width, height);
 }
 
-void
-Window::quit()
+Window::~Window()
 {
 	SDL_DestroyWindow(window_);
 	window_ = nullptr;
-
-	SDL_DestroyRenderer(renderer_);
-	renderer_ = nullptr;
 }
 
 void
@@ -80,30 +53,13 @@ Window::eventHandler(const SDL_Event& event)
 }
 
 void
-Window::clear()
-{
-	SDL_SetRenderDrawColor(renderer_,
-			       clearColor_.r,
-			       clearColor_.g,
-			       clearColor_.b,
-			       clearColor_.a);
-	SDL_RenderClear(renderer_);
-}
-
-void
-Window::present()
-{
-	SDL_RenderPresent(renderer_);
-}
-
-void
 Window::resize(int width, int height)
 {
 	SDL_SetWindowSize(window_, width, height);
 }
 
 void
-Window::setTitle(const string& title)
+Window::setTitle(const std::string& title)
 {
 	SDL_SetWindowTitle(window_, title.c_str());
 }
@@ -126,14 +82,8 @@ Window::hide()
 	SDL_HideWindow(window_);
 }
 
-void
-Window::setClearColor(SDL_Color value)
-{
-	clearColor_ = value;
-}
-
 int
-Window::posX()
+Window::posX() const
 {
 	int xToReturn;
 	SDL_GetWindowPosition(window_, &xToReturn, nullptr);
@@ -142,7 +92,7 @@ Window::posX()
 
 
 int
-Window::posY()
+Window::posY() const
 {
 	int yToReturn;
 	SDL_GetWindowPosition(window_, nullptr, &yToReturn);
@@ -150,7 +100,7 @@ Window::posY()
 }
 
 int
-Window::width()
+Window::width() const
 {
 	int wToReturn;
 	SDL_GetWindowSize(window_, &wToReturn, nullptr);
@@ -158,48 +108,33 @@ Window::width()
 }
 
 int
-Window::height()
+Window::height() const
 {
 	int hToReturn;
 	SDL_GetWindowSize(window_, nullptr, &hToReturn);
 	return hToReturn;
 }
 
-SDL_Rect
-Window::rect()
-{
-	SDL_Rect rectToReturn;
-	SDL_GetWindowSize(window_, &rectToReturn.w, &rectToReturn.h);
-	SDL_GetWindowPosition(window_, &rectToReturn.x, &rectToReturn.y);
-	return rectToReturn;
-}
-
 bool
-Window::isWindowed()
+Window::isWindowed() const
 {
 	return isWindowed_;
 }
 
 bool
-Window::isFocused()
+Window::isFocused() const
 {
 	return isFocused_;
 }
 
 SDL_Window*
-Window::window()
+Window::window() const
 {
 	return window_;
 }
 
-SDL_Renderer*
-Window::renderer()
-{
-	return renderer_;
-}
-
-Uint32
-Window::ID()
+uint32_t
+Window::ID() const
 {
 	return SDL_GetWindowID(window_);
 }

@@ -33,6 +33,7 @@ enum ActorSprite
 class Sprite;
 class Bullet;
 class StateMachine;
+class Graphics;
 
 class GameActor
 {
@@ -42,7 +43,7 @@ public:
 
 	virtual void handleInput() = 0;
 	virtual void update() = 0;
-	virtual void render() = 0;
+	virtual void render(Graphics& graphics) = 0;
 
 	/* Base class should override the functions it need */
 	virtual void movingRight() {};

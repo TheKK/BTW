@@ -6,6 +6,8 @@
 
 #include "potionBullet.h"
 
+#include "gameActor.h"
+
 PotionBullet::PotionBullet(GameActor& caster)
 {
 	const Position& caster_pos = caster.pos();
@@ -50,8 +52,7 @@ PotionBullet::update(GameActor& target)
 void
 PotionBullet::render()
 {
-	SDL_SetRenderDrawColor(Window::renderer(), 50, 100, 30, 255);
-	SDL_RenderFillRect(Window::renderer(), &posRect_);
+	/* FIXME Need some sprite */
 }
 
 bool
