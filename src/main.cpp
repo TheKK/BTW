@@ -10,14 +10,14 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 
-#include "gameState.h"
+#include "scene.h"
 #include "logLocator.h"
 #include "sdlLog.h"
 #include "soundEngine.h"
 #include "timer.h"
 #include "userEvent.h"
 #include "window.h"
-#include "testGameState.h"
+#include "mainGameScene.h"
 
 #ifndef SDL_ASSERT_LEVEL
 	#define SDL_ASSERT_LEVEL	3
@@ -119,29 +119,29 @@ CleanUp()
 }
 
 void
-ChangeState(GameState** state)
+ChangeScene(Scene** scene)
 {
-	GameState* newState = nullptr;
+	Scene* newScene = nullptr;
 
-	switch ((*state)->next()) {
-	case GAME_STATE_MAIN:
-	case GAME_STATE_QUIT:
-		newState = nullptr;
+	switch ((*scene)->next()) {
+	case SCENE_MAIN:
+	case SCENE_QUIT:
+		newScene = nullptr;
 		break;
-	case GAME_STATE_TEST:
-		newState = new TestGameState();
+	case SCENE_TEST:
+		newScene = new MainGameScene();
 		break;
 	default:
-		LogLocator::GetService()->LogError("GameState trasform error");
+		LogLocator::GetService()->LogError("Game scene trasform error");
 		break;
 	}
 
-	delete *state;
+	delete *scene;
 
-	if(newState)
-		*state = newState;
+	if(newScene)
+		*scene = newScene;
 	else
-		*state = nullptr;
+		*scene = nullptr;
 }
 
 int
@@ -149,30 +149,30 @@ main(int argc, char* argv[])
 {
 	Timer timer;
 	SDL_Event event;
-	GameState* gameState;
+	Scene* currentScene;
 
 	try {
 		/* The creation of world... */
 		InitSystem();
 
-		gameState = new TestGameState();
+		currentScene = new MainGameScene();
 
 		/* The cycle of life... */
-		while (gameState) {
+		while (currentScene) {
 			timer.Start();
 
 			/* EventHandler */
 			while (SDL_PollEvent(&event))
-				gameState->eventHandler(event);
+				currentScene->eventHandler(event);
 
-			gameState->update();
+			currentScene->update();
 
 			Window::clear();
-			gameState->render();
+			currentScene->render();
 			Window::present();
 
-			if (gameState->hasNext())
-				ChangeState(&gameState);
+			if (currentScene->hasNext())
+				ChangeScene(&currentScene);
 
 			if (timer.GetTicks() < (1000.0 / (double) GAME_FPS)) {
 				SDL_Delay((1000.0 / (double) GAME_FPS) -

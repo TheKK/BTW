@@ -1,12 +1,12 @@
 /*
  * Author: KK <thumbd03803@gmail.com>
  *
- * File: testGameState.cpp
+ * File: mainGameScene.cpp
  */
 
-#include "testGameState.h"
+#include "mainGameScene.h"
 
-TestGameState::TestGameState():
+MainGameScene::MainGameScene():
 	controller_(),
 	controller2_("./game/setting/debugController.json"),
 
@@ -30,30 +30,30 @@ TestGameState::TestGameState():
 	currentScript_ = scripts_[SCRIPT_ON_FIGHT];
 }
 
-TestGameState::~TestGameState()
+MainGameScene::~MainGameScene()
 {
 }
 
 void
-TestGameState::eventHandler(const SDL_Event& event)
+MainGameScene::eventHandler(const SDL_Event& event)
 {
 	currentScript_->eventHandler(event);
 }
 
 void
-TestGameState::update()
+MainGameScene::update()
 {
 	currentScript_->update();
 }
 
 void
-TestGameState::render()
+MainGameScene::render()
 {
 	currentScript_->render();
 }
 
 void
-TestGameState::changeScript_(enum TestGameStateScript which)
+MainGameScene::changeScript_(enum MainGameSceneScript which)
 {
 	currentScript_ = scripts_[which];
 }

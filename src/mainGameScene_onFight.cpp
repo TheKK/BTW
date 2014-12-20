@@ -1,28 +1,28 @@
 /*
  * Author: KK <thumbd03803@gmail.com>
  *
- * File: testGameState_onFight.cpp
+ * File: mainGameScene_onFight.cpp
  */
 
-#include "testGameState_onFight.h"
+#include "mainGameScene_onFight.h"
 
-#include "testGameState.h"
+#include "mainGameScene.h"
 
-TestGameState_onFight::TestGameState_onFight(TestGameState& scene):
+MainGameScene_onFight::MainGameScene_onFight(MainGameScene& scene):
 	scene_(scene)
 {
 }
 
-TestGameState_onFight::~TestGameState_onFight()
+MainGameScene_onFight::~MainGameScene_onFight()
 {
 }
 
 void
-TestGameState_onFight::eventHandler(const SDL_Event& event)
+MainGameScene_onFight::eventHandler(const SDL_Event& event)
 {
 	switch (event.type) {
 	case SDL_QUIT:
-		scene_.setNext(GAME_STATE_QUIT);
+		scene_.setNext(SCENE_QUIT);
 		break;
 	}
 
@@ -31,7 +31,7 @@ TestGameState_onFight::eventHandler(const SDL_Event& event)
 }
 
 void
-TestGameState_onFight::update()
+MainGameScene_onFight::update()
 {
 	if (scene_.controller_.ifButtonPressed(BUTTON_UP))
 		scene_.changeScript_(SCRIPT_ON_PAUSE);
@@ -49,7 +49,7 @@ TestGameState_onFight::update()
 }
 
 void
-TestGameState_onFight::render()
+MainGameScene_onFight::render()
 {
 	scene_.backGroundBG_.renderFullWindow();
 

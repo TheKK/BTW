@@ -1,28 +1,28 @@
 /*
  * Author: KK <thumbd03803@gmail.com>
  *
- * File: testGameState_onPause.cpp
+ * File: mainGameScene_onPause.cpp
  */
 
-#include "testGameState_onPause.h"
+#include "mainGameScene_onPause.h"
 
-#include "testGameState.h"
+#include "mainGameScene.h"
 
-TestGameState_onPause::TestGameState_onPause(TestGameState& scene):
+MainGameScene_onPause::MainGameScene_onPause(MainGameScene& scene):
 	scene_(scene)
 {
 }
 
-TestGameState_onPause::~TestGameState_onPause()
+MainGameScene_onPause::~MainGameScene_onPause()
 {
 }
 
 void
-TestGameState_onPause::eventHandler(const SDL_Event& event)
+MainGameScene_onPause::eventHandler(const SDL_Event& event)
 {
 	switch (event.type) {
 	case SDL_QUIT:
-		scene_.setNext(GAME_STATE_QUIT);
+		scene_.setNext(SCENE_QUIT);
 		break;
 	}
 
@@ -31,14 +31,14 @@ TestGameState_onPause::eventHandler(const SDL_Event& event)
 }
 
 void
-TestGameState_onPause::update()
+MainGameScene_onPause::update()
 {
 	if (scene_.controller_.ifButtonPressed(BUTTON_JUMP))
 		scene_.changeScript_(SCRIPT_ON_FIGHT);
 }
 
 void
-TestGameState_onPause::render()
+MainGameScene_onPause::render()
 {
 	scene_.backGroundBG_.renderFullWindow();
 

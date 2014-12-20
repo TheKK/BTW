@@ -1,40 +1,40 @@
 /*
  * Author: KK <thumbd03803@gmail.com>
  *
- * File: testGameState.h
+ * File: mainGameScene.h
  */
 
-#ifndef TEST_GAME_STATE_H
-#define TEST_GAME_STATE_H
+#ifndef MAIN_GAME_SCENE_H
+#define MAIN_GAME_SCENE_H
 
 #include <iostream>
 #include <SDL.h>
 
-#include "gameState.h"
+#include "scene.h"
 #include "gameActor_Zup.h"
 #include "gameActorController.h"
 #include "texture.h"
 #include "hpBar.h"
 #include "window.h"
 
-#include "testGameState_onFight.h"
-#include "testGameState_onPause.h"
+#include "mainGameScene_onFight.h"
+#include "mainGameScene_onPause.h"
 
-enum TestGameStateScript {
+enum MainGameSceneScript {
 	SCRIPT_ON_FIGHT = 0x0000,
 	SCRIPT_ON_PAUSE,
 
 	SCRIPT_COUNT
 };
 
-class TestGameState : public GameState
+class MainGameScene : public Scene
 {
-friend class TestGameState_onFight;
-friend class TestGameState_onPause;
+friend class MainGameScene_onFight;
+friend class MainGameScene_onPause;
 
 public:
-	TestGameState();
-	~TestGameState();
+	MainGameScene();
+	~MainGameScene();
 
 	void eventHandler(const SDL_Event& event);
 	void update();
@@ -53,10 +53,10 @@ private:
 
 	vector<Script*> scripts_;
 	Script* currentScript_ = NULL;
-	TestGameState_onFight onFight_;
-	TestGameState_onPause onPause_;
+	MainGameScene_onFight onFight_;
+	MainGameScene_onPause onPause_;
 
-	void changeScript_(enum TestGameStateScript which);
+	void changeScript_(enum MainGameSceneScript which);
 };
 
-#endif /* TEST_GAME_STATE_H */
+#endif /* MAIN_GAME_SCENE_H */
