@@ -6,6 +6,8 @@
 
 #include "gameActor_Zup.h"
 
+#include <cmath>
+
 #include "window.h"
 #include "potionBullet.h"
 #include "luaStateMachine.h"
@@ -86,7 +88,14 @@ GameActor_Zup::updateSprite()
 void
 GameActor_Zup::updatePosition()
 {
-	pos_.moveBy(velX_, velY_);
+	pos_.moveBy(round(velX_), velY_);
+	velX_ += accX_;
+	if (accX_ > 0.0f)
+		velX_ = std::min(velX_, walkingSpeedMax);
+	else if (accX_ < 0.0f)
+		velX_ = std::max(velX_, -walkingSpeedMax);
+	else
+		velX_ *= slowdownFator;
 
 	if ((!isOnGround()) && (++gravityDelay_ == 2)) {
 		velY_ += gravity_;
@@ -95,27 +104,28 @@ GameActor_Zup::updatePosition()
 
 	if (pos_.y() + pos_.h() > horizon_)
 		pos_.setY(horizon_ - pos_.h());
-
-	if (velX_ != 0) {
-		if (++frictionDelay_ == 4) {
-			velX_ -= velX_ * 0.5;
-			frictionDelay_ = 0;
-		}
-	}
 }
 
 void
-GameActor_Zup::moveRight()
+GameActor_Zup::movingRight()
 {
-	applyAcc(1, 0);
 	direction_ = FACE_RIGHT;
+
+	accX_ = walkingAcceleration;
 }
 
 void
-GameActor_Zup::moveLeft()
+GameActor_Zup::movingLeft()
 {
-	applyAcc(-1, 0);
 	direction_ = FACE_LEFT;
+
+	accX_ = -walkingAcceleration;
+}
+
+void
+GameActor_Zup::stopMoving()
+{
+	accX_ = 0.0f;
 }
 
 void

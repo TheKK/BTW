@@ -23,8 +23,9 @@ public:
 	static void register_gameActor(lua_State* L);
 	static void register_controller(lua_State* L);
 private:
-	static int gameActor_moveRight(lua_State* L);
-	static int gameActor_moveLeft(lua_State* L);
+	static int gameActor_movingRight(lua_State* L);
+	static int gameActor_movingLeft(lua_State* L);
+	static int gameActor_stopMoving(lua_State* L);
 	static int gameActor_jump(lua_State* L);
 	static int gameActor_land(lua_State* L);
 	static int gameActor_dive(lua_State* L);

@@ -10,6 +10,12 @@
 #include "gameActor.h"
 #include "sprite.h"
 
+namespace {
+	const float walkingSpeedMax = 5.0f;
+	const float walkingAcceleration = 0.4f;
+	const float slowdownFator = 0.85f;
+}
+
 class Controller;
 
 class GameActor_Zup : public GameActor
@@ -25,14 +31,14 @@ public:
 	void updateSprite();
 	void updatePosition();
 
-	void moveRight();
-	void moveLeft();
+	void movingRight();
+	void movingLeft();
+	void stopMoving();
 	void normalAttack();
 private:
 	Sprite sprite_onGround_;
 	Sprite sprite_normalAttack_;
 	Sprite sprite_jumping_;
-	//Sprite sprite_jumpingAttack_;
 
 	int frictionDelay_;
 	int gravityDelay_;

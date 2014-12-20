@@ -14,21 +14,25 @@ onGround.onExit = function()
 end
 
 onGround.handleInput = function()
-	if (Controller.ifButtonHeld(Buttons.RIGHT)) then
-		GameActor.moveRight()
+	if (Controller.ifButtonHeld(Buttons.RIGHT) and Controller.ifButtonHeld(Buttons.LEFT)) then
+		GameActor.stopMoving()
+	else if (Controller.ifButtonHeld(Buttons.RIGHT)) then
+		GameActor.movingRight()
+	else if (Controller.ifButtonHeld(Buttons.LEFT)) then
+		GameActor.movingLeft()
+	else
+		GameActor.stopMoving()
 	end
+end
+end
 
-	if (Controller.ifButtonHeld(Buttons.LEFT)) then
-		GameActor.moveLeft()
-	end
+	--if (Controller.ifButtonPressed(Buttons.NORMAL_ATTACK)) then
+		--StateMachine.setNext('normalAttack')
+	--end
 
-	if (Controller.ifButtonPressed(Buttons.NORMAL_ATTACK)) then
-		StateMachine.setNext('normalAttack')
-	end
-
-	if (Controller.ifButtonHeld(Buttons.JUMP)) then
-		StateMachine.setNext('jumping')
-	end
+	--if (Controller.ifButtonHeld(Buttons.JUMP)) then
+		--StateMachine.setNext('jumping')
+	--end
 end
 
 onGround.update = function()

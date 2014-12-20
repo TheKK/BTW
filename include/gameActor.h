@@ -45,8 +45,9 @@ public:
 	virtual void render() = 0;
 
 	/* Base class should override the functions it need */
-	virtual void moveRight() {};
-	virtual void moveLeft() {};
+	virtual void movingRight() {};
+	virtual void movingLeft() {};
+	virtual void stopMoving() {};
 	virtual void jump() {};
 	virtual void dive() {};
 	virtual void normalAttack() {};
@@ -86,8 +87,10 @@ protected:
 	bool isInvisible_ = false;
 
 	Position pos_;
-	int velX_ = 0;
-	int velY_ = 0;
+	float velX_ = 0.0f;
+	float velY_ = 0.0f;
+	float accX_ = 0.0f;
+	float accY_ = 0.0f;
 	int gravity_ = 0;
 	int horizon_ = 0;
 	enum FaceDirection direction_ = FACE_RIGHT;

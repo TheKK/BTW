@@ -35,8 +35,9 @@ LuaGlues::register_gameActor(lua_State* L)
 
 	/* Glues for class GameActor */
 	lua_table_begine(L);
-	lua_table_add_function(L, "moveRight", gameActor_moveRight);
-	lua_table_add_function(L, "moveLeft", gameActor_moveLeft);
+	lua_table_add_function(L, "movingRight", gameActor_movingRight);
+	lua_table_add_function(L, "movingLeft", gameActor_movingLeft);
+	lua_table_add_function(L, "stopMoving", gameActor_stopMoving);
 	lua_table_add_function(L, "jump", gameActor_jump);
 	lua_table_add_function(L, "isOnGround", gameActor_isOnGround);
 	lua_table_add_function(L, "setVelY", gameActor_setVelY);
@@ -81,7 +82,7 @@ LuaGlues::register_controller(lua_State* L)
 }
 
 int
-LuaGlues::gameActor_moveRight(lua_State* L)
+LuaGlues::gameActor_movingRight(lua_State* L)
 {
 	void* actorPtr = nullptr;
 
@@ -92,13 +93,13 @@ LuaGlues::gameActor_moveRight(lua_State* L)
 	lua_getglobal_safe(L, "gameActor");
 	actorPtr = lua_touserdata(L, -1);
 
-	((GameActor*) actorPtr)->moveRight();
+	((GameActor*) actorPtr)->movingRight();
 
 	return 0;
 }
 
 int
-LuaGlues::gameActor_moveLeft(lua_State* L)
+LuaGlues::gameActor_movingLeft(lua_State* L)
 {
 	void* actorPtr = nullptr;
 
@@ -109,7 +110,24 @@ LuaGlues::gameActor_moveLeft(lua_State* L)
 	lua_getglobal_safe(L, "gameActor");
 	actorPtr = lua_touserdata(L, -1);
 
-	((GameActor*) actorPtr)->moveLeft();
+	((GameActor*) actorPtr)->movingLeft();
+
+	return 0;
+}
+
+int
+LuaGlues::gameActor_stopMoving(lua_State* L)
+{
+	void* actorPtr = nullptr;
+
+	/* Check number of arguments */
+	if (lua_gettop(L) > 0)
+		return luaL_error(L, "This function doesn't need arguments");
+
+	lua_getglobal_safe(L, "gameActor");
+	actorPtr = lua_touserdata(L, -1);
+
+	((GameActor*) actorPtr)->stopMoving();
 
 	return 0;
 }
