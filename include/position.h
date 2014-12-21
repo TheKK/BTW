@@ -9,30 +9,37 @@
 
 #include <SDL.h>
 
-using namespace std;
-
 class Position
 {
 public:
 	Position();
-	Position(int x, int y, int w, int h);
+	Position(float x, float y, int w, int h);
 	~Position();
 
-	void moveBy(int dx, int dy);
-	void moveTo(int x, int y);
+	void moveBy(float dx, float dy);
+	void moveTo(float x, float y);
 
-	void setX(int n);
-	void setY(int n);
+	void setX(float n);
+	void setY(float n);
 	void setW(int n);
 	void setH(int n);
-	void setRect(int x, int y, int w, int h);
+
+	void setRect(float x, float y, int w, int h);
 
 	int x() const;
 	int y() const;
 	int w() const;
 	int h() const;
-	const SDL_Rect& rect() const;
+
+	int top() const;
+	int button() const;
+	int left() const;
+	int right() const;
+
+	const SDL_Rect* rect();
 private:
+	float posX_ = 0;
+	float posY_ = 0;
 	SDL_Rect posRect_ = {0};
 };
 

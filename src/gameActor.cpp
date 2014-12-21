@@ -34,38 +34,38 @@ GameActor::hp() const
 }
 
 void
-GameActor::applyAcc(int accX, int accY)
+GameActor::applyAcc(float accX, float accY)
 {
 	velX_ += accX;
 	velY_ += accY;
 }
 
 void
-GameActor::setVelX(int n)
+GameActor::setVelX(float n)
 {
 	velX_ = n;
 }
 
 void
-GameActor::setVelY(int n)
+GameActor::setVelY(float n)
 {
 	velY_ = n;
 }
 
-int
+float
 GameActor::velX() const
 {
 	return velX_;
 }
 
-int
+float
 GameActor::velY() const
 {
 	return velY_;
 }
 
 void
-GameActor::setGravity(int g)
+GameActor::setGravity(float g)
 {
 	gravity_ = g;
 }
@@ -76,7 +76,7 @@ GameActor::setHorizon(int h)
 	horizon_ = h;
 }
 
-int
+float
 GameActor::gravity() const
 {
 	return gravity_;
@@ -91,6 +91,7 @@ GameActor::horizon() const
 bool
 GameActor::isOnGround() const
 {
+	/* XXX Bad hack */
 	return (pos_.y() + pos_.h() >= horizon_);
 }
 
@@ -99,6 +100,7 @@ GameActor::direction() const
 {
 	return direction_;
 }
+
 void
 GameActor::addBullet(Bullet* bullet)
 {
@@ -118,7 +120,7 @@ GameActor::testBulletCollision(GameActor& caster)
 		return;
 
 	for (Bullet* bullet : caster.bulletList()) {
-		if (SDL_HasIntersection(&pos_.rect(), bullet->rect())) {
+		if (SDL_HasIntersection(pos_.rect(), bullet->rect())) {
 			hp_ -= bullet->damage();
 
 			if (hp_ <= 0) {

@@ -56,15 +56,15 @@ public:
 
 	int16_t hp() const;
 
-	void applyAcc(int x, int y);
-	void setVelX(int n);
-	void setVelY(int n);
-	int velX() const;
-	int velY() const;
+	void applyAcc(float x, float y);
+	void setVelX(float n);
+	void setVelY(float n);
+	float velX() const;
+	float velY() const;
 
-	void setGravity(int g);
+	void setGravity(float g);
 	void setHorizon(int h);
-	int gravity() const;
+	float gravity() const;
 	int horizon() const;
 
 	bool isOnGround() const;
@@ -92,7 +92,7 @@ protected:
 	float velY_ = 0.0f;
 	float accX_ = 0.0f;
 	float accY_ = 0.0f;
-	int gravity_ = 0;
+	float gravity_ = 0;
 	int horizon_ = 0;
 	enum FaceDirection direction_ = FACE_RIGHT;
 

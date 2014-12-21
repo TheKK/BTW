@@ -6,13 +6,19 @@
 
 #include "position.h"
 
+#include <cmath>
+
 Position::Position()
 {
 }
 
-Position::Position(int x, int y, int w, int h)
+Position::Position(float x, float y, int w, int h)
 {
-	posRect_ = {x, y, w, h};
+	posX_ = x;
+	posY_ = y;
+
+	posRect_.w = w;
+	posRect_.h = h;
 }
 
 Position::~Position()
@@ -20,29 +26,29 @@ Position::~Position()
 }
 
 void
-Position::moveBy(int dx, int dy)
+Position::moveBy(float dx, float dy)
 {
-	posRect_.x += dx;
-	posRect_.y += dy;
+	posX_ += dx;
+	posY_ += dy;
 }
 
 void
-Position::moveTo(int x, int y)
+Position::moveTo(float x, float y)
 {
-	posRect_.x = x;
-	posRect_.y = y;
+	posX_ = x;
+	posY_ = y;
 }
 
 void
-Position::setX(int n)
+Position::setX(float n)
 {
-	posRect_.x = n;
+	posX_ = n;
 }
 
 void
-Position::setY(int n)
+Position::setY(float n)
 {
-	posRect_.y = n;
+	posY_ = n;
 }
 
 void
@@ -58,10 +64,11 @@ Position::setH(int n)
 }
 
 void
-Position::setRect(int x, int y, int w, int h)
+Position::setRect(float x, float y, int w, int h)
 {
-	posRect_.x = x;
-	posRect_.y = y;
+	posX_ = x;
+	posY_ = y;
+
 	posRect_.w = w;
 	posRect_.h = h;
 }
@@ -69,13 +76,13 @@ Position::setRect(int x, int y, int w, int h)
 int
 Position::x() const
 {
-	return posRect_.x;
+	return round(posX_);
 }
 
 int
 Position::y() const
 {
-	return posRect_.y;
+	return round(posY_);
 }
 
 int
@@ -90,8 +97,35 @@ Position::h() const
 	return posRect_.h;
 }
 
-const SDL_Rect&
-Position::rect() const
+int
+Position::top() const
 {
-	return posRect_;
+	return round(posX_);
+}
+
+int
+Position::button() const
+{
+	return round(posY_ + posRect_.h);
+}
+
+int
+Position::left() const
+{
+	return round(posY_);
+}
+
+int
+Position::right() const
+{
+	return round(posX_ + posRect_.w);
+}
+
+const SDL_Rect*
+Position::rect()
+{
+	posRect_.x = round(posX_);
+	posRect_.y = round(posY_);
+
+	return &posRect_;
 }

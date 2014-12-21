@@ -5,19 +5,18 @@
 ]]
 
 local frame
-local initJumpSpeed = -3
-local accPeriod = 5
+local initJumpSpeed = -2.5
+local accPeriod = 4
 
 jumping = {}
 
 jumping.onEnter = function()
-	GameActor.setSprite(Sprites.JUMPING)
+	--GameActor.setSprite(Sprites.JUMPING)
 
 	-- Jump from ground
 	if (GameActor.isOnGround()) then
 		frame = 0
-		GameActor.setVelY(0)
-		GameActor.applyAcc(0, initJumpSpeed)
+		GameActor.setVelY(initJumpSpeed)
 	end
 end
 
@@ -26,11 +25,11 @@ end
 
 jumping.handleInput = function()
 	if (Controller.ifButtonHeld(Buttons.RIGHT)) then
-		GameActor.moveRight()
+		GameActor.movingRight()
 	end
 
 	if (Controller.ifButtonHeld(Buttons.LEFT)) then
-		GameActor.moveLeft()
+		GameActor.movingLeft()
 	end
 
 	if (Controller.ifButtonPressed(Buttons.DOWN)) then

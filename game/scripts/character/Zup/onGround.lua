@@ -7,7 +7,7 @@
 onGround = {}
 
 onGround.onEnter = function()
-	GameActor.setSprite(Sprites.ON_GROUND)
+	--GameActor.setSprite(Sprites.ON_GROUND)
 end
 
 onGround.onExit = function()
@@ -30,9 +30,9 @@ end
 		--StateMachine.setNext('normalAttack')
 	--end
 
-	--if (Controller.ifButtonHeld(Buttons.JUMP)) then
-		--StateMachine.setNext('jumping')
-	--end
+	if (Controller.ifButtonPressed(Buttons.JUMP)) then
+		StateMachine.setNext('jumping')
+	end
 end
 
 onGround.update = function()

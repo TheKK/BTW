@@ -13,16 +13,19 @@
 #include "luaStateMachine.h"
 #include "graphics.h"
 
-GameActor_Zup::GameActor_Zup(Graphics& graphics, const Controller& controller):
-	sprite_onGround_("./game/images/zup_onGround.png", graphics,
-			 30, 65),
-	sprite_normalAttack_("./game/images/zup_normalAttack.png",
-			     graphics, 30, 65),
-	sprite_jumping_("./game/images/zup_jumping.png", graphics,
-			30, 65),
+bool operator<(const GameActor_Zup::SpriteState& a,
+	       const GameActor_Zup::SpriteState& b)
+{
+	if (a.motionType != b.motionType)
+		return a.motionType < b.motionType;
 
-	frictionDelay_(0),
-	gravityDelay_(0),
+	if (a.horizontalFacing != b.horizontalFacing)
+		return a.horizontalFacing < b.horizontalFacing;
+
+	return false;
+}
+
+GameActor_Zup::GameActor_Zup(Graphics& graphics, const Controller& controller):
 	spriteDelay_(0)
 {
 	stateMachine_ =
@@ -32,19 +35,22 @@ GameActor_Zup::GameActor_Zup(Graphics& graphics, const Controller& controller):
 
 	pos_.setRect(0, 0, 30, 65);
 
-	gravity_ = 1;
+	gravity_ = 0.03;
+
+	/* XXX Bad hack */
 	horizon_ = graphics.h() - 70;
 
-	spriteList_[SPRITE_ON_GROUND] = &sprite_onGround_;
-	spriteList_[SPRITE_NORMAL_ATTACK] = &sprite_normalAttack_;
-	spriteList_[SPRITE_JUMPING] = &sprite_jumping_;
-	currentSprite_ = spriteList_[SPRITE_ON_GROUND];
+	initSprites_(graphics);
 
 	stateMachine_->onEnter();
 }
 
 GameActor_Zup::~GameActor_Zup()
 {
+	for (auto& e : spriteSheets_)
+		delete e.second;
+
+	spriteSheets_.clear();
 }
 
 void
@@ -67,12 +73,7 @@ GameActor_Zup::update()
 void
 GameActor_Zup::render(Graphics& graphics)
 {
-	if (direction_ == FACE_RIGHT)
-		currentSprite_->setFlip(FLIP_NONE);
-	else
-		currentSprite_->setFlip(FLIP_HORIZONTAL);
-
-	currentSprite_->render(graphics, &pos_.rect());
+	spriteSheets_[getSpriteState_()]->render(graphics, pos_.rect());
 
 	renderBullet();
 }
@@ -81,15 +82,22 @@ void
 GameActor_Zup::updateSprite()
 {
 	if (++spriteDelay_ == 10) {
-		currentSprite_->nextFrame();
+		spriteSheets_[getSpriteState_()]->nextFrame();
 		spriteDelay_ = 0;
 	}
+
+	if (direction_ == FACE_RIGHT)
+		spriteSheets_[getSpriteState_()]->setFlip(FLIP_NONE);
+	else
+		spriteSheets_[getSpriteState_()]->setFlip(FLIP_HORIZONTAL);
 }
 
 void
 GameActor_Zup::updatePosition()
 {
-	pos_.moveBy(round(velX_), velY_);
+	pos_.moveBy(velX_, velY_);
+
+	/* Horizontal movement */
 	velX_ += accX_;
 	if (accX_ > 0.0f)
 		velX_ = std::min(velX_, walkingSpeedMax);
@@ -98,12 +106,14 @@ GameActor_Zup::updatePosition()
 	else
 		velX_ *= slowdownFator;
 
-	if ((!isOnGround()) && (++gravityDelay_ == 2)) {
-		velY_ += gravity_;
-		gravityDelay_ = 0;
-	}
+	/* Vertival movement */
+	velY_ += accY_;
+	if (!isOnGround())
+		accY_ += gravity_;
+	else
+		accY_ = 0.0f;
 
-	if (pos_.y() + pos_.h() > horizon_)
+	if (pos_.button() > horizon_)
 		pos_.setY(horizon_ - pos_.h());
 }
 
@@ -133,4 +143,22 @@ void
 GameActor_Zup::normalAttack()
 {
 	addBullet(new PotionBullet(*this));
+}
+
+void
+GameActor_Zup::initSprites_(Graphics& graphics)
+{
+	spriteSheets_[SpriteState(RIGHT, STANDING)] = 
+		new Sprite("./game/images/zup_onGround.png", graphics, 30, 65);
+
+	spriteSheets_[SpriteState(RIGHT, WALKING)] = 
+		new Sprite("./game/images/zup_jumping.png", graphics, 30, 65);
+}
+
+const GameActor_Zup::SpriteState
+GameActor_Zup::getSpriteState_() const
+{
+	return SpriteState(
+		RIGHT,
+		(accX_ == 0.0f) ? STANDING : WALKING);
 }
