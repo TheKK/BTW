@@ -7,14 +7,8 @@
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
 
-#include <iostream>
-#include <fstream>
 #include <string>
-#include <stdexcept>
 #include <SDL.h>
-#include <jsoncpp/json/json.h>
-
-#include "logLocator.h"
 
 enum Buttons
 {

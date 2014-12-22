@@ -6,6 +6,12 @@
 
 #include "controller.h"
 
+#include <jsoncpp/json/json.h>
+#include <stdexcept>
+#include <fstream>
+
+#include "logLocator.h"
+
 #define DEFAULT_SETTING_FILE	(char*) "./game/setting/controller.json"
 
 #define GET_SETTING_FROM_JSON(json, button, defaultValue); \
